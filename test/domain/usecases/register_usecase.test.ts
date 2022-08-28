@@ -14,12 +14,12 @@ describe('RegisterUsecase', () => {
         usecase = new RegisterUsecase(repository);
     });
 
-    const params: UserRegisterParams = {
+    const params = new UserRegisterParams({
         email: 'valid@email.com',
         name: 'Mocked name',
         phone: '15992280628',
         birthDate: new Date(),
-    };
+    });
 
     const entity = mockedUserEntity;
 
@@ -32,12 +32,48 @@ describe('RegisterUsecase', () => {
         expect(repository.register).toHaveBeenCalledWith(params);
     });
 
-    it('should not call register with wrong email', async () => {
+    it('should not call register with invalid email', async () => {
         const usecaseCall = async () => {
-            await usecase.call({
+            await usecase.call(new UserRegisterParams({
                 ...params,
                 email: 'invalid_email',
-            });
+            }));
+        }
+
+        expect(usecaseCall()).rejects.toThrow(ValidationException);
+        expect(repository.register).not.toHaveBeenCalled();
+    });
+
+    it('should not call register with invalid name', async () => {
+        const usecaseCall = async () => {
+            await usecase.call(new UserRegisterParams({
+                ...params,
+                name: '',
+            }));
+        }
+
+        expect(usecaseCall()).rejects.toThrow(ValidationException);
+        expect(repository.register).not.toHaveBeenCalled();
+    });
+
+    it('should not call register with invalid phone', async () => {
+        const usecaseCall = async () => {
+            await usecase.call(new UserRegisterParams({
+                ...params,
+                phone: '',
+            }));
+        }
+
+        expect(usecaseCall()).rejects.toThrow(ValidationException);
+        expect(repository.register).not.toHaveBeenCalled();
+    });
+
+    it('should not call register with invalid birthdate', async () => {
+        const usecaseCall = async () => {
+            await usecase.call(new UserRegisterParams({
+                ...params,
+                birthDate: null,
+            }));
         }
 
         expect(usecaseCall()).rejects.toThrow(ValidationException);
