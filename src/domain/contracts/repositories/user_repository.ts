@@ -1,5 +1,5 @@
-import { UserEntity } from "../entities/user_entity";
-import { Validators } from "../shared/validations/validators";
+import { UserEntity } from "../../entities/user_entity";
+import { Validators } from "../../shared/validations/validators";
 
 export abstract class UserRepository {
     abstract register(params: UserRegisterParams): Promise<UserEntity>;

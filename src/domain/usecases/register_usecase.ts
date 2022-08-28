@@ -1,6 +1,6 @@
 import { UserEntity } from "../entities/user_entity";
 import { ValidationException } from "../exceptions/validation_exception";
-import { UserRegisterParams, UserRepository } from "../repositories/user_repository";
+import { UserRegisterParams, UserRepository } from "../contracts/repositories/user_repository";
 
 export class RegisterUsecase implements UseCase<UserEntity, UserRegisterParams> {
 
