@@ -2,12 +2,12 @@ import { mockedUserEntity } from "../../../test/mocks/user_entity.mock";
 import { UserRegisterParams, UserRepository } from "../../../src/domain/repositories/user_repository";
 import { RegisterUsecase } from "../../../src/domain/usecases/register_usecase";
 import { ValidationException } from "../../../src/domain/exceptions/validation_exception";
-import { mock } from 'jest-mock-extended';
+import { mock, MockProxy } from 'jest-mock-extended';
 
 
 describe('RegisterUsecase', () => {
     let usecase: RegisterUsecase;
-    let repository: UserRepository;
+    let repository: MockProxy<UserRepository>;
 
     beforeEach(() => {
         repository = mock<UserRepository>();
@@ -24,7 +24,7 @@ describe('RegisterUsecase', () => {
     const entity = mockedUserEntity;
 
     it('should get a user when calling the repository successfully', async () => {
-        (repository.register as any).mockReturnValue(entity);
+        repository.register.mockResolvedValue(entity);
 
         const result = await usecase.call(params);
 
