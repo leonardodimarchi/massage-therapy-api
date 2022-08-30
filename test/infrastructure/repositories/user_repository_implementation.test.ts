@@ -1,7 +1,7 @@
 import { MockProxy, mock } from "jest-mock-extended";
-import { mockedUserEntity } from "../../../test/mocks/user_entity.mock";
-import { UserDatasource } from "../../../src/data/contracts/datasources/user_datasource";
-import { UserRepositoryImplementation } from "../../../src/data/repositories/user_repository_implementation";
+import { mockedUserEntity } from "../../mocks/user_entity.mock";
+import { UserDatasource } from "../../../src/infrastructure/contracts/datasources/user_datasource";
+import { UserRepositoryImplementation } from "../../../src/infrastructure/repositories/user_repository_implementation";
 import { UserRegisterPayload, UserRepository } from "../../../src/domain/contracts/repositories/user_repository";
 
 describe('UserRepository', () => {
