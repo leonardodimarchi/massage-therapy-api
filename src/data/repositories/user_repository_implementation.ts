@@ -7,6 +7,6 @@ export class UserRepositoryImplementation implements UserRepository {
     constructor(private readonly datasource: UserDatasource) {}
 
     public async register(params: UserRegisterPayload): Promise<UserEntity> {
-        throw new Error("Method not implemented.");
+        return await this.datasource.register(params);
     }
 }
