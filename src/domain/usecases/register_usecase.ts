@@ -1,12 +1,12 @@
 import { UserEntity } from "../entities/user_entity";
 import { ValidationException } from "../exceptions/validation_exception";
-import { UserRegisterParams, UserRepository } from "../contracts/repositories/user_repository";
+import { UserRegisterPayload, UserRepository } from "../contracts/repositories/user_repository";
 
-export class RegisterUsecase implements UseCase<UserEntity, UserRegisterParams> {
+export class RegisterUsecase implements UseCase<UserEntity, UserRegisterPayload> {
 
     constructor(private readonly repository: UserRepository) {}
 
-    public async call(params: UserRegisterParams): Promise<UserEntity> {
+    public async call(params: UserRegisterPayload): Promise<UserEntity> {
         if (!params.isValidEmail())
             throw new ValidationException('Email inválido');
 
@@ -18,6 +18,9 @@ export class RegisterUsecase implements UseCase<UserEntity, UserRegisterParams> 
 
         if (!params.isValidBirthDate())
             throw new ValidationException('Data de nascimento inválida');
+
+        if (!params.isValidPassword())
+            throw new ValidationException('Senha inválida');
 
         return this.repository.register(params);
     }

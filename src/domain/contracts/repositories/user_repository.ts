@@ -2,7 +2,7 @@ import { UserEntity } from "../../entities/user_entity";
 import { Validators } from "../../shared/validations/validators";
 
 export abstract class UserRepository {
-    abstract register(params: UserRegisterParams): Promise<UserEntity>;
+    abstract register(params: UserRegisterPayload): Promise<UserEntity>;
 }
 
 interface UserRegisterProperties {
@@ -10,19 +10,22 @@ interface UserRegisterProperties {
     name: string;
     phone: string;
     birthDate: Date;
+    password: string;
 }
 
-export class UserRegisterParams {
+export class UserRegisterPayload {
     email: string;
     name: string;
     phone: string;
     birthDate: Date;
+    password: string;
 
     constructor(props: UserRegisterProperties) {
         this.email = props.email;
         this.name = props.name;
         this.phone = props.phone;
         this.birthDate = props.birthDate;
+        this.password = props.password;
     }
 
     public isValidEmail(): boolean {
@@ -39,5 +42,9 @@ export class UserRegisterParams {
 
     public isValidBirthDate(): boolean {
         return this.birthDate instanceof Date;
+    }
+
+    public isValidPassword(): boolean {
+        return !!this.password?.length
     }
 }
