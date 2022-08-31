@@ -1,6 +1,6 @@
-import { UserEntity } from "../entities/user_entity";
-import { ValidationException } from "../exceptions/validation_exception";
-import { UserRegisterPayload, UserRepository } from "../contracts/repositories/user_repository";
+import { UserEntity } from "../../entities/user_entity";
+import { ValidationException } from "../../exceptions/validation_exception";
+import { UserRegisterPayload, UserRepository } from "../../contracts/repositories/user_repository";
 
 export class RegisterUsecase implements UseCase<UserEntity, UserRegisterPayload> {
 

@@ -1,6 +1,6 @@
 import { mockedUserEntity } from "../../../test/mocks/user_entity.mock";
 import { UserRegisterPayload, UserRepository } from "../../../src/domain/contracts/repositories/user_repository";
-import { RegisterUsecase } from "../../../src/domain/usecases/register_usecase";
+import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usecase";
 import { ValidationException } from "../../../src/domain/exceptions/validation_exception";
 import { mock, MockProxy } from 'jest-mock-extended';
 
