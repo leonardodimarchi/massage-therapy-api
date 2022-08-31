@@ -1,0 +1,23 @@
+import { UserEntity } from 'src/domain/entities/user_entity';
+import { EntitySchema } from 'typeorm';
+import { BaseSchemaColumns } from './base_schema_columns';
+
+export const UserSchema = new EntitySchema<UserEntity>({
+  name: 'User',
+  tableName: 'users',
+  target: UserEntity,
+  columns: {
+    ...BaseSchemaColumns,
+    email: {
+      type: String,
+      length: 50,
+    },
+    name: {
+      type: String,
+      length: 50,
+    },
+  },
+  orderBy: {
+    createdAt: 'ASC',
+  },
+});
