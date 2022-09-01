@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 import { UserModule } from './modules/user_module';
 
 @Module({
@@ -8,7 +9,7 @@ import { UserModule } from './modules/user_module';
       type: 'sqlite',
       database: 'db',
       synchronize: true,
-      entities: [__dirname + "/infrastructure/*.schema.ts"],
+      entities: [join(__dirname, '..', 'infrastructure', '**', '*_schema{.ts,.js}')]
     }),
     UserModule,
   ],
