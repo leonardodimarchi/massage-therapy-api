@@ -1,15 +1,15 @@
-import { MockProxy, mock } from "jest-mock-extended";
-import { Repository } from "typeorm";
-import { UserRegisterPayload, UserRepository } from "../../../src/domain/contracts/repositories/user_repository";
+import { mock } from "jest-mock-extended";
+import { UserRegisterPayload } from "../../../src/domain/contracts/repositories/user_repository";
 import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usecase";
 import { UserController } from "../../../src/presenter/controllers/user_controller";
 
 describe('UserController', () => {
     let controller: UserController;
+    let registerUsecase: RegisterUsecase
 
     beforeEach(() => {
-        const repository = mock<UserRepository>();
-        controller = new UserController(repository);
+        registerUsecase = mock<RegisterUsecase>();
+        controller = new UserController(registerUsecase);
     });
 
     const params = new UserRegisterPayload({
@@ -24,7 +24,7 @@ describe('UserController', () => {
         it('should call register usecase', async () => {
             await controller.register(params);
 
-            // expect(RegisterUsecase().call).toHaveBeenCalledWith(params);
+            expect(registerUsecase.call).toHaveBeenCalledWith(params);
         });
     })
 });
