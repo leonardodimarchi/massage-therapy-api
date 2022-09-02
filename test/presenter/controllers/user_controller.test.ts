@@ -1,11 +1,11 @@
-import { mock } from "jest-mock-extended";
+import { mock, MockProxy } from "jest-mock-extended";
 import { UserRegisterPayload } from "../../../src/domain/contracts/repositories/user_repository";
 import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usecase";
 import { UserController } from "../../../src/presenter/controllers/user_controller";
 
 describe('UserController', () => {
     let controller: UserController;
-    let registerUsecase: RegisterUsecase
+    let registerUsecase: MockProxy<RegisterUsecase>;
 
     beforeEach(() => {
         registerUsecase = mock<RegisterUsecase>();
