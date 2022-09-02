@@ -1,12 +1,13 @@
-import { UserRegisterPayload } from "../../../src/domain/contracts/repositories/user_repository";
-import { UserEntity } from "../../../src/domain/entities/user_entity";
+import { UserRegisterPayload } from "../../domain/contracts/repositories/user_repository";
+import { UserEntity } from "../../domain/entities/user_entity";
 import { UserDatasource } from "../contracts/datasources/user_datasource";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserSchema } from "../database/schema/user_schema";
 
 export class UserDatasourceImplementation implements UserDatasource {
     constructor(
-        @InjectRepository(UserEntity)
+        @InjectRepository(UserSchema)
         private typeOrmRepository: Repository<UserEntity>,
     ) {}
 

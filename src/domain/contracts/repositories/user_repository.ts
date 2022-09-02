@@ -41,7 +41,7 @@ export class UserRegisterPayload {
     }
 
     public isValidBirthDate(): boolean {
-        return this.birthDate instanceof Date;
+        return !!this.birthDate;
     }
 
     public isValidPassword(): boolean {
