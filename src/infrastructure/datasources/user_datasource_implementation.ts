@@ -1,4 +1,4 @@
-import { UserRegisterPayload } from "../../domain/contracts/repositories/user_repository";
+import { UserPayload } from "../../domain/models/payloads/user_payload";
 import { UserEntity } from "../../domain/entities/user_entity";
 import { UserDatasource } from "../contracts/datasources/user_datasource";
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,9 +9,9 @@ export class UserDatasourceImplementation implements UserDatasource {
     constructor(
         @InjectRepository(UserSchema)
         private typeOrmRepository: Repository<UserEntity>,
-    ) {}
+    ) { }
 
-    async register(params: UserRegisterPayload): Promise<UserEntity> {
+    async register(params: UserPayload): Promise<UserEntity> {
         return await this.typeOrmRepository.save(params);
     }
 }

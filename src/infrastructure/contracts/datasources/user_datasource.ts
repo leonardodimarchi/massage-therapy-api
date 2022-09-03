@@ -1,6 +1,6 @@
-import { UserRegisterPayload } from "../../../../src/domain/contracts/repositories/user_repository";
+import { UserPayload } from "../../../../src/domain/models/payloads/user_payload";
 import { UserEntity } from "../../../../src/domain/entities/user_entity";
 
 export abstract class UserDatasource {
-    abstract register(params: UserRegisterPayload): Promise<UserEntity>;
+    abstract register(params: UserPayload): Promise<UserEntity>;
 }

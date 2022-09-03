@@ -1,27 +1,24 @@
-import { BaseEntityProperties, Entity } from "../shared/entity";
+import { BaseProxy, BaseProxyProperties } from "../../../domain/shared/base_proxy";
 
-interface UserProperties extends BaseEntityProperties {
+interface UserProxyProperties extends BaseProxyProperties {
     email: string;
     name: string;
     phone: string;
     birthDate: Date;
-    password: string;
 }
 
-export class UserEntity extends Entity {
+export class UserProxy extends BaseProxy {
     email: string;
     name: string;
     phone: string;
     birthDate: Date;
-    password: string;
 
-    constructor(props: UserProperties) {
+    constructor(props: UserProxyProperties) {
         super(props);
 
         this.email = props.email;
         this.name = props.name;
         this.phone = props.phone;
         this.birthDate = props.birthDate;
-        this.password = props.password;
     }
 }

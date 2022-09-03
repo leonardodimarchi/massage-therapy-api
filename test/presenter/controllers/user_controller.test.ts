@@ -1,7 +1,9 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { mock, MockProxy } from "jest-mock-extended";
+import { UserProxy } from "../../../src/domain/models/proxies/user_proxy";
+import { mockedUserEntity } from "../../mocks/user_entity.mock";
 import { ValidationException } from "../../../src/domain/exceptions/validation_exception";
-import { UserRegisterPayload } from "../../../src/domain/contracts/repositories/user_repository";
+import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
 import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usecase";
 import { UserController } from "../../../src/presenter/controllers/user_controller";
 
@@ -14,19 +16,42 @@ describe('UserController', () => {
         controller = new UserController(registerUsecase);
     });
 
-    const params = new UserRegisterPayload({
-        email: 'valid@email.com',
-        name: 'Mocked name',
-        phone: '15992280628',
-        birthDate: new Date(),
-        password: '123456'
-    });
+
+    const mockedEntity = mockedUserEntity;
+   
 
     describe('Register', () => {
+        const params = new UserPayload({
+            email: 'Mocked email',
+            name: 'Mocked Name',
+            birthDate: new Date(11, 10, 2000),
+            phone: 'Mocked phone',
+            password: '123456'
+        });
+
+        const expectedResult = new UserProxy({
+            id: 1,
+            createdAt: new Date(11, 10, 2000),
+            updatedAt: new Date(11, 10, 2000),
+            email: 'Mocked email',
+            name: 'Mocked Name',
+            birthDate: new Date(11, 10, 2000),
+            phone: 'Mocked phone',
+        })
+
         it('should call register usecase', async () => {
             await controller.register(params);
 
             expect(registerUsecase.call).toHaveBeenCalledWith(params);
+        });
+
+        it('should return a UserProxy', async () => {
+            registerUsecase.call.mockResolvedValueOnce(mockedEntity);
+
+            const result = await controller.register(params);
+
+            expect(result).toEqual(expectedResult);
+            expect(result).toBeInstanceOf(UserProxy);
         });
 
         it('should throw an Forbidden HttpException when receiving a ValidationException', async () => {

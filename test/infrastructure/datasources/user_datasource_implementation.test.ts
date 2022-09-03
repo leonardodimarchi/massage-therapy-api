@@ -1,5 +1,5 @@
 import { MockProxy, mock } from "jest-mock-extended";
-import { UserRegisterPayload } from "../../../src/domain/contracts/repositories/user_repository";
+import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
 import { UserEntity } from "../../../src/domain/entities/user_entity";
 import { UserDatasourceImplementation } from "../../../src/infrastructure/datasources/user_datasource_implementation";
 import { mockedUserEntity } from "../../../test/mocks/user_entity.mock";
@@ -16,7 +16,7 @@ describe('UserDatasource', () => {
 
     describe('Register', () => {
         const entity = mockedUserEntity;
-        const payload = new UserRegisterPayload({
+        const payload = new UserPayload({
             email: 'valid@email.com',
             name: 'Mocked name',
             phone: '15992280628',

@@ -2,7 +2,8 @@ import { MockProxy, mock } from "jest-mock-extended";
 import { mockedUserEntity } from "../../mocks/user_entity.mock";
 import { UserDatasource } from "../../../src/infrastructure/contracts/datasources/user_datasource";
 import { UserRepositoryImplementation } from "../../../src/infrastructure/repositories/user_repository_implementation";
-import { UserRegisterPayload, UserRepository } from "../../../src/domain/contracts/repositories/user_repository";
+import { UserRepository } from "../../../src/domain/contracts/repositories/user_repository";
+import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
 
 describe('UserRepository', () => {
     let repository: UserRepository;
@@ -15,7 +16,7 @@ describe('UserRepository', () => {
 
     describe('Register', () => {
         const mockedReturn = mockedUserEntity;
-        const payload = new UserRegisterPayload({
+        const payload = new UserPayload({
             email: 'valid@email.com',
             name: 'Mocked name',
             phone: '15992280628',

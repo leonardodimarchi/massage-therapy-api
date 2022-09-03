@@ -1,6 +1,6 @@
-import { BaseEntityProperties, Entity } from "../shared/entity";
+import { Validators } from "../../../domain/shared/validations/validators";
 
-interface UserProperties extends BaseEntityProperties {
+interface UserPayloadProperties {
     email: string;
     name: string;
     phone: string;
@@ -8,16 +8,14 @@ interface UserProperties extends BaseEntityProperties {
     password: string;
 }
 
-export class UserEntity extends Entity {
+export class UserPayload {
     email: string;
     name: string;
     phone: string;
     birthDate: Date;
     password: string;
 
-    constructor(props: UserProperties) {
-        super(props);
-
+    constructor(props: UserPayloadProperties) {
         this.email = props.email;
         this.name = props.name;
         this.phone = props.phone;
