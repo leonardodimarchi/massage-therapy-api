@@ -4,33 +4,55 @@ import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usec
 import { ValidationException } from "../../../src/domain/exceptions/validation_exception";
 import { mock, MockProxy } from 'jest-mock-extended';
 import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
+import { BcryptService } from "../../../src/domain/contracts/adapters/bcrypt_service";
+import { UserEntity } from "../../../src/domain/entities/user_entity";
 
 describe('RegisterUsecase', () => {
-    let usecase: RegisterUsecase;
     let repository: MockProxy<UserRepository>;
+    let bcryptService: MockProxy<BcryptService>;
+    let usecase: RegisterUsecase;
 
     beforeEach(() => {
         repository = mock<UserRepository>();
-        usecase = new RegisterUsecase(repository);
+        bcryptService = mock<BcryptService>();
+        usecase = new RegisterUsecase(repository, bcryptService);
+
+
+        bcryptService.hash.mockResolvedValueOnce(hashPassword);
     });
+
+    const hashPassword = 'hashPassword';
 
     const params = new UserPayload({
         email: 'valid@email.com',
         name: 'Mocked name',
         phone: '15992280628',
         birthDate: new Date(),
-        password: '123456'
+        password: hashPassword,
     });
 
-    const entity = mockedUserEntity;
+    const entity: UserEntity = {
+        ...mockedUserEntity,
+        password: hashPassword,
+    };
 
     it('should get a user when calling the repository successfully', async () => {
         repository.register.mockResolvedValue(entity);
 
-        const result = await usecase.call(params);
+        const result = await usecase.call(new UserPayload({
+            ...params,
+        }));
 
         expect(result).toBe(entity);
-        expect(repository.register).toHaveBeenCalledWith(params);
+        expect(repository.register).toHaveBeenNthCalledWith(1, params);
+    });
+
+    it('should call bcrypt service to hash the user password', async () => {
+        await usecase.call(new UserPayload({
+            ...params,
+        }));
+
+        expect(bcryptService.hash).toHaveBeenNthCalledWith(1, params.password);
     });
 
     it('should not call register with invalid email', async () => {

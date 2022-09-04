@@ -3,10 +3,14 @@ import { UserRepository } from "../../../domain/contracts/repositories/user_repo
 import { UserPayload } from "../../../domain/models/payloads/user_payload";
 import { UserEntity } from "../../entities/user_entity";
 import { ValidationException } from "../../exceptions/validation_exception";
+import { BcryptService } from "src/domain/contracts/adapters/bcrypt_service";
 
 export class RegisterUsecase implements UseCase<UserEntity, UserPayload> {
 
-    constructor(private readonly repository: UserRepository) {}
+    constructor(
+        private readonly repository: UserRepository,
+        private readonly bcryptService: BcryptService,
+    ) {}
 
     public async call(params: UserPayload): Promise<UserEntity> {
         if (!UserValidator.isValidEmail(params.email))
@@ -23,6 +27,8 @@ export class RegisterUsecase implements UseCase<UserEntity, UserPayload> {
 
         if (!UserValidator.isValidPassword(params.password))
             throw new ValidationException('Senha inválida');
+
+        params.password = await this.bcryptService.hash(params.password);
 
         return this.repository.register(params);
     }

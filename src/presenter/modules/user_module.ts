@@ -7,6 +7,8 @@ import { UserRepositoryImplementation } from "../../infrastructure/repositories/
 import { UserController } from "../controllers/user_controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserSchema } from "../../infrastructure/database/schema/user_schema";
+import { BcryptService } from "../../domain/contracts/adapters/bcrypt_service";
+import { BcryptServiceImplementation } from "../../infrastructure/services/bcrypt_service_implementation";
 
 @Module({
     imports: [
@@ -16,8 +18,10 @@ import { UserSchema } from "../../infrastructure/database/schema/user_schema";
     providers: [
         {
             provide: RegisterUsecase,
-            useFactory: (repository: UserRepository) => new RegisterUsecase(repository),
-            inject: [UserRepository]
+            useFactory: (repository: UserRepository, bcryptService: BcryptService) => {
+                return new RegisterUsecase(repository, bcryptService);
+            },
+            inject: [UserRepository, BcryptService]
         },
         {
             provide: UserRepository,
@@ -28,6 +32,10 @@ import { UserSchema } from "../../infrastructure/database/schema/user_schema";
             provide: UserDatasource,
             useClass: UserDatasourceImplementation,
         },
+        {
+            provide: BcryptService,
+            useClass: BcryptServiceImplementation,
+        }
     ],
 })
 export class UserModule { }
