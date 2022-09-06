@@ -12,7 +12,6 @@ export class UserRepositoryImplementation implements UserRepository {
     }
 
     public async getByEmail(email: string): Promise<UserEntity> {
-        // TODO: Implement
-        return null;
+        return await this.datasource.getByEmail(email);
     }
 }
