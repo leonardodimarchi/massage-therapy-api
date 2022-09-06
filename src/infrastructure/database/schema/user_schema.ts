@@ -15,6 +15,10 @@ export const UserSchema = new EntitySchema<UserEntity>({
       type: String,
       length: 50,
     },
+    password: {
+      type: String,
+      length: 50,
+    },
   },
   orderBy: {
     createdAt: 'ASC',

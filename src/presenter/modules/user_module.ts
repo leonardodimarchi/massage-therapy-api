@@ -9,13 +9,25 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserSchema } from "../../infrastructure/database/schema/user_schema";
 import { BcryptService } from "../../domain/contracts/services/bcrypt_service";
 import { BcryptServiceImplementation } from "../../infrastructure/services/bcrypt_service_implementation";
+import { PassportModule } from "@nestjs/passport/dist";
+import { LocalStrategy } from "../../infrastructure/authentication/strategies/local_strategy";
+import { ValidateToLoginUsecase } from "../../domain/usecases/user/validate_to_login_usecase";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserSchema])
+        TypeOrmModule.forFeature([UserSchema]),
+        PassportModule,
     ],
     controllers: [UserController],
     providers: [
+        LocalStrategy,
+        {
+            provide: ValidateToLoginUsecase,
+            useFactory: (repository: UserRepository, bcryptService: BcryptService) => {
+                return new ValidateToLoginUsecase(repository, bcryptService);
+            },
+            inject: [UserRepository, BcryptService]
+        },
         {
             provide: RegisterUsecase,
             useFactory: (repository: UserRepository, bcryptService: BcryptService) => {
