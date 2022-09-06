@@ -10,4 +10,9 @@ export class UserRepositoryImplementation implements UserRepository {
     public async register(params: UserPayload): Promise<UserEntity> {
         return await this.datasource.register(params);
     }
+
+    public async getByEmail(email: string): Promise<UserEntity> {
+        // TODO: Implement
+        return null;
+    }
 }
