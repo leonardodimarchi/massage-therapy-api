@@ -7,7 +7,7 @@ import { UserRepositoryImplementation } from "../../infrastructure/repositories/
 import { UserController } from "../controllers/user_controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserSchema } from "../../infrastructure/database/schema/user_schema";
-import { BcryptService } from "../../domain/contracts/adapters/bcrypt_service";
+import { BcryptService } from "../../domain/contracts/services/bcrypt_service";
 import { BcryptServiceImplementation } from "../../infrastructure/services/bcrypt_service_implementation";
 
 @Module({

@@ -1,4 +1,4 @@
-import { BcryptService } from "../../domain/contracts/adapters/bcrypt_service";
+import { BcryptService } from "../../domain/contracts/services/bcrypt_service";
 import * as bcrypt from 'bcrypt';
 
 export class BcryptServiceImplementation implements BcryptService {

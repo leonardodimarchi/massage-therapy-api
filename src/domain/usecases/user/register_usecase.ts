@@ -3,7 +3,7 @@ import { UserRepository } from "../../../domain/contracts/repositories/user_repo
 import { UserPayload } from "../../../domain/models/payloads/user_payload";
 import { UserEntity } from "../../entities/user_entity";
 import { ValidationException } from "../../exceptions/validation_exception";
-import { BcryptService } from "src/domain/contracts/adapters/bcrypt_service";
+import { BcryptService } from "src/domain/contracts/services/bcrypt_service";
 
 export class RegisterUsecase implements UseCase<UserEntity, UserPayload> {
 
