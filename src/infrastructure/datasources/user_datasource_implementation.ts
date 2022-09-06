@@ -16,7 +16,8 @@ export class UserDatasourceImplementation implements UserDatasource {
     }
 
     public async getByEmail(email: string): Promise<UserEntity> {
-        // TODO: Implement
-        return null;
+        return await this.typeOrmRepository.findOne({
+            where: { email }
+        })
     }
 }
