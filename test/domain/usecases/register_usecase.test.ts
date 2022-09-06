@@ -4,7 +4,7 @@ import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usec
 import { ValidationException } from "../../../src/domain/exceptions/validation_exception";
 import { mock, MockProxy } from 'jest-mock-extended';
 import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
-import { BcryptService } from "../../../src/domain/contracts/adapters/bcrypt_service";
+import { BcryptService } from "../../../src/domain/contracts/services/bcrypt_service";
 import { UserEntity } from "../../../src/domain/entities/user_entity";
 
 describe('RegisterUsecase', () => {
