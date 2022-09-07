@@ -3,7 +3,7 @@ import { ValidationException } from "../../domain/exceptions/validation_exceptio
 import { RegisterUsecase } from "../../domain/usecases/user/register_usecase";
 import { UserPayload } from "../../domain/models/payloads/user_payload";
 import { UserProxy } from "../../domain/models/proxies/user_proxy";
-import { AuthGuard } from "@nestjs/passport";
+import { LocalAuthGuard } from "../../infrastructure/authentication/guards/local_auth_guard";
 
 @Controller('users')
 export class UserController {
@@ -11,7 +11,7 @@ export class UserController {
         private readonly registerUsecase: RegisterUsecase,
     ) { }
 
-    @UseGuards(AuthGuard('local'))
+    @UseGuards(LocalAuthGuard)
     @Post('login')
     async login(@Request() req) {
       return req.user;
