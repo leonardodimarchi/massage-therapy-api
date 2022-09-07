@@ -3,4 +3,5 @@ import { UserEntity } from "../../../../src/domain/entities/user_entity";
 
 export abstract class UserDatasource {
     abstract register(params: UserPayload): Promise<UserEntity>;
+    abstract getByEmail(email: string): Promise<UserEntity>;
 }

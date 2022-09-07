@@ -32,5 +32,23 @@ describe('UserDatasource', () => {
             expect(result).toEqual(entity);
             expect(typeOrmRepository.save).toHaveBeenNthCalledWith(1, payload);
         });
-    })
+    });
+
+    describe('GetByEmail', () => {
+        const entity = mockedUserEntity;
+        const mockedEmail = 'my@email.com';
+
+        it('should get a user from the database', async () => {
+            typeOrmRepository.findOne.mockResolvedValue(entity);
+
+            const result = await datasource.getByEmail(mockedEmail);
+
+            expect(result).toEqual(entity);
+            expect(typeOrmRepository.findOne).toHaveBeenNthCalledWith(1, {
+                where: {
+                    email: mockedEmail
+                }
+            });
+        });
+    });
 });

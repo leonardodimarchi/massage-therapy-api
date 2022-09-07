@@ -34,4 +34,18 @@ describe('UserRepository', () => {
             expect(datasource.register).toHaveBeenNthCalledWith(1, payload);
         });
     });
+
+    describe('GetByEmail', () => {
+        const mockedReturn = mockedUserEntity;
+        const mockedEmail = 'my@email.com';
+
+        it('should return a user entity when calling the datasource', async () => {
+            datasource.getByEmail.mockResolvedValue(mockedReturn);
+
+            const result = await repository.getByEmail(mockedEmail);
+
+            expect(result).toEqual(mockedReturn);
+            expect(datasource.getByEmail).toHaveBeenNthCalledWith(1, mockedEmail);
+        });
+    });
 });

@@ -11,7 +11,13 @@ export class UserDatasourceImplementation implements UserDatasource {
         private typeOrmRepository: Repository<UserEntity>,
     ) { }
 
-    async register(params: UserPayload): Promise<UserEntity> {
+    public async register(params: UserPayload): Promise<UserEntity> {
         return await this.typeOrmRepository.save(params);
+    }
+
+    public async getByEmail(email: string): Promise<UserEntity> {
+        return await this.typeOrmRepository.findOne({
+            where: { email }
+        })
     }
 }

@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { JwtModule } from "@nestjs/jwt";
 import { UserDatasource } from "../../infrastructure/contracts/datasources/user_datasource";
 import { UserDatasourceImplementation } from "../../infrastructure/datasources/user_datasource_implementation";
 import { UserRepository } from "../../domain/contracts/repositories/user_repository";
@@ -7,17 +8,49 @@ import { UserRepositoryImplementation } from "../../infrastructure/repositories/
 import { UserController } from "../controllers/user_controller";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserSchema } from "../../infrastructure/database/schema/user_schema";
+import { BcryptService } from "../../domain/contracts/services/bcrypt_service";
+import { BcryptServiceImplementation } from "../../infrastructure/services/bcrypt_service_implementation";
+import { PassportModule } from "@nestjs/passport/dist";
+import { LocalStrategy } from "../../infrastructure/authentication/strategies/local_strategy";
+import { ValidateToLoginUsecase } from "../../domain/usecases/user/validate_to_login_usecase";
+import { LoginUsecase } from "../../domain/usecases/user/login_usecase";
+import { JwtService } from "../../domain/contracts/services/jwt_service";
+import { JwtStrategy } from "../../infrastructure/authentication/strategies/jwt_strategy";
+import { JwtServiceImplementation } from "../../infrastructure/services/jwt_service_implementation";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserSchema])
+        TypeOrmModule.forFeature([UserSchema]),
+        PassportModule,
+        JwtModule.register({
+            secret: 'SECRET',
+            signOptions: { 
+                expiresIn: '7d',
+            },
+        }),
     ],
     controllers: [UserController],
     providers: [
+        LocalStrategy,
+        JwtStrategy,
+        {
+            provide: LoginUsecase,
+            useFactory: (jwtService: JwtService) => new LoginUsecase(jwtService),
+            inject: [JwtService]
+        },
+        {
+            provide: ValidateToLoginUsecase,
+            useFactory: (repository: UserRepository, bcryptService: BcryptService) => {
+                return new ValidateToLoginUsecase(repository, bcryptService);
+            },
+            inject: [UserRepository, BcryptService]
+        },
         {
             provide: RegisterUsecase,
-            useFactory: (repository: UserRepository) => new RegisterUsecase(repository),
-            inject: [UserRepository]
+            useFactory: (repository: UserRepository, bcryptService: BcryptService) => {
+                return new RegisterUsecase(repository, bcryptService);
+            },
+            inject: [UserRepository, BcryptService]
         },
         {
             provide: UserRepository,
@@ -28,6 +61,14 @@ import { UserSchema } from "../../infrastructure/database/schema/user_schema";
             provide: UserDatasource,
             useClass: UserDatasourceImplementation,
         },
+        {
+            provide: BcryptService,
+            useClass: BcryptServiceImplementation,
+        },
+        {
+            provide: JwtService,
+            useClass: JwtServiceImplementation,
+        }
     ],
 })
 export class UserModule { }
