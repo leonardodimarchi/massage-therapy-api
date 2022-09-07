@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { JwtModule, JwtService as JwtImplementation } from "@nestjs/jwt";
+import { JwtModule } from "@nestjs/jwt";
 import { UserDatasource } from "../../infrastructure/contracts/datasources/user_datasource";
 import { UserDatasourceImplementation } from "../../infrastructure/datasources/user_datasource_implementation";
 import { UserRepository } from "../../domain/contracts/repositories/user_repository";
@@ -16,6 +16,7 @@ import { ValidateToLoginUsecase } from "../../domain/usecases/user/validate_to_l
 import { LoginUsecase } from "../../domain/usecases/user/login_usecase";
 import { JwtService } from "../../domain/contracts/services/jwt_service";
 import { JwtStrategy } from "../../infrastructure/authentication/strategies/jwt_strategy";
+import { JwtServiceImplementation } from "../../infrastructure/services/jwt_service_implementation";
 
 @Module({
     imports: [
@@ -23,7 +24,9 @@ import { JwtStrategy } from "../../infrastructure/authentication/strategies/jwt_
         PassportModule,
         JwtModule.register({
             secret: 'SECRET',
-            signOptions: { expiresIn: '60s' },
+            signOptions: { 
+                expiresIn: '7d',
+            },
         }),
     ],
     controllers: [UserController],
@@ -64,7 +67,7 @@ import { JwtStrategy } from "../../infrastructure/authentication/strategies/jwt_
         },
         {
             provide: JwtService,
-            useClass: JwtImplementation,
+            useClass: JwtServiceImplementation,
         }
     ],
 })
