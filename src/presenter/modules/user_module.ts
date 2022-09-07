@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { JwtModule, JwtService as JwtImplementation } from "@nestjs/jwt";
 import { UserDatasource } from "../../infrastructure/contracts/datasources/user_datasource";
 import { UserDatasourceImplementation } from "../../infrastructure/datasources/user_datasource_implementation";
 import { UserRepository } from "../../domain/contracts/repositories/user_repository";
@@ -12,15 +13,28 @@ import { BcryptServiceImplementation } from "../../infrastructure/services/bcryp
 import { PassportModule } from "@nestjs/passport/dist";
 import { LocalStrategy } from "../../infrastructure/authentication/strategies/local_strategy";
 import { ValidateToLoginUsecase } from "../../domain/usecases/user/validate_to_login_usecase";
+import { LoginUsecase } from "../../domain/usecases/user/login_usecase";
+import { JwtService } from "../../domain/contracts/services/jwt_service";
+import { JwtStrategy } from "../../infrastructure/authentication/strategies/jwt_strategy";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([UserSchema]),
         PassportModule,
+        JwtModule.register({
+            secret: 'SECRET',
+            signOptions: { expiresIn: '60s' },
+        }),
     ],
     controllers: [UserController],
     providers: [
         LocalStrategy,
+        JwtStrategy,
+        {
+            provide: LoginUsecase,
+            useFactory: (jwtService: JwtService) => new LoginUsecase(jwtService),
+            inject: [JwtService]
+        },
         {
             provide: ValidateToLoginUsecase,
             useFactory: (repository: UserRepository, bcryptService: BcryptService) => {
@@ -47,6 +61,10 @@ import { ValidateToLoginUsecase } from "../../domain/usecases/user/validate_to_l
         {
             provide: BcryptService,
             useClass: BcryptServiceImplementation,
+        },
+        {
+            provide: JwtService,
+            useClass: JwtImplementation,
         }
     ],
 })

@@ -4,17 +4,21 @@ import { RegisterUsecase } from "../../domain/usecases/user/register_usecase";
 import { UserPayload } from "../../domain/models/payloads/user_payload";
 import { UserProxy } from "../../domain/models/proxies/user_proxy";
 import { LocalAuthGuard } from "../../infrastructure/authentication/guards/local_auth_guard";
+import { UserEntity } from "../../domain/entities/user_entity";
+import { LoginUsecase } from "../../domain/usecases/user/login_usecase";
+import { JwtProxy } from "../../domain/models/proxies/jwt_proxy";
 
 @Controller('users')
 export class UserController {
     constructor(
         private readonly registerUsecase: RegisterUsecase,
+        private readonly loginUsecase: LoginUsecase,
     ) { }
 
     @UseGuards(LocalAuthGuard)
     @Post('login')
-    async login(@Request() req) {
-      return req.user;
+    public login(@Request() req: { user: UserEntity }): JwtProxy {
+      return this.loginUsecase.call(req.user);
     }
 
     @Post()
