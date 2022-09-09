@@ -6,20 +6,22 @@ import { ValidationException } from "../../../src/domain/exceptions/validation_e
 import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
 import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usecase";
 import { UserController } from "../../../src/presenter/controllers/user_controller";
+import { LoginUsecase } from "../../../src/domain/usecases/user/login_usecase";
+import { LoginPayload } from "src/domain/models/payloads/login_payload";
 
 describe('UserController', () => {
     let controller: UserController;
     let registerUsecase: MockProxy<RegisterUsecase>;
+    let loginUsecase: MockProxy<LoginUsecase>;
 
     beforeEach(() => {
         registerUsecase = mock<RegisterUsecase>();
-        controller = new UserController(registerUsecase);
+        loginUsecase = mock<LoginUsecase>();
+        controller = new UserController(registerUsecase, loginUsecase);
     });
-
 
     const mockedEntity = mockedUserEntity;
    
-
     describe('Register', () => {
         const params = new UserPayload({
             email: 'Mocked email',
@@ -65,5 +67,13 @@ describe('UserController', () => {
                 HttpStatus.FORBIDDEN,
             ));
         });
-    })
+    });
+
+    describe('Login', () => {
+        it('should call login usecase with the user entity', () => {
+            controller.login({ user: mockedEntity });
+
+            expect(loginUsecase.call).toHaveBeenNthCalledWith(1, mockedEntity);
+        });
+    });
 });
