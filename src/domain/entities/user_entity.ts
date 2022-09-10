@@ -1,4 +1,5 @@
 import { BaseEntityProperties, Entity } from "../shared/entity";
+import { TreatmentEntity } from "./treatment_entity";
 
 interface UserProperties extends BaseEntityProperties {
     email: string;
@@ -6,6 +7,8 @@ interface UserProperties extends BaseEntityProperties {
     phone: string;
     birthDate: Date;
     password: string;
+
+    treatments?: TreatmentEntity[];
 }
 
 export class UserEntity extends Entity {
@@ -15,6 +18,8 @@ export class UserEntity extends Entity {
     birthDate: Date;
     password: string;
 
+    treatments?: TreatmentEntity[];
+
     constructor(props: UserProperties) {
         super(props);
 
@@ -23,5 +28,7 @@ export class UserEntity extends Entity {
         this.phone = props.phone;
         this.birthDate = props.birthDate;
         this.password = props.password;
+
+        this.treatments = props.treatments;
     }
 }

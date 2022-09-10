@@ -1,4 +1,5 @@
 import { BaseEntityProperties, Entity } from "../shared/entity";
+import { UserEntity } from "./user_entity";
 
 interface TreatmentProperties extends BaseEntityProperties {
     userId: number;
@@ -7,6 +8,8 @@ interface TreatmentProperties extends BaseEntityProperties {
     symptoms: string;
     isPregnant?: boolean;
     pregnantWeeks?: number;
+
+    user?: UserEntity;
 }
 
 export class TreatmentEntity extends Entity {
@@ -17,6 +20,8 @@ export class TreatmentEntity extends Entity {
     isPregnant?: boolean;
     pregnantWeeks?: number;
 
+    user?: UserEntity;
+
     constructor(props: TreatmentProperties) {
         super(props);
 
@@ -26,5 +31,7 @@ export class TreatmentEntity extends Entity {
         this.symptoms = props.symptoms;
         this.isPregnant = props.isPregnant;
         this.pregnantWeeks = props.pregnantWeeks;
+        
+        this.user = props.user;
     }
 }
