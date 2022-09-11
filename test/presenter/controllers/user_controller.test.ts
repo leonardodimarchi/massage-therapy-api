@@ -12,12 +12,10 @@ import { LoginPayload } from "src/domain/models/payloads/login_payload";
 describe('UserController', () => {
     let controller: UserController;
     let registerUsecase: MockProxy<RegisterUsecase>;
-    let loginUsecase: MockProxy<LoginUsecase>;
 
     beforeEach(() => {
         registerUsecase = mock<RegisterUsecase>();
-        loginUsecase = mock<LoginUsecase>();
-        controller = new UserController(registerUsecase, loginUsecase);
+        controller = new UserController(registerUsecase);
     });
 
     const mockedEntity = mockedUserEntity;
@@ -66,14 +64,6 @@ describe('UserController', () => {
                 mockedErrorMessage,
                 HttpStatus.FORBIDDEN,
             ));
-        });
-    });
-
-    describe('Login', () => {
-        it('should call login usecase with the user entity', () => {
-            controller.login({ user: mockedEntity });
-
-            expect(loginUsecase.call).toHaveBeenNthCalledWith(1, mockedEntity);
         });
     });
 });

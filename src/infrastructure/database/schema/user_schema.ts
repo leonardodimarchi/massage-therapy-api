@@ -27,7 +27,7 @@ export const UserSchema = new EntitySchema<UserEntity>({
   relations: {
     treatments: {
       type: 'one-to-many',
-      target: TreatmentSchema,
+      target: 'treatments',
       inverseSide: 'Treatments'
     }
   }

@@ -38,7 +38,7 @@ export const TreatmentSchema = new EntitySchema<TreatmentEntity>({
   relations: {
     user: {
       type: 'many-to-one',
-      target: UserSchema,
+      target: 'users',
       joinColumn: true,
       inverseSide: 'Users'
     }

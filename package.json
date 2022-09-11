@@ -79,6 +79,17 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.test.json"
+      }
+    },
+    "moduleNameMapper": {
+      "@/presenter/(.*)": ["<rootDir>/src/presenter/$1"],
+      "@/infra/(.*)": ["<rootDir>/src/infrastructure/$1"],
+      "@/domain/(.*)": ["<rootDir>/src/domain/$1"],
+      "test/(.*)": ["<rootDir>/test/$1"]
+    }
   }
 }
