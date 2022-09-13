@@ -7,12 +7,15 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentEntity, Appo
 
     constructor(
         private readonly repository: AppointmentRepository,
-    ) {}
+    ) { }
 
     public async call(params: AppointmentPayload): Promise<AppointmentEntity> {
         if (params.startsAt.getTime() < new Date().getTime())
             throw new ValidationException('A data de agendamento não pode ser antes da data de hoje');
-        
+
+        if (params.endsAt.getTime() < params.startsAt.getTime())
+            throw new ValidationException('A data final do agendamento não pode ser antes da data inicial');
+
         return await this.repository.create(params);
     }
 }
