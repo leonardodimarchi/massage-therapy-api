@@ -8,7 +8,7 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentEntity, Appo
         private readonly repository: AppointmentRepository,
     ) {}
 
-    public async call(params: AppointmentPayload): Promise<AppointmentEntity> {
+    public async call(params: AppointmentPayload): Promise<AppointmentEntity> { 
         return await this.repository.create(params);
     }
 }

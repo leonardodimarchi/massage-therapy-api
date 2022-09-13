@@ -30,7 +30,9 @@ describe('CreateAppointmentUsecase', () => {
         complaint: '',
         isUnderMedicalTreatment: false,
         symptoms: '',
-    })
+        startsAt: new Date(2023, 7, 20),
+        endsAt: new Date(2023, 8, 4)
+    });
     
     it('should get a user when calling the repository successfully', async () => {
         repository.create.mockResolvedValue(entity);
