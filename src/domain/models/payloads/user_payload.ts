@@ -1,5 +1,3 @@
-import { Validators } from "../../../domain/shared/validations/validators";
-
 interface UserPayloadProperties {
     email: string;
     name: string;

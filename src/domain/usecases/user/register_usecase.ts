@@ -1,9 +1,10 @@
-import { UserValidator } from "../../../domain/validators/user_validator";
-import { UserRepository } from "../../../domain/contracts/repositories/user_repository";
-import { UserPayload } from "../../../domain/models/payloads/user_payload";
-import { UserEntity } from "../../entities/user_entity";
-import { ValidationException } from "../../exceptions/validation_exception";
-import { BcryptService } from "src/domain/contracts/services/bcrypt_service";
+import { UserRepository } from "@/domain/contracts/repositories/user_repository";
+import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
+import { UserEntity } from "@/domain/entities/user_entity";
+import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { UserPayload } from "@/domain/models/payloads/user_payload";
+import { UserValidator } from "@/domain/validators/user_validator";
+
 
 export class RegisterUsecase implements UseCase<UserEntity, UserPayload> {
 
