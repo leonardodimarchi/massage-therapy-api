@@ -1,11 +1,10 @@
 import { EntitySchema } from 'typeorm';
 import { BaseSchemaColumns } from './base_schema_columns';
-import { TreatmentEntity } from '../../../domain/entities/treatment_entity';
-import { UserSchema } from './user_schema';
+import { AppointmentEntity } from '../../../domain/entities/appointment_entity';
 
-export const TreatmentSchema = new EntitySchema<TreatmentEntity>({
-  name: 'Treatments',
-  tableName: 'treatments',
+export const AppointmentSchema = new EntitySchema<AppointmentEntity>({
+  name: 'Appointments',
+  tableName: 'appointments',
   columns: {
     ...BaseSchemaColumns,
     userId: {

@@ -1,7 +1,6 @@
 import { UserEntity } from '../../../domain/entities/user_entity';
 import { EntitySchema } from 'typeorm';
 import { BaseSchemaColumns } from './base_schema_columns';
-import { TreatmentSchema } from './treatment_schema';
 
 export const UserSchema = new EntitySchema<UserEntity>({
   name: 'Users',
@@ -25,10 +24,10 @@ export const UserSchema = new EntitySchema<UserEntity>({
     createdAt: 'ASC',
   },
   relations: {
-    treatments: {
+    appointments: {
       type: 'one-to-many',
-      target: 'treatments',
-      inverseSide: 'Treatments'
+      target: 'appointments',
+      inverseSide: 'Appointments'
     }
   }
 });

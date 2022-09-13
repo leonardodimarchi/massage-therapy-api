@@ -1,7 +1,7 @@
 import { BaseEntityProperties, Entity } from "../shared/entity";
 import { UserEntity } from "./user_entity";
 
-interface TreatmentProperties extends BaseEntityProperties {
+interface AppointmentProperties extends BaseEntityProperties {
     userId: number;
     complaint: string;
     isUnderMedicalTreatment: boolean;
@@ -12,7 +12,7 @@ interface TreatmentProperties extends BaseEntityProperties {
     user?: UserEntity;
 }
 
-export class TreatmentEntity extends Entity {
+export class AppointmentEntity extends Entity {
     userId: number;
     complaint: string;
     isUnderMedicalTreatment: boolean;
@@ -22,7 +22,7 @@ export class TreatmentEntity extends Entity {
 
     user?: UserEntity;
 
-    constructor(props: TreatmentProperties) {
+    constructor(props: AppointmentProperties) {
         super(props);
 
         this.userId = props.userId;
