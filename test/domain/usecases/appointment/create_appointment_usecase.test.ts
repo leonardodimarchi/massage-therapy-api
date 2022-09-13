@@ -63,6 +63,25 @@ describe('CreateAppointmentUsecase', () => {
         expect(repository.create).not.toHaveBeenCalled();
     });
 
+    it('should not create if the start date is before now (With time)', async () => {
+        const todayDate = new Date(2022, 10, 2, 10, 50, 23);
+        const startsAt = new Date(2022, 10, 2, 10, 50, 22);
+        const endsAt = new Date(2022, 10, 3);
+
+        jest.useFakeTimers().setSystemTime(todayDate);
+
+        const invalidPayload = new AppointmentPayload({
+            ...payload,
+            startsAt,
+            endsAt,
+        })
+
+        expect(async () => {
+            await usecase.call(invalidPayload)
+        }).rejects.toThrowError(ValidationException);
+        expect(repository.create).not.toHaveBeenCalled();
+    });
+
     it('should not create if the end date is before start date', async () => {
         const todayDate = new Date(2022, 10, 2);
         const startsAt = new Date(2022, 10, 3);
