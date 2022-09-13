@@ -1,8 +1,8 @@
-import { mock, MockProxy } from 'jest-mock-extended';
-import { JwtProxy } from '../../../src/domain/models/proxies/jwt_proxy';
-import { JwtService } from '../../../src/domain/contracts/services/jwt_service';
-import { LoginUsecase } from "../../../src/domain/usecases/user/login_usecase";
-import { mockedUserEntity } from '../../../test/mocks/user_entity.mock';
+import { JwtProxy } from "@/domain/models/proxies/jwt_proxy";
+import { LoginUsecase } from "@/domain/usecases/user/login_usecase";
+import { JwtService } from "@nestjs/jwt";
+import { MockProxy, mock } from "jest-mock-extended";
+import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
 describe('LoginUsecase', () => {
     let jwtService: MockProxy<JwtService>;

@@ -1,10 +1,10 @@
-import { mockedUserEntity } from "../../../test/mocks/user_entity.mock";
-import { UserRepository } from "../../../src/domain/contracts/repositories/user_repository";
-import { mock, MockProxy } from 'jest-mock-extended';
-import { BcryptService } from "../../../src/domain/contracts/services/bcrypt_service";
-import { UserEntity } from "../../../src/domain/entities/user_entity";
-import { ValidateToLoginUsecase } from "../../../src/domain/usecases/user/validate_to_login_usecase";
-import { LoginPayload } from "../../../src/domain/models/payloads/login_payload";
+import { UserRepository } from "@/domain/contracts/repositories/user_repository";
+import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
+import { UserEntity } from "@/domain/entities/user_entity";
+import { LoginPayload } from "@/domain/models/payloads/login_payload";
+import { ValidateToLoginUsecase } from "@/domain/usecases/user/validate_to_login_usecase";
+import { MockProxy, mock } from "jest-mock-extended";
+import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
 describe('ValidateToLoginUsecase', () => {
     let repository: MockProxy<UserRepository>;

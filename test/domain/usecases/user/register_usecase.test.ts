@@ -1,11 +1,11 @@
-import { mockedUserEntity } from "../../../test/mocks/user_entity.mock";
-import { UserRepository } from "../../../src/domain/contracts/repositories/user_repository";
-import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usecase";
-import { ValidationException } from "../../../src/domain/exceptions/validation_exception";
-import { mock, MockProxy } from 'jest-mock-extended';
-import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
-import { BcryptService } from "../../../src/domain/contracts/services/bcrypt_service";
-import { UserEntity } from "../../../src/domain/entities/user_entity";
+import { UserRepository } from "@/domain/contracts/repositories/user_repository";
+import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
+import { UserEntity } from "@/domain/entities/user_entity";
+import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { UserPayload } from "@/domain/models/payloads/user_payload";
+import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
+import { MockProxy, mock } from "jest-mock-extended";
+import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
 describe('RegisterUsecase', () => {
     let repository: MockProxy<UserRepository>;
