@@ -16,6 +16,11 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentEntity, Appo
         if (params.endsAt.getTime() < params.startsAt.getTime())
             throw new ValidationException('A data final do agendamento não pode ser antes da data inicial');
 
+        const hasConflictingDates = await this.repository.hasConflictingDates(params.startsAt, params.endsAt);
+
+        if (hasConflictingDates)
+            throw new ValidationException('A data de agendamento está indisponível');
+
         return await this.repository.create(params);
     }
 }

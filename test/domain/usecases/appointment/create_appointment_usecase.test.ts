@@ -100,4 +100,13 @@ describe('CreateAppointmentUsecase', () => {
         }).rejects.toThrowError(ValidationException);
         expect(repository.create).not.toHaveBeenCalled();
     });
+
+    it('should check if there is any conclicting appointments', async () => {
+        repository.hasConflictingDates.mockResolvedValueOnce(true);
+
+        expect(async () => {
+            await usecase.call(payload)
+        }).rejects.toThrowError(ValidationException);
+        expect(repository.hasConflictingDates).toHaveBeenNthCalledWith(1, payload.startsAt, payload.endsAt);
+    });
 });
