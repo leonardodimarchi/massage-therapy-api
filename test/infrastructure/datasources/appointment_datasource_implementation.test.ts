@@ -35,4 +35,30 @@ describe('AppointmentDatasource', () => {
             expect(typeOrmRepository.save).toHaveBeenNthCalledWith(1, payload);
         });
     });
+
+    describe('HasConflictingDates', () => {
+        it('should return true if it finds an appointment', async () => {
+            typeOrmRepository.findOne.mockResolvedValueOnce(mockedAppointmentEntity);
+
+            const startDate = new Date(2022, 10, 2);
+            const endDate = new Date(2022, 10, 6);
+
+            const result = await datasource.hasConflictingDates(startDate, endDate);
+
+            expect(typeOrmRepository.findOne).toHaveBeenCalledTimes(1);
+            expect(result).toBeTruthy();
+        });
+
+        it('should return false if it doesn\'t finds an appointment', async () => {
+            typeOrmRepository.findOne.mockResolvedValueOnce(null);
+
+            const startDate = new Date(2022, 10, 2);
+            const endDate = new Date(2022, 10, 6);
+
+            const result = await datasource.hasConflictingDates(startDate, endDate);
+
+            expect(typeOrmRepository.findOne).toHaveBeenCalledTimes(1);
+            expect(result).toBeFalsy();
+        });
+    });
 });

@@ -16,6 +16,8 @@ export class AppointmentDatasourceImplementation implements AppointmentDatasourc
     }
 
     public async hasConflictingDates(startDate: Date, endDate: Date): Promise<boolean> {
-        throw new Error("Method not implemented.");
+        const exists = await this.typeOrmRepository.findOne({}).then(result => !!result);
+        
+        return exists;
     }
 }
