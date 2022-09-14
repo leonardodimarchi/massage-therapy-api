@@ -3,8 +3,7 @@ import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload
 import { AppointmentDatasourceImplementation } from "@/infra/datasources/appointment_datasource_implementation";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
-import { mockedUserEntity } from "test/mocks/user_entity.mock";
-import { Repository } from "typeorm";
+import { FindOneOptions, Repository, MoreThanOrEqual, LessThanOrEqual } from "typeorm";
 
 describe('AppointmentDatasource', () => {
     let typeOrmRepository: MockProxy<Repository<AppointmentEntity>>;
@@ -59,6 +58,21 @@ describe('AppointmentDatasource', () => {
 
             expect(typeOrmRepository.findOne).toHaveBeenCalledTimes(1);
             expect(result).toBeFalsy();
+        });
+
+        it('should find an appointment by passing the correct filter', async () => {
+            const startDate = new Date(2022, 10, 2);
+            const endDate = new Date(2022, 10, 6);
+            const expectedOptions: FindOneOptions<AppointmentEntity> = {
+                where: {
+                    startsAt: MoreThanOrEqual(startDate),
+                    endsAt: LessThanOrEqual(endDate),
+                }
+            };
+
+            await datasource.hasConflictingDates(startDate, endDate);
+
+            expect(typeOrmRepository.findOne).toHaveBeenNthCalledWith(1, expectedOptions);
         });
     });
 });
