@@ -2,8 +2,8 @@ import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 
 export const mockedAppointmentEntity = new AppointmentEntity({
     id: 1,
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date(2023, 7, 20),
+    updatedAt: new Date(2023, 7, 20),
     userId: 2,
     complaint: '',
     isUnderMedicalTreatment: false,
