@@ -7,6 +7,7 @@ import { AppointmentController } from "@/presenter/controllers/appointment_contr
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
+import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
 describe('AppointmentController', () => {
     let controller: AppointmentController;
@@ -18,6 +19,7 @@ describe('AppointmentController', () => {
     });
 
     const mockedEntity = mockedAppointmentEntity;
+    const mockedUser = mockedUserEntity;
 
     describe('Create', () => {
         const params: AppointmentPayload = new AppointmentPayload({
@@ -42,7 +44,9 @@ describe('AppointmentController', () => {
         });
 
         it('should call the create usecase', async () => {
-            await controller.create(params);
+            await controller.create({
+                user: {...mockedUserEntity, id: 2},
+            }, params);
 
             expect(createAppointmentUsecase.call).toHaveBeenCalledWith(params);
         });
@@ -50,7 +54,9 @@ describe('AppointmentController', () => {
         it('should return a AppointmentProxy', async () => {
             createAppointmentUsecase.call.mockResolvedValueOnce(mockedEntity);
 
-            const result = await controller.create(params);
+            const result = await controller.create({
+                user: mockedUserEntity,
+            }, params);
 
             expect(result).toEqual(expectedResult);
             expect(result).toBeInstanceOf(AppointmentProxy);
@@ -62,7 +68,9 @@ describe('AppointmentController', () => {
                 throw new ValidationException(mockedErrorMessage);
             });
 
-            expect(async () => await controller.create(params)).rejects.toThrow(new HttpException(
+            expect(async () => await controller.create({
+                user: mockedUserEntity,
+            }, params)).rejects.toThrow(new HttpException(
                 mockedErrorMessage,
                 HttpStatus.FORBIDDEN,
             ));

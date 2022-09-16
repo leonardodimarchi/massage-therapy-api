@@ -21,7 +21,7 @@ import { AppointmentRepositoryImplementation } from "@/infra/repositories/appoin
             useFactory: (repository: AppointmentRepository) => {
                 return new CreateAppointmentUsecase(repository);
             },
-            inject: [CreateAppointmentUsecase]
+            inject: [AppointmentRepository]
         },
         {
             provide: AppointmentRepository,

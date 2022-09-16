@@ -22,10 +22,10 @@ export class AppointmentPayload {
     constructor(props: AppointmentPayloadProperties) {
         this.userId = props.userId;
         this.complaint = props.complaint;
-        this.isUnderMedicalTreatment = props.isUnderMedicalTreatment;
+        this.isUnderMedicalTreatment = props.isUnderMedicalTreatment ?? false;
         this.symptoms = props.symptoms;
-        this.startsAt = props.startsAt;
-        this.endsAt = props.endsAt;
+        this.startsAt = props.startsAt instanceof Date ? props.startsAt : new Date(props.startsAt);
+        this.endsAt = props.endsAt instanceof Date ? props.endsAt : new Date(props.endsAt);
         this.isPregnant = props.isPregnant;
         this.pregnantWeeks = props.pregnantWeeks;
     }

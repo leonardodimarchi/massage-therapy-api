@@ -19,9 +19,9 @@ describe('CreateAppointmentUsecase', () => {
 
     const payload: AppointmentPayload = new AppointmentPayload({
         userId: 2,
-        complaint: '',
+        complaint: 'Valid complaint',
         isUnderMedicalTreatment: false,
-        symptoms: '',
+        symptoms: 'Valid symptoms',
         startsAt: new Date(2023, 7, 20),
         endsAt: new Date(2023, 8, 4)
     });
@@ -99,5 +99,23 @@ describe('CreateAppointmentUsecase', () => {
             await usecase.call(payload)
         }).rejects.toThrowError(ValidationException);
         expect(repository.hasConflictingDates).toHaveBeenNthCalledWith(1, payload.startsAt, payload.endsAt);
+    });
+
+    it('should check if there is a valid complaint', async () => {
+        expect(async () => {
+            await usecase.call(new AppointmentPayload({
+                ...payload,
+                complaint: '',
+            }))
+        }).rejects.toThrowError(ValidationException);
+    });
+
+    it('should check if there is a valid symptom', async () => {
+        expect(async () => {
+            await usecase.call(new AppointmentPayload({
+                ...payload,
+                symptoms: '',
+            }))
+        }).rejects.toThrowError(ValidationException);
     });
 });

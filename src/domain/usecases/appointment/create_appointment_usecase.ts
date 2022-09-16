@@ -10,10 +10,16 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentEntity, Appo
     ) { }
 
     public async call(params: AppointmentPayload): Promise<AppointmentEntity> {
-        if (params.startsAt.getTime() < new Date().getTime())
+        if (!params.complaint?.trim()?.length)
+            throw new ValidationException('É necessário enviar uma descrição');
+
+        if (!params.symptoms?.trim()?.length)
+            throw new ValidationException('É necessário enviar algum sintoma');
+
+        if (params.startsAt?.getTime() < new Date().getTime())
             throw new ValidationException('A data de agendamento não pode ser antes da data de hoje');
 
-        if (params.endsAt.getTime() < params.startsAt.getTime())
+        if (params.endsAt?.getTime() < params.startsAt?.getTime())
             throw new ValidationException('A data final do agendamento não pode ser antes da data inicial');
 
         const hasConflictingDates = await this.repository.hasConflictingDates(params.startsAt, params.endsAt);
