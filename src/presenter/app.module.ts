@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { UserModule } from './modules/user_module';
+import { AppointmentModule } from '@/presenter/modules/appointment_module';
+import { UserModule } from '@/presenter/modules/user_module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { UserModule } from './modules/user_module';
       entities: [join(__dirname, '..', 'infrastructure', '**', '*_schema{.ts,.js}')]
     }),
     UserModule,
+    AppointmentModule,
   ],
   controllers: [],
   providers: [],
