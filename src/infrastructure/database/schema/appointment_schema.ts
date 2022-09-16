@@ -18,6 +18,12 @@ export const AppointmentSchema = new EntitySchema<AppointmentEntity>({
       type: String,
       length: 1024,
     },
+    startsAt: {
+      type: Date,
+    },
+    endsAt: {
+      type: Date,
+    },
     isUnderMedicalTreatment: {
       type: Boolean,
       default: false,

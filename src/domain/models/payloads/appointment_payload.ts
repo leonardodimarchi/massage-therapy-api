@@ -1,7 +1,4 @@
-import { BaseEntityProperties, Entity } from "../shared/entity";
-import { UserEntity } from "./user_entity";
-
-interface AppointmentProperties extends BaseEntityProperties {
+interface AppointmentPayloadProperties {
     userId: number;
     complaint: string;
     isUnderMedicalTreatment: boolean;
@@ -10,11 +7,9 @@ interface AppointmentProperties extends BaseEntityProperties {
     endsAt: Date;
     isPregnant?: boolean;
     pregnantWeeks?: number;
-
-    user?: UserEntity;
 }
 
-export class AppointmentEntity extends Entity {
+export class AppointmentPayload {
     userId: number;
     complaint: string;
     isUnderMedicalTreatment: boolean;
@@ -24,20 +19,14 @@ export class AppointmentEntity extends Entity {
     isPregnant?: boolean;
     pregnantWeeks?: number;
 
-    user?: UserEntity;
-
-    constructor(props: AppointmentProperties) {
-        super(props);
-
+    constructor(props: AppointmentPayloadProperties) {
         this.userId = props.userId;
         this.complaint = props.complaint;
-        this.isUnderMedicalTreatment = props.isUnderMedicalTreatment;
+        this.isUnderMedicalTreatment = props.isUnderMedicalTreatment ?? false;
         this.symptoms = props.symptoms;
+        this.startsAt = props.startsAt instanceof Date ? props.startsAt : new Date(props.startsAt);
+        this.endsAt = props.endsAt instanceof Date ? props.endsAt : new Date(props.endsAt);
         this.isPregnant = props.isPregnant;
         this.pregnantWeeks = props.pregnantWeeks;
-        this.startsAt = props.startsAt;
-        this.endsAt = props.endsAt; 
-        
-        this.user = props.user;
     }
 }

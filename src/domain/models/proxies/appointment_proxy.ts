@@ -1,7 +1,7 @@
-import { BaseEntityProperties, Entity } from "../shared/entity";
-import { UserEntity } from "./user_entity";
+import { BaseProxyProperties, BaseProxy } from "@/domain/shared/base_proxy";
+import { UserProxy } from "./user_proxy";
 
-interface AppointmentProperties extends BaseEntityProperties {
+interface AppointmentProxyProperties extends BaseProxyProperties {
     userId: number;
     complaint: string;
     isUnderMedicalTreatment: boolean;
@@ -11,10 +11,10 @@ interface AppointmentProperties extends BaseEntityProperties {
     isPregnant?: boolean;
     pregnantWeeks?: number;
 
-    user?: UserEntity;
+    user?: UserProxy;
 }
 
-export class AppointmentEntity extends Entity {
+export class AppointmentProxy extends BaseProxy {
     userId: number;
     complaint: string;
     isUnderMedicalTreatment: boolean;
@@ -24,20 +24,20 @@ export class AppointmentEntity extends Entity {
     isPregnant?: boolean;
     pregnantWeeks?: number;
 
-    user?: UserEntity;
+    user?: UserProxy;
 
-    constructor(props: AppointmentProperties) {
+    constructor(props: AppointmentProxyProperties) {
         super(props);
 
         this.userId = props.userId;
         this.complaint = props.complaint;
         this.isUnderMedicalTreatment = props.isUnderMedicalTreatment;
         this.symptoms = props.symptoms;
+        this.startsAt = props.startsAt;
+        this.endsAt = props.endsAt;
         this.isPregnant = props.isPregnant;
         this.pregnantWeeks = props.pregnantWeeks;
-        this.startsAt = props.startsAt;
-        this.endsAt = props.endsAt; 
-        
+    
         this.user = props.user;
     }
 }
