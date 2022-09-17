@@ -1,10 +1,15 @@
 import {registerAs} from "@nestjs/config";
 import { join } from "path";
+import { DataSourceOptions, LoggerOptions } from "typeorm";
 
-export default registerAs('database', () => {
+export const ENV_DB_CONFIG_KEY = 'database';
+
+export type DbConfig = DataSourceOptions;
+
+export default registerAs<DbConfig>(ENV_DB_CONFIG_KEY, () => {
     return {
-        type: process.env.DB_TYPE,
-        logging: process.env.DB_LOGGING,
+        type: 'sqlite',
+        logging: process.env.DB_LOGGING as LoggerOptions,
         host: process.env.DB_HOST,
         port: parseInt(process.env.DB_PORT),
         username: process.env.DB_USER,
