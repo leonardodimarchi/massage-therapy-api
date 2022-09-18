@@ -1,21 +1,25 @@
 import {registerAs} from "@nestjs/config";
 import { join } from "path";
 import { DataSourceOptions, LoggerOptions } from "typeorm";
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 export const ENV_DB_CONFIG_KEY = 'database';
 
 export type DbConfig = DataSourceOptions;
 
+export const dataSourceOptions: DataSourceOptions = {
+    type: 'sqlite',
+    logging: process.env.DB_LOGGING as LoggerOptions,
+    database: process.env.DB_NAME,
+    synchronize: Boolean(process.env.DB_SYNCHRONIZE),
+    entities: [join(__dirname, '../database', '**', '*_schema{.ts,.js}')],
+    migrations: [join(__dirname, '../database', 'migrations', '*.ts')],
+}
+
 export default registerAs<DbConfig>(ENV_DB_CONFIG_KEY, () => {
     return {
-        type: 'sqlite',
-        logging: process.env.DB_LOGGING as LoggerOptions,
-        host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT),
-        username: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME,
-        synchronize: process.env.MODE === "dev",
-        entities: [join(__dirname, '../database', '**', '*_schema{.ts,.js}')]
+        ...dataSourceOptions
     }
 })
