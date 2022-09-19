@@ -3,7 +3,7 @@ import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 
-export class CreateAppointmentUsecase implements UseCase<AppointmentEntity, AppointmentPayload> {
+export class CreateAppointmentUsecase implements UseCase<AppointmentPayload, AppointmentEntity> {
 
     constructor(
         private readonly repository: AppointmentRepository,

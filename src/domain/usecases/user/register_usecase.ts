@@ -6,7 +6,7 @@ import { UserPayload } from "@/domain/models/payloads/user_payload";
 import { UserValidator } from "@/domain/validators/user_validator";
 
 
-export class RegisterUsecase implements UseCase<UserEntity, UserPayload> {
+export class RegisterUsecase implements UseCase<UserPayload, UserEntity> {
 
     constructor(
         private readonly repository: UserRepository,

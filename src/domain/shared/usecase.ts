@@ -1,3 +1,3 @@
-abstract class UseCase<Output, Input> {
+abstract class UseCase<Input, Output> {
     abstract call(params: Input): Promise<Output> | Output;
 }

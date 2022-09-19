@@ -1,6 +1,6 @@
 import { UserEntity } from "@/domain/entities/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
+import { AppointmentPayload, AppointmentPayloadProps } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { JwtAuthGuard } from "@/infra/guards/authentication/jwt_auth_guard";
@@ -14,7 +14,7 @@ export class AppointmentController {
 
     @Post()
     @UseGuards(JwtAuthGuard)
-    public async create(@Req() req: { user: UserEntity }, @Body() payload: AppointmentPayload): Promise<AppointmentProxy> {
+    public async create(@Req() req: { user: UserEntity }, @Body() payload: AppointmentPayloadProps): Promise<AppointmentProxy> {
         try {
             const result = await this.createAppointmentUsecase.call(new AppointmentPayload({
                 ...payload,
