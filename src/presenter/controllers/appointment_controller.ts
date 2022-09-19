@@ -16,12 +16,10 @@ export class AppointmentController {
     @UseGuards(JwtAuthGuard)
     public async create(@Req() req: { user: UserEntity }, @Body() payload: AppointmentPayloadProps): Promise<AppointmentProxy> {
         try {
-            const result = await this.createAppointmentUsecase.call(new AppointmentPayload({
+            return await this.createAppointmentUsecase.call(new AppointmentPayload({
                 ...payload,
                 userId: req.user.id
             }));
-
-            return new AppointmentProxy({ ...result });
         } catch (error) {
             if (error instanceof ValidationException)
                 throw new HttpException(

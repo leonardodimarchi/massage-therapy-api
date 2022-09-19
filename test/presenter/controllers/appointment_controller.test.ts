@@ -1,5 +1,5 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
+import { AppointmentPayload, AppointmentPayloadProps } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 import { UserProxy } from "@/domain/models/proxies/user_proxy";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
@@ -18,18 +18,17 @@ describe('AppointmentController', () => {
         controller = new AppointmentController(createAppointmentUsecase);
     });
 
-    const mockedEntity = mockedAppointmentEntity;
     const mockedUser = mockedUserEntity;
 
     describe('Create', () => {
-        const params: AppointmentPayload = new AppointmentPayload({
+        const mockedPayloadProperties: AppointmentPayloadProps = {
             userId: 2,
             complaint: '',
             isUnderMedicalTreatment: false,
             symptoms: '',
             startsAt: new Date(2023, 7, 20),
             endsAt: new Date(2023, 8, 4),
-        });
+        };
 
         const expectedResult = new AppointmentProxy({
             id: 1,
@@ -45,18 +44,18 @@ describe('AppointmentController', () => {
 
         it('should call the create usecase', async () => {
             await controller.create({
-                user: {...mockedUserEntity, id: 2},
-            }, params);
+                user: {...mockedUser, id: 2},
+            }, mockedPayloadProperties);
 
-            expect(createAppointmentUsecase.call).toHaveBeenCalledWith(params);
+            expect(createAppointmentUsecase.call).toHaveBeenCalledWith(new AppointmentPayload({...mockedPayloadProperties}));
         });
 
         it('should return a AppointmentProxy', async () => {
-            createAppointmentUsecase.call.mockResolvedValueOnce(mockedEntity);
+            createAppointmentUsecase.call.mockResolvedValueOnce(expectedResult);
 
             const result = await controller.create({
-                user: mockedUserEntity,
-            }, params);
+                user: mockedUser,
+            }, mockedPayloadProperties);
 
             expect(result).toEqual(expectedResult);
             expect(result).toBeInstanceOf(AppointmentProxy);
@@ -70,7 +69,7 @@ describe('AppointmentController', () => {
 
             expect(async () => await controller.create({
                 user: mockedUserEntity,
-            }, params)).rejects.toThrow(new HttpException(
+            }, mockedPayloadProperties)).rejects.toThrow(new HttpException(
                 mockedErrorMessage,
                 HttpStatus.FORBIDDEN,
             ));

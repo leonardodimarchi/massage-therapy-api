@@ -13,9 +13,7 @@ export class UserController {
     @Post()
     public async register(@Body() payload: UserPayloadProps): Promise<UserProxy> {
         try {
-            const result = await this.registerUsecase.call(new UserPayload(payload));
-
-            return new UserProxy({ ...result });
+            return await this.registerUsecase.call(new UserPayload(payload));
         } catch (error) {
             if (error instanceof ValidationException)
                 throw new HttpException(

@@ -3,11 +3,9 @@ import { mock, MockProxy } from "jest-mock-extended";
 import { UserProxy } from "../../../src/domain/models/proxies/user_proxy";
 import { mockedUserEntity } from "../../mocks/user_entity.mock";
 import { ValidationException } from "../../../src/domain/exceptions/validation_exception";
-import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
+import { UserPayload, UserPayloadProps } from "../../../src/domain/models/payloads/user_payload";
 import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usecase";
 import { UserController } from "../../../src/presenter/controllers/user_controller";
-import { LoginUsecase } from "../../../src/domain/usecases/user/login_usecase";
-import { LoginPayload } from "src/domain/models/payloads/login_payload";
 
 describe('UserController', () => {
     let controller: UserController;
@@ -17,17 +15,15 @@ describe('UserController', () => {
         registerUsecase = mock<RegisterUsecase>();
         controller = new UserController(registerUsecase);
     });
-
-    const mockedEntity = mockedUserEntity;
    
     describe('Register', () => {
-        const params = new UserPayload({
+        const params: UserPayloadProps = {
             email: 'Mocked email',
             name: 'Mocked Name',
             birthDate: new Date(11, 10, 2000),
             phone: 'Mocked phone',
             password: '123456'
-        });
+        };
 
         const expectedResult = new UserProxy({
             id: 1,
@@ -42,11 +38,11 @@ describe('UserController', () => {
         it('should call register usecase', async () => {
             await controller.register(params);
 
-            expect(registerUsecase.call).toHaveBeenCalledWith(params);
+            expect(registerUsecase.call).toHaveBeenCalledWith(new UserPayload(params));
         });
 
         it('should return a UserProxy', async () => {
-            registerUsecase.call.mockResolvedValueOnce(mockedEntity);
+            registerUsecase.call.mockResolvedValueOnce(expectedResult);
 
             const result = await controller.register(params);
 

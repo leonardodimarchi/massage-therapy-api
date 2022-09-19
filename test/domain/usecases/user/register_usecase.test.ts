@@ -3,6 +3,7 @@ import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
 import { UserEntity } from "@/domain/entities/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { UserPayload } from "@/domain/models/payloads/user_payload";
+import { UserProxy } from "@/domain/models/proxies/user_proxy";
 import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedUserEntity } from "test/mocks/user_entity.mock";
@@ -36,6 +37,10 @@ describe('RegisterUsecase', () => {
         password: hashPassword,
     };
 
+    const proxy: UserProxy = new UserProxy({
+        ...mockedUserEntity,
+    });
+
     it('should get a user when calling the repository successfully', async () => {
         repository.register.mockResolvedValue(entity);
 
@@ -43,7 +48,7 @@ describe('RegisterUsecase', () => {
             ...params,
         }));
 
-        expect(result).toBe(entity);
+        expect(result).toEqual(proxy);
         expect(repository.register).toHaveBeenNthCalledWith(1, params);
     });
 

@@ -2,6 +2,7 @@ import { AppointmentRepository } from "@/domain/contracts/repositories/appointme
 import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
+import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
@@ -17,6 +18,10 @@ describe('CreateAppointmentUsecase', () => {
 
     const entity: AppointmentEntity = mockedAppointmentEntity;
 
+    const proxy: AppointmentProxy = new AppointmentProxy({
+        ...entity,
+    });
+
     const payload: AppointmentPayload = new AppointmentPayload({
         userId: 2,
         complaint: 'Valid complaint',
@@ -26,12 +31,12 @@ describe('CreateAppointmentUsecase', () => {
         endsAt: new Date(2023, 8, 4)
     });
 
-    it('should get a user when calling the repository successfully', async () => {
+    it('should get a appointment proxy when calling the repository successfully', async () => {
         repository.create.mockResolvedValue(entity);
 
         const result = await usecase.call(payload);
 
-        expect(result).toBe(entity);
+        expect(result).toEqual(proxy);
         expect(repository.create).toHaveBeenNthCalledWith(1, payload);
     });
 

@@ -1,19 +1,19 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
-import { UserEntity } from "@/domain/entities/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { UserPayload } from "@/domain/models/payloads/user_payload";
+import { UserProxy } from "@/domain/models/proxies/user_proxy";
 import { UserValidator } from "@/domain/validators/user_validator";
 
 
-export class RegisterUsecase implements UseCase<UserPayload, UserEntity> {
+export class RegisterUsecase implements UseCase<UserPayload, UserProxy> {
 
     constructor(
         private readonly repository: UserRepository,
         private readonly bcryptService: BcryptService,
     ) {}
 
-    public async call(params: UserPayload): Promise<UserEntity> {
+    public async call(params: UserPayload): Promise<UserProxy> {
         if (!UserValidator.isValidEmail(params.email))
             throw new ValidationException('Email inválido');
 
@@ -31,6 +31,8 @@ export class RegisterUsecase implements UseCase<UserPayload, UserEntity> {
 
         params.password = await this.bcryptService.hash(params.password);
 
-        return this.repository.register(params);
+        const entity = await this.repository.register(params);
+
+        return new UserProxy({...entity});
     }
 }
