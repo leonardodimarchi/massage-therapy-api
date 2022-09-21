@@ -26,6 +26,16 @@ describe('UserController', () => {
             password: '123456'
         };
 
+        const proxy = new UserProxy({
+            id: 1,
+            createdAt: new Date(11, 10, 2000),
+            updatedAt: new Date(11, 10, 2000),
+            email: 'Mocked email',
+            name: 'Mocked Name',
+            birthDate: new Date(11, 10, 2000),
+            phone: 'Mocked phone',
+        });
+
         const expectedResult: CreatedUserDto = {
             id: 1,
             createdAt: new Date(11, 10, 2000),
@@ -43,7 +53,7 @@ describe('UserController', () => {
         });
 
         it('should return a UserProxy', async () => {
-            registerUsecase.call.mockResolvedValueOnce(expectedResult);
+            registerUsecase.call.mockResolvedValueOnce(proxy);
 
             const result = await controller.register(params);
 
