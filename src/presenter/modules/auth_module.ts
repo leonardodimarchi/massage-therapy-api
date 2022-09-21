@@ -16,16 +16,18 @@ import { UserRepositoryImplementation } from "@/infra/repositories/user_reposito
 import { BcryptServiceImplementation } from "@/infra/services/bcrypt_service_implementation";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserSchema } from "@/infra/database/schema/user_schema";
+import { ConfigService } from "@nestjs/config";
+import { ENV_AUTH_CONFIG_KEY } from "@/infra/configurations/authentication.config";
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([UserSchema]),
         PassportModule,
-        JwtModule.register({
-            secret: 'SECRET',
-            signOptions: { 
-                expiresIn: '7d',
-            },
+        JwtModule.registerAsync({
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) => ({
+                ...configService.get(ENV_AUTH_CONFIG_KEY),
+            })
         }),
     ],
     controllers: [AuthController],

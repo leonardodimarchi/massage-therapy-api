@@ -1,4 +1,4 @@
-interface UserPayloadProperties {
+export interface UserPayloadProps {
     email: string;
     name: string;
     phone: string;
@@ -13,7 +13,7 @@ export class UserPayload {
     birthDate: Date;
     password: string;
 
-    constructor(props: UserPayloadProperties) {
+    constructor(props: UserPayloadProps) {
         this.email = props.email;
         this.name = props.name;
         this.phone = props.phone;

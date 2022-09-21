@@ -1,15 +1,15 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
+import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 
-export class CreateAppointmentUsecase implements UseCase<AppointmentEntity, AppointmentPayload> {
+export class CreateAppointmentUsecase implements UseCase<AppointmentPayload, AppointmentProxy> {
 
     constructor(
         private readonly repository: AppointmentRepository,
     ) { }
 
-    public async call(params: AppointmentPayload): Promise<AppointmentEntity> {
+    public async call(params: AppointmentPayload): Promise<AppointmentProxy> {
         if (!params.complaint?.trim()?.length)
             throw new ValidationException('É necessário enviar uma descrição');
 
@@ -27,6 +27,8 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentEntity, Appo
         if (hasConflictingDates)
             throw new ValidationException('A data de agendamento está indisponível');
 
-        return await this.repository.create(params);
+        const entity = await this.repository.create(params);
+
+        return new AppointmentProxy({...entity});
     }
 }

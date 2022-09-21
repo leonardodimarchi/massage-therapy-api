@@ -3,7 +3,7 @@ import { UserRepository } from "../../../domain/contracts/repositories/user_repo
 import { UserEntity } from "../../entities/user_entity";
 import { LoginPayload } from "../../../domain/models/payloads/login_payload";
 
-export class ValidateToLoginUsecase implements UseCase<UserEntity, LoginPayload> {
+export class ValidateToLoginUsecase implements UseCase<LoginPayload, UserEntity> {
 
     constructor(
         private readonly repository: UserRepository,

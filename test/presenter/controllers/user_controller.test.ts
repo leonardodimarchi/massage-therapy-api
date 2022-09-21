@@ -1,13 +1,12 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { mock, MockProxy } from "jest-mock-extended";
-import { UserProxy } from "../../../src/domain/models/proxies/user_proxy";
-import { mockedUserEntity } from "../../mocks/user_entity.mock";
-import { ValidationException } from "../../../src/domain/exceptions/validation_exception";
-import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
-import { RegisterUsecase } from "../../../src/domain/usecases/user/register_usecase";
-import { UserController } from "../../../src/presenter/controllers/user_controller";
-import { LoginUsecase } from "../../../src/domain/usecases/user/login_usecase";
-import { LoginPayload } from "src/domain/models/payloads/login_payload";
+import { UserProxy } from "@/domain/models/proxies/user_proxy";
+import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { UserPayload, UserPayloadProps } from "@/domain/models/payloads/user_payload";
+import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
+import { UserController } from "@/presenter/controllers/user_controller";
+import { CreateUserDto } from "@/presenter/dto/user/create-user.dto";
+import { CreatedUserDto } from "@/presenter/dto/user/created-user.dto";
 
 describe('UserController', () => {
     let controller: UserController;
@@ -17,19 +16,17 @@ describe('UserController', () => {
         registerUsecase = mock<RegisterUsecase>();
         controller = new UserController(registerUsecase);
     });
-
-    const mockedEntity = mockedUserEntity;
    
     describe('Register', () => {
-        const params = new UserPayload({
+        const params: CreateUserDto = {
             email: 'Mocked email',
             name: 'Mocked Name',
             birthDate: new Date(11, 10, 2000),
             phone: 'Mocked phone',
             password: '123456'
-        });
+        };
 
-        const expectedResult = new UserProxy({
+        const proxy = new UserProxy({
             id: 1,
             createdAt: new Date(11, 10, 2000),
             updatedAt: new Date(11, 10, 2000),
@@ -37,21 +34,30 @@ describe('UserController', () => {
             name: 'Mocked Name',
             birthDate: new Date(11, 10, 2000),
             phone: 'Mocked phone',
-        })
+        });
+
+        const expectedResult: CreatedUserDto = {
+            id: 1,
+            createdAt: new Date(11, 10, 2000),
+            updatedAt: new Date(11, 10, 2000),
+            email: 'Mocked email',
+            name: 'Mocked Name',
+            birthDate: new Date(11, 10, 2000),
+            phone: 'Mocked phone',
+        }
 
         it('should call register usecase', async () => {
             await controller.register(params);
 
-            expect(registerUsecase.call).toHaveBeenCalledWith(params);
+            expect(registerUsecase.call).toHaveBeenCalledWith(new UserPayload(params));
         });
 
         it('should return a UserProxy', async () => {
-            registerUsecase.call.mockResolvedValueOnce(mockedEntity);
+            registerUsecase.call.mockResolvedValueOnce(proxy);
 
             const result = await controller.register(params);
 
             expect(result).toEqual(expectedResult);
-            expect(result).toBeInstanceOf(UserProxy);
         });
 
         it('should throw an Forbidden HttpException when receiving a ValidationException', async () => {

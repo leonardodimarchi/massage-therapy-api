@@ -1,7 +1,7 @@
-interface AppointmentPayloadProperties {
+export interface AppointmentPayloadProps {
     userId: number;
     complaint: string;
-    isUnderMedicalTreatment: boolean;
+    isUnderMedicalTreatment?: boolean;
     symptoms: string;
     startsAt: Date;
     endsAt: Date;
@@ -19,7 +19,7 @@ export class AppointmentPayload {
     isPregnant?: boolean;
     pregnantWeeks?: number;
 
-    constructor(props: AppointmentPayloadProperties) {
+    constructor(props: AppointmentPayloadProps) {
         this.userId = props.userId;
         this.complaint = props.complaint;
         this.isUnderMedicalTreatment = props.isUnderMedicalTreatment ?? false;

@@ -1,9 +1,12 @@
-import { Body, Controller, HttpException, Request, HttpStatus, Post, UseGuards } from "@nestjs/common";
-import { ValidationException } from "../../domain/exceptions/validation_exception";
-import { RegisterUsecase } from "../../domain/usecases/user/register_usecase";
-import { UserPayload } from "../../domain/models/payloads/user_payload";
-import { UserProxy } from "../../domain/models/proxies/user_proxy";
+import { Body, Controller, HttpException, HttpStatus, Post } from "@nestjs/common";
+import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
+import { UserPayload } from "@/domain/models/payloads/user_payload";
+import { ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { CreateUserDto } from "@/presenter/dto/user/create-user.dto";
+import { CreatedUserDto } from "../dto/user/created-user.dto";
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
     constructor(
@@ -11,11 +14,15 @@ export class UserController {
     ) { }
 
     @Post()
-    public async register(@Body() payload: UserPayload): Promise<UserProxy> {
+    @ApiOperation({ summary: 'Cadastrar um novo usuário' })
+    @ApiCreatedResponse({ description: 'O usuário foi criado com sucesso', type: CreatedUserDto })
+    public async register(@Body() payload: CreateUserDto): Promise<CreatedUserDto> {
         try {
-            const result = await this.registerUsecase.call(payload);
+            const createdUser = await this.registerUsecase.call(new UserPayload(payload));
 
-            return new UserProxy({ ...result });
+            return {
+                ...createdUser
+            }
         } catch (error) {
             if (error instanceof ValidationException)
                 throw new HttpException(
@@ -23,7 +30,7 @@ export class UserController {
                     HttpStatus.BAD_REQUEST,
                 );
 
-            throw error;
+            throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

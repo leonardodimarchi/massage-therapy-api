@@ -3,7 +3,7 @@ import { JwtService } from "../../../domain/contracts/services/jwt_service";
 import { UserEntity } from "../../../domain/entities/user_entity";
 import { JwtPayload } from "../../../domain/models/payloads/jwt_payload";
 
-export class LoginUsecase implements UseCase<JwtProxy, UserEntity> {
+export class LoginUsecase implements UseCase<UserEntity, JwtProxy> {
 
     constructor(
         private readonly jwtService: JwtService,
