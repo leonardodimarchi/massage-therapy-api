@@ -5,7 +5,9 @@ import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { JwtAuthGuard } from "@/infra/guards/authentication/jwt_auth_guard";
 import { Controller, Post, Body, HttpException, HttpStatus, UseGuards, Req } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Appointments')
 @Controller('appointments')
 export class AppointmentController {
     constructor(

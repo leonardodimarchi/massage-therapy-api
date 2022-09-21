@@ -3,7 +3,9 @@ import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
 import { UserPayload, UserPayloadProps } from "@/domain/models/payloads/user_payload";
 import { UserProxy } from "@/domain/models/proxies/user_proxy";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Users')
 @Controller('users')
 export class UserController {
     constructor(
