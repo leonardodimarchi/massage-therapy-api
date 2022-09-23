@@ -1,7 +1,7 @@
 export interface AppointmentPayloadProps {
     userId: number;
     complaint: string;
-    isUnderMedicalTreatment: boolean;
+    isUnderMedicalTreatment?: boolean;
     symptoms: string;
     startsAt: Date;
     endsAt: Date;
