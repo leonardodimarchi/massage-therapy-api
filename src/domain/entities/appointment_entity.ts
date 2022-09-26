@@ -11,7 +11,7 @@ interface AppointmentProperties extends BaseEntityProperties {
     endsAt: Date;
     isPregnant?: boolean;
     pregnantWeeks?: number;
-    status?: AppointmentStatusEnum;
+    status: AppointmentStatusEnum;
 
     user?: UserEntity;
 }
@@ -25,7 +25,7 @@ export class AppointmentEntity extends Entity {
     endsAt: Date;
     isPregnant?: boolean;
     pregnantWeeks?: number;
-    status?: AppointmentStatusEnum;
+    status: AppointmentStatusEnum;
 
     user?: UserEntity;
 
