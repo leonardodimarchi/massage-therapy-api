@@ -1,3 +1,4 @@
+import { AppointmentStatusEnum } from "../models/enums/appointment_status.enum";
 import { BaseEntityProperties, Entity } from "../shared/entity";
 import { UserEntity } from "./user_entity";
 
@@ -10,6 +11,7 @@ interface AppointmentProperties extends BaseEntityProperties {
     endsAt: Date;
     isPregnant?: boolean;
     pregnantWeeks?: number;
+    status: AppointmentStatusEnum;
 
     user?: UserEntity;
 }
@@ -23,6 +25,7 @@ export class AppointmentEntity extends Entity {
     endsAt: Date;
     isPregnant?: boolean;
     pregnantWeeks?: number;
+    status: AppointmentStatusEnum;
 
     user?: UserEntity;
 
@@ -37,6 +40,7 @@ export class AppointmentEntity extends Entity {
         this.pregnantWeeks = props.pregnantWeeks;
         this.startsAt = props.startsAt;
         this.endsAt = props.endsAt; 
+        this.status = props.status; 
         
         this.user = props.user;
     }

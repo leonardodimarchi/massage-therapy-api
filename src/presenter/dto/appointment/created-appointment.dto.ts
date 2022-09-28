@@ -1,3 +1,4 @@
+import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { BaseOutputDto } from "../base/base-output.dto";
 
@@ -25,4 +26,7 @@ export class CreatedAppointmentDto extends BaseOutputDto {
 
     @ApiPropertyOptional()
     pregnantWeeks?: number;
+
+    @ApiProperty()
+    status: AppointmentStatusEnum;
 }

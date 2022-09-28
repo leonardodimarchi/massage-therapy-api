@@ -1,4 +1,5 @@
 import { BaseProxyProperties, BaseProxy } from "@/domain/shared/base_proxy";
+import { AppointmentStatusEnum } from "../enums/appointment_status.enum";
 import { UserProxy } from "./user_proxy";
 
 interface AppointmentProxyProperties extends BaseProxyProperties {
@@ -10,6 +11,7 @@ interface AppointmentProxyProperties extends BaseProxyProperties {
     endsAt: Date;
     isPregnant?: boolean;
     pregnantWeeks?: number;
+    status: AppointmentStatusEnum;
 
     user?: UserProxy;
 }
@@ -23,6 +25,7 @@ export class AppointmentProxy extends BaseProxy {
     endsAt: Date;
     isPregnant?: boolean;
     pregnantWeeks?: number;
+    status: AppointmentStatusEnum;
 
     user?: UserProxy;
 
@@ -37,6 +40,7 @@ export class AppointmentProxy extends BaseProxy {
         this.endsAt = props.endsAt;
         this.isPregnant = props.isPregnant;
         this.pregnantWeeks = props.pregnantWeeks;
+        this.status = props.status;
     
         this.user = props.user;
     }

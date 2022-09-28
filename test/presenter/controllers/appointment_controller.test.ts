@@ -1,4 +1,5 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { AppointmentPayload, AppointmentPayloadProps } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
@@ -39,6 +40,7 @@ describe('AppointmentController', () => {
             symptoms: '',
             startsAt: new Date(2023, 7, 20),
             endsAt: new Date(2023, 8, 4),
+            status: AppointmentStatusEnum.PENDING,
         });
 
         const expectedResult: CreatedAppointmentDto = {
@@ -51,6 +53,7 @@ describe('AppointmentController', () => {
             symptoms: '',
             startsAt: new Date(2023, 7, 20),
             endsAt: new Date(2023, 8, 4),
+            status: AppointmentStatusEnum.PENDING,
         }
 
         it('should call the create usecase', async () => {
