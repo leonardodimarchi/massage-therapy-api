@@ -1,3 +1,5 @@
+import { AppointmentStatusEnum } from "../enums/appointment_status.enum";
+
 export interface AppointmentPayloadProps {
     userId: number;
     complaint: string;
@@ -7,6 +9,7 @@ export interface AppointmentPayloadProps {
     endsAt: Date;
     isPregnant?: boolean;
     pregnantWeeks?: number;
+    status?: AppointmentStatusEnum;
 }
 
 export class AppointmentPayload {
@@ -18,6 +21,7 @@ export class AppointmentPayload {
     endsAt: Date;
     isPregnant?: boolean;
     pregnantWeeks?: number;
+    status: AppointmentStatusEnum;
 
     constructor(props: AppointmentPayloadProps) {
         this.userId = props.userId;
@@ -28,5 +32,6 @@ export class AppointmentPayload {
         this.endsAt = props.endsAt instanceof Date ? props.endsAt : new Date(props.endsAt);
         this.isPregnant = props.isPregnant;
         this.pregnantWeeks = props.pregnantWeeks;
+        this.status = props.status ?? AppointmentStatusEnum.PENDING;
     }
 }

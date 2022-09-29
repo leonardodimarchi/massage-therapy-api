@@ -30,7 +30,18 @@ erDiagram
         Date endsAt
         boolean isPregnant
         number pregnantWeeks
+        AppointmentStatus status
 
         number userId FK
     }
+```
+
+```mermaid
+classDiagram
+class AppointmentStatus {
+    <<enumeration>>
+    PENDING
+    SCHEDULED
+    REPROVED
+}
 ```

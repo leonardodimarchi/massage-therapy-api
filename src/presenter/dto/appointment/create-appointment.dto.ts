@@ -30,7 +30,7 @@ export class CreateAppointmentDto {
     @ApiProperty({
         required: true,
     })
-    @IsDateString({}, { message: 'É necessário enviar uma data de início válida' })
+    @IsDateString({}, { message: 'É necessário enviar uma data de fim válida' })
     endsAt: Date;
 
     @ApiPropertyOptional({
