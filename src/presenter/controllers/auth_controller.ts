@@ -23,7 +23,7 @@ export class AuthController {
     @ApiOperation({ summary: 'Gerar um token de usuário (JWT)' })
     @ApiOkResponse({ description: 'O token foi gerado com sucesso', type: SuccessLoginDto })
     public async login(@Request() req: { user: UserEntity }): Promise<SuccessLoginDto> {
-      const { jwt, loggedUser } = await this.loginUsecase.call(req.user);
+      const { jwt, loggedUser } = this.loginUsecase.call(req.user);
 
       return {
         jwt,

@@ -10,6 +10,7 @@ export const UserSchema = new EntitySchema<UserEntity>({
     email: {
       type: String,
       length: 50,
+      unique: true,
     },
     name: {
       type: String,
@@ -19,6 +20,13 @@ export const UserSchema = new EntitySchema<UserEntity>({
       type: String,
       length: 50,
     },
+    birthDate: {
+      type: Date,
+    },
+    phone: {
+      type: String,
+      length: 50,
+    }
   },
   orderBy: {
     createdAt: 'ASC',
