@@ -2,6 +2,10 @@ import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsDateString } from "class-validator";
 import { BaseOutputDto } from "../base/base-output.dto";
 
+class JwtDto {
+    access_token: string;
+}
+
 class LoggedUserDto extends BaseOutputDto {
     @ApiProperty({
         required: true,
@@ -30,7 +34,7 @@ class LoggedUserDto extends BaseOutputDto {
 
 export class SuccessLoginDto {
     @ApiProperty()
-    access_token: string;
+    jwt: JwtDto;
 
     @ApiProperty()
     user: LoggedUserDto;
