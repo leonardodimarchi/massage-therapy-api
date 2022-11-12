@@ -1,3 +1,4 @@
+import { UserEntity } from "@/domain/entities/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { AppointmentPayload, AppointmentPayloadProps } from "@/domain/models/payloads/appointment_payload";
@@ -58,7 +59,7 @@ describe('AppointmentController', () => {
 
         it('should call the create usecase', async () => {
             await controller.create({
-                user: {...mockedUser, id: 2},
+                user: new UserEntity({...mockedUser, id: 2}),
             }, mockedPayloadProperties);
 
             expect(createAppointmentUsecase.call).toHaveBeenCalledWith(new AppointmentPayload({...mockedPayloadProperties}));

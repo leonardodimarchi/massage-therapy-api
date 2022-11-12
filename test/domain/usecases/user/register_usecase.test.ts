@@ -32,10 +32,10 @@ describe('RegisterUsecase', () => {
         password: hashPassword,
     });
 
-    const entity: UserEntity = {
+    const entity: UserEntity = new UserEntity({
         ...mockedUserEntity,
         password: hashPassword,
-    };
+    });
 
     const proxy: UserProxy = new UserProxy({
         ...mockedUserEntity,
