@@ -4,6 +4,8 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import { AppointmentDatasource } from "@/infra/contracts/datasources/appointment_datasource";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
+import { GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
+import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 
 export class AppointmentDatasourceImplementation implements AppointmentDatasource {
     constructor(
@@ -24,5 +26,9 @@ export class AppointmentDatasourceImplementation implements AppointmentDatasourc
         });
 
         return !!conflictingAppointment;
+    }
+
+    public async getUserAppointments(params: GetUserAppointmentsParams): Promise<PaginatedItems<AppointmentEntity>> {
+        throw new Error("Method not implemented.");
     }
 }

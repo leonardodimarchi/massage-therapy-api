@@ -1,9 +1,12 @@
-import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
+import { AppointmentRepository, GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
+import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentDatasource } from "@/infra/contracts/datasources/appointment_datasource";
 import { AppointmentRepositoryImplementation } from "@/infra/repositories/appointment_repository_implementation";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
+import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
 describe('AppointmentRepository', () => {
     let repository: AppointmentRepository;
@@ -45,6 +48,25 @@ describe('AppointmentRepository', () => {
 
             expect(result).toEqual(true);
             expect(datasource.hasConflictingDates).toHaveBeenNthCalledWith(1, startDate, endDate);
+        });
+    });
+
+    describe('GetUserAppointments', () => {
+        it('should return paginated items from the datasource', async () => {
+            const params: GetUserAppointmentsParams = { user: mockedUserEntity };
+            const datasourceReturnValue: PaginatedItems<AppointmentEntity> = {
+                items: [mockedAppointmentEntity, mockedAppointmentEntity],
+                page: 1,
+                count: 1,
+                pageCount: 2,
+                total: 2,
+            }
+            datasource.getUserAppointments.mockResolvedValue(datasourceReturnValue);
+
+            const result = await repository.getUserAppointments(params);
+
+            expect(result).toEqual(datasourceReturnValue);
+            expect(datasource.getUserAppointments).toHaveBeenNthCalledWith(1, params);
         });
     });
 });

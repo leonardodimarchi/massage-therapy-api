@@ -18,6 +18,6 @@ export class AppointmentRepositoryImplementation implements AppointmentRepositor
     }
 
     public async getUserAppointments(params: GetUserAppointmentsParams): Promise<PaginatedItems<AppointmentEntity>> {
-        throw new Error("Method not implemented.");
+        return await this.datasource.getUserAppointments(params);
     }
 }
