@@ -28,7 +28,19 @@ export class AppointmentDatasourceImplementation implements AppointmentDatasourc
         return !!conflictingAppointment;
     }
 
-    public async getUserAppointments(params: GetUserAppointmentsParams): Promise<PaginatedItems<AppointmentEntity>> {
-        throw new Error("Method not implemented.");
+    public async getUserAppointments({ user }: GetUserAppointmentsParams): Promise<PaginatedItems<AppointmentEntity>> {
+        const [items, total] = await this.typeOrmRepository.findAndCount({
+            where: {
+                userId: user.id,
+            }
+        });
+
+        return {
+            page: 1,
+            pageCount: 2,
+            count: items.length,
+            items,
+            total,
+        }
     }
 }
