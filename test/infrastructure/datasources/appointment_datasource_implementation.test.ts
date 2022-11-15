@@ -86,7 +86,11 @@ describe('AppointmentDatasource', () => {
             user: new UserEntity({
                 ...mockedUserEntity,
                 id: userId,
-            })
+            }),
+            paginationOptions: {
+                limit: 5,
+                page: 1,
+            }
          }
 
         it('should filter the user appointments', async () => {

@@ -1,6 +1,7 @@
 import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { UserEntity } from "@/domain/entities/user_entity";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
+import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 
 export abstract class AppointmentRepository {
@@ -11,4 +12,5 @@ export abstract class AppointmentRepository {
 
 export type GetUserAppointmentsParams = {
     user: UserEntity;
+    paginationOptions: PaginationOptions;
 }

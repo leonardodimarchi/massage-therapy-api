@@ -1,6 +1,7 @@
 import { AppointmentRepository, GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
 import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
+import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentDatasource } from "@/infra/contracts/datasources/appointment_datasource";
 import { AppointmentRepositoryImplementation } from "@/infra/repositories/appointment_repository_implementation";
@@ -52,8 +53,13 @@ describe('AppointmentRepository', () => {
     });
 
     describe('GetUserAppointments', () => {
+        const paginationOptions: PaginationOptions = {
+            limit: 5,
+            page: 1,
+        }
+
         it('should return paginated items from the datasource', async () => {
-            const params: GetUserAppointmentsParams = { user: mockedUserEntity };
+            const params: GetUserAppointmentsParams = { user: mockedUserEntity, paginationOptions };
             const datasourceReturnValue: PaginatedItems<AppointmentEntity> = {
                 items: [mockedAppointmentEntity, mockedAppointmentEntity],
                 page: 1,

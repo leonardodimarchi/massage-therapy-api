@@ -1,5 +1,6 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
+import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 import { GetUserAppointmentsUsecase, GetUserAppointmentsUsecaseInput } from "@/domain/usecases/appointment/get_user_appointments_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
@@ -15,11 +16,15 @@ describe('GetAppointmentsUsecase', () => {
         usecase = new GetUserAppointmentsUsecase(repository);
     });
 
-    const user = mockedUserEntity
+    const user = mockedUserEntity;
+    const paginationOptions: PaginationOptions = {
+        limit: 5,
+        page: 1,
+    };
     const entity = mockedAppointmentEntity;
 
     it('should call the repository', () => {
-        const input: GetUserAppointmentsUsecaseInput = { user };
+        const input: GetUserAppointmentsUsecaseInput = { user, paginationOptions };
         repository.getUserAppointments.mockResolvedValueOnce({
             items: [entity, entity],
             page: 1,
@@ -34,7 +39,7 @@ describe('GetAppointmentsUsecase', () => {
     });
 
     it('should transform the entities to proxy', async () => {
-        const input: GetUserAppointmentsUsecaseInput = { user };
+        const input: GetUserAppointmentsUsecaseInput = { user, paginationOptions };
         repository.getUserAppointments.mockResolvedValueOnce({
             items: [entity, entity],
             page: 1,
