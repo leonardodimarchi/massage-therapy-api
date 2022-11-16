@@ -35,7 +35,8 @@ describe('AppointmentDatasource', () => {
             const result = await datasource.create(payload);
 
             expect(result).toEqual(entity);
-            expect(typeOrmRepository.save).toHaveBeenNthCalledWith(1, payload);
+            expect(typeOrmRepository.save).toHaveBeenCalledTimes(1)
+            expect(typeOrmRepository.save).toHaveBeenCalledWith(payload);
         });
     });
 
@@ -76,7 +77,8 @@ describe('AppointmentDatasource', () => {
 
             await datasource.hasConflictingDates(startDate, endDate);
 
-            expect(typeOrmRepository.findOne).toHaveBeenNthCalledWith(1, expectedOptions);
+            expect(typeOrmRepository.findOne).toHaveBeenCalledTimes(1)
+            expect(typeOrmRepository.findOne).toHaveBeenCalledWith(expectedOptions);
         });
     });
 
@@ -101,10 +103,87 @@ describe('AppointmentDatasource', () => {
 
             await datasource.getUserAppointments(params);
 
-            expect(typeOrmRepository.findAndCount).toHaveBeenNthCalledWith<FindManyOptions<AppointmentEntity>[]>(1, {
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1)
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledWith<FindManyOptions<AppointmentEntity>[]>({
                 where: {
                     userId,
+                },
+                skip: 0,
+                take: params.paginationOptions.limit,
+            });
+        });
+
+        it('should use the pagination options if it exists', async () => {
+            const limit = 5;
+            const page = 1;
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                [], 
+                0,
+            ]);
+
+            await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: {
+                    limit,
+                    page,
                 }
+            });
+
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1);
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledWith<FindManyOptions<AppointmentEntity>[]>({
+                where: {
+                    userId,
+                },
+                skip: 0,
+                take: limit,
+            });
+        });
+
+        it('should use the default pagination options if none is specified', async () => {
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                [], 
+                0,
+            ]);
+
+            await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: null,
+            });
+
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1);
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledWith<FindManyOptions<AppointmentEntity>[]>({
+                where: {
+                    userId,
+                },
+                take: 10,
+                skip: 0,
+            });
+        });
+
+        it('should skip items correctly to match the pagination with page > 1', async () => {
+            const limit = 5;
+            const page = 2;
+            const numberOfItemsToSkip = 5;
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                [], 
+                0,
+            ]);
+
+            await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: {
+                    limit,
+                    page,
+                }
+            });
+
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1);
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledWith<FindManyOptions<AppointmentEntity>[]>({
+                where: {
+                    userId,
+                },
+                skip: numberOfItemsToSkip,
+                take: limit,
             });
         });
 

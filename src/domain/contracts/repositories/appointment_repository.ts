@@ -12,5 +12,5 @@ export abstract class AppointmentRepository {
 
 export type GetUserAppointmentsParams = {
     user: UserEntity;
-    paginationOptions: PaginationOptions;
+    paginationOptions?: PaginationOptions;
 }

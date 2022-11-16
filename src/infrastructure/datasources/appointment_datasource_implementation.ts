@@ -6,6 +6,7 @@ import { AppointmentDatasource } from "@/infra/contracts/datasources/appointment
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
+import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 
 export class AppointmentDatasourceImplementation implements AppointmentDatasource {
     constructor(
@@ -28,11 +29,20 @@ export class AppointmentDatasourceImplementation implements AppointmentDatasourc
         return !!conflictingAppointment;
     }
 
-    public async getUserAppointments({ user }: GetUserAppointmentsParams): Promise<PaginatedItems<AppointmentEntity>> {
+    public async getUserAppointments({ user, paginationOptions }: GetUserAppointmentsParams): Promise<PaginatedItems<AppointmentEntity>> {
+        const defaultPaginationOptions: PaginationOptions = {
+            limit: 10,
+            page: 1,
+        };
+
+        const { limit, page } = Object.assign(defaultPaginationOptions, paginationOptions);
+
         const [items, total] = await this.typeOrmRepository.findAndCount({
             where: {
                 userId: user.id,
-            }
+            },
+            skip: (page-1) * limit,
+            take: limit,
         });
 
         return {
