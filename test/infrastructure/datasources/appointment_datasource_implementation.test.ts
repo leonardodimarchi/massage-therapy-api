@@ -147,7 +147,10 @@ describe('AppointmentDatasource', () => {
 
             await datasource.getUserAppointments({
                 ...params,
-                paginationOptions: null,
+                paginationOptions: {
+                    limit: undefined,
+                    page: undefined,
+                },
             });
 
             expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1);
@@ -187,6 +190,27 @@ describe('AppointmentDatasource', () => {
             });
         });
 
+        it('should return with the correct page count', async () => {
+            const limit = 5;
+            const page = 1;
+            const total = 15;
+            const pageCount = 3;
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                [], 
+                total,
+            ]);
+
+            const result = await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: {
+                    limit,
+                    page,
+                }
+            });
+
+            expect(result.pageCount).toEqual(pageCount);
+        });
+
         it('should return paginated items', async () => {
             const mockedEntityList = [mockedAppointmentEntity, mockedAppointmentEntity];       
             const totalItems = 4;
@@ -204,7 +228,13 @@ describe('AppointmentDatasource', () => {
                 items: mockedEntityList,
             }
 
-            const result = await datasource.getUserAppointments(params);
+            const result = await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: {
+                    limit: mockedEntityList.length,
+                    page: 1,
+                }
+            });
 
             expect(result).toEqual(expectedReturnValue);
         });

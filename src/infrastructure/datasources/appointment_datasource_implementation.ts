@@ -35,7 +35,10 @@ export class AppointmentDatasourceImplementation implements AppointmentDatasourc
             page: 1,
         };
 
-        const { limit, page } = Object.assign(defaultPaginationOptions, paginationOptions);
+        const { limit, page } = Object.assign(defaultPaginationOptions, {
+            ...paginationOptions.page && { page: paginationOptions.page },
+            ...paginationOptions.limit && { limit: paginationOptions.limit },
+        });
 
         const [items, total] = await this.typeOrmRepository.findAndCount({
             where: {
@@ -47,9 +50,9 @@ export class AppointmentDatasourceImplementation implements AppointmentDatasourc
 
         return {
             page: 1,
-            pageCount: 2,
+            pageCount: Math.ceil(total / limit),
             count: items.length,
-            items,
+            items: items.map(i => new AppointmentEntity(i)),
             total,
         }
     }

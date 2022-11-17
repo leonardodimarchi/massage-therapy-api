@@ -2,7 +2,7 @@ import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { BaseOutputDto } from "../shared/base-output.dto";
 
-export class CreatedAppointmentDto extends BaseOutputDto {
+export class AppointmentDto extends BaseOutputDto {
     @ApiProperty()
     userId: number;
 

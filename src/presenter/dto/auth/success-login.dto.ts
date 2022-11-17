@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsString, IsDateString } from "class-validator";
-import { BaseOutputDto } from "../base/base-output.dto";
+import { BaseOutputDto } from "../shared/base-output.dto";
 
 class JwtDto {
     access_token: string;

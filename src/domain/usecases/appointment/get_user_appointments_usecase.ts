@@ -6,10 +6,10 @@ import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 
 export type GetUserAppointmentsUsecaseInput = {
     user: UserEntity;
-    paginationOptions: PaginationOptions;
+    paginationOptions?: PaginationOptions;
 }
 
-export type GetUserAppointmentsUsecaseOutput = PaginatedItems<AppointmentProxy>;
+export type GetUserAppointmentsUsecaseOutput = Promise<PaginatedItems<AppointmentProxy>>;
 
 export class GetUserAppointmentsUsecase implements UseCase<GetUserAppointmentsUsecaseInput, GetUserAppointmentsUsecaseOutput> {
 

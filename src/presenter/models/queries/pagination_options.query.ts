@@ -1,17 +1,17 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDefined, IsOptional } from "class-validator";
+import { IsOptional } from "class-validator";
 
 export class PaginationOptionsQuery {
-    @ApiProperty({
+    @ApiPropertyOptional({
         description: 'Página desejada',
-        required: true,
         name: 'page',
         example: 1,
+        default: 1,
     })
     @Type(() => Number)
-    @IsDefined({ message: 'Por favor, envie a página desejada' })
-    page: number;
+    @IsOptional({ message: 'Por favor, envie a página desejada' })
+    page?: number;
 
     @ApiPropertyOptional({
         description: 'Número de itens por página',
