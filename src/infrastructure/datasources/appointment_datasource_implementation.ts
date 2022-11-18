@@ -4,6 +4,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import { AppointmentDatasource } from "@/infra/contracts/datasources/appointment_datasource";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
+import { GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
+import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
+import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 
 export class AppointmentDatasourceImplementation implements AppointmentDatasource {
     constructor(
@@ -24,5 +27,33 @@ export class AppointmentDatasourceImplementation implements AppointmentDatasourc
         });
 
         return !!conflictingAppointment;
+    }
+
+    public async getUserAppointments({ user, paginationOptions }: GetUserAppointmentsParams): Promise<PaginatedItems<AppointmentEntity>> {
+        const defaultPaginationOptions: PaginationOptions = {
+            limit: 10,
+            page: 1,
+        };
+
+        const { limit, page } = Object.assign(defaultPaginationOptions, {
+            ...paginationOptions.page && { page: paginationOptions.page },
+            ...paginationOptions.limit && { limit: paginationOptions.limit },
+        });
+
+        const [items, total] = await this.typeOrmRepository.findAndCount({
+            where: {
+                userId: user.id,
+            },
+            skip: (page-1) * limit,
+            take: limit,
+        });
+
+        return {
+            page: 1,
+            pageCount: Math.ceil(total / limit),
+            count: items.length,
+            items: items.map(i => new AppointmentEntity(i)),
+            total,
+        }
     }
 }

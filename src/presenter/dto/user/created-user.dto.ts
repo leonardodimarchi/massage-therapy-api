@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDateString, IsString } from "class-validator";
-import { BaseOutputDto } from "../base/base-output.dto";
+import { BaseOutputDto } from "../shared/base-output.dto";
 
 export class CreatedUserDto extends BaseOutputDto {
     @ApiProperty({

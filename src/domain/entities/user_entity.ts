@@ -1,4 +1,6 @@
+import { UserProxy } from "../models/proxies/user_proxy";
 import { BaseEntityProperties, Entity } from "../shared/entity";
+import { ProxyMapper } from "../shared/proxy_mapper";
 import { AppointmentEntity } from "./appointment_entity";
 
 interface UserProperties extends BaseEntityProperties {
@@ -11,7 +13,7 @@ interface UserProperties extends BaseEntityProperties {
     appointments?: AppointmentEntity[];
 }
 
-export class UserEntity extends Entity {
+export class UserEntity extends Entity implements ProxyMapper<UserProxy> {
     email: string;
     name: string;
     phone: string;
@@ -30,5 +32,9 @@ export class UserEntity extends Entity {
         this.password = props.password;
 
         this.appointments = props.appointments;
+    }
+
+    toProxy(): UserProxy {
+        return new UserProxy(this);
     }
 }

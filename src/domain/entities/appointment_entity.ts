@@ -1,5 +1,7 @@
 import { AppointmentStatusEnum } from "../models/enums/appointment_status.enum";
+import { AppointmentProxy } from "../models/proxies/appointment_proxy";
 import { BaseEntityProperties, Entity } from "../shared/entity";
+import { ProxyMapper } from "../shared/proxy_mapper";
 import { UserEntity } from "./user_entity";
 
 interface AppointmentProperties extends BaseEntityProperties {
@@ -16,7 +18,7 @@ interface AppointmentProperties extends BaseEntityProperties {
     user?: UserEntity;
 }
 
-export class AppointmentEntity extends Entity {
+export class AppointmentEntity extends Entity implements ProxyMapper<AppointmentProxy> {
     userId: number;
     complaint: string;
     isUnderMedicalTreatment: boolean;
@@ -43,5 +45,9 @@ export class AppointmentEntity extends Entity {
         this.status = props.status; 
         
         this.user = props.user;
+    }
+
+    toProxy(): AppointmentProxy {
+        return new AppointmentProxy(this);
     }
 }
