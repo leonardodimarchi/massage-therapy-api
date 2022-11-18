@@ -1,9 +1,13 @@
+import { GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
 import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { UserEntity } from "@/domain/entities/user_entity";
+import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentDatasourceImplementation } from "@/infra/datasources/appointment_datasource_implementation";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
-import { FindOneOptions, Repository, MoreThanOrEqual, LessThanOrEqual } from "typeorm";
+import { mockedUserEntity } from "test/mocks/user_entity.mock";
+import { FindOneOptions, Repository, MoreThanOrEqual, LessThanOrEqual, FindManyOptions } from "typeorm";
 
 describe('AppointmentDatasource', () => {
     let typeOrmRepository: MockProxy<Repository<AppointmentEntity>>;
@@ -31,7 +35,8 @@ describe('AppointmentDatasource', () => {
             const result = await datasource.create(payload);
 
             expect(result).toEqual(entity);
-            expect(typeOrmRepository.save).toHaveBeenNthCalledWith(1, payload);
+            expect(typeOrmRepository.save).toHaveBeenCalledTimes(1)
+            expect(typeOrmRepository.save).toHaveBeenCalledWith(payload);
         });
     });
 
@@ -72,7 +77,166 @@ describe('AppointmentDatasource', () => {
 
             await datasource.hasConflictingDates(startDate, endDate);
 
-            expect(typeOrmRepository.findOne).toHaveBeenNthCalledWith(1, expectedOptions);
+            expect(typeOrmRepository.findOne).toHaveBeenCalledTimes(1)
+            expect(typeOrmRepository.findOne).toHaveBeenCalledWith(expectedOptions);
+        });
+    });
+
+    describe('GetUserAppointments', () => {
+        const userId = 2;
+        const params: GetUserAppointmentsParams = { 
+            user: new UserEntity({
+                ...mockedUserEntity,
+                id: userId,
+            }),
+            paginationOptions: {
+                limit: 5,
+                page: 1,
+            }
+         }
+
+        it('should filter the user appointments', async () => {
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                [], 
+                0,
+            ]);
+
+            await datasource.getUserAppointments(params);
+
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1)
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledWith<FindManyOptions<AppointmentEntity>[]>({
+                where: {
+                    userId,
+                },
+                skip: 0,
+                take: params.paginationOptions.limit,
+            });
+        });
+
+        it('should use the pagination options if it exists', async () => {
+            const limit = 5;
+            const page = 1;
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                [], 
+                0,
+            ]);
+
+            await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: {
+                    limit,
+                    page,
+                }
+            });
+
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1);
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledWith<FindManyOptions<AppointmentEntity>[]>({
+                where: {
+                    userId,
+                },
+                skip: 0,
+                take: limit,
+            });
+        });
+
+        it('should use the default pagination options if none is specified', async () => {
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                [], 
+                0,
+            ]);
+
+            await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: {
+                    limit: undefined,
+                    page: undefined,
+                },
+            });
+
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1);
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledWith<FindManyOptions<AppointmentEntity>[]>({
+                where: {
+                    userId,
+                },
+                take: 10,
+                skip: 0,
+            });
+        });
+
+        it('should skip items correctly to match the pagination with page > 1', async () => {
+            const limit = 5;
+            const page = 2;
+            const numberOfItemsToSkip = 5;
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                [], 
+                0,
+            ]);
+
+            await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: {
+                    limit,
+                    page,
+                }
+            });
+
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1);
+            expect(typeOrmRepository.findAndCount).toHaveBeenCalledWith<FindManyOptions<AppointmentEntity>[]>({
+                where: {
+                    userId,
+                },
+                skip: numberOfItemsToSkip,
+                take: limit,
+            });
+        });
+
+        it('should return with the correct page count', async () => {
+            const limit = 5;
+            const page = 1;
+            const total = 15;
+            const pageCount = 3;
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                [], 
+                total,
+            ]);
+
+            const result = await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: {
+                    limit,
+                    page,
+                }
+            });
+
+            expect(result.pageCount).toEqual(pageCount);
+        });
+
+        it('should return paginated items', async () => {
+            const mockedEntityList = [mockedAppointmentEntity, mockedAppointmentEntity];       
+            const totalItems = 4;
+
+            typeOrmRepository.findAndCount.mockResolvedValueOnce([
+                mockedEntityList, 
+                totalItems,
+            ]);
+
+            const expectedReturnValue: PaginatedItems<AppointmentEntity> = {
+                page: 1,
+                pageCount: 2,
+                total: totalItems,
+                count: mockedEntityList.length,
+                items: mockedEntityList,
+            }
+
+            const result = await datasource.getUserAppointments({
+                ...params,
+                paginationOptions: {
+                    limit: mockedEntityList.length,
+                    page: 1,
+                }
+            });
+
+            expect(result).toEqual(expectedReturnValue);
         });
     });
 });

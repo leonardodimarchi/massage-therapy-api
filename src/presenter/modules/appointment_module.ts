@@ -8,6 +8,7 @@ import { AppointmentRepository } from "@/domain/contracts/repositories/appointme
 import { AppointmentDatasource } from "@/infra/contracts/datasources/appointment_datasource";
 import { AppointmentDatasourceImplementation } from "@/infra/datasources/appointment_datasource_implementation";
 import { AppointmentRepositoryImplementation } from "@/infra/repositories/appointment_repository_implementation";
+import { GetUserAppointmentsUsecase } from "@/domain/usecases/appointment/get_user_appointments_usecase";
 
 @Module({
     imports: [
@@ -20,6 +21,13 @@ import { AppointmentRepositoryImplementation } from "@/infra/repositories/appoin
             provide: CreateAppointmentUsecase,
             useFactory: (repository: AppointmentRepository) => {
                 return new CreateAppointmentUsecase(repository);
+            },
+            inject: [AppointmentRepository]
+        },
+        {
+            provide: GetUserAppointmentsUsecase,
+            useFactory: (repository: AppointmentRepository) => {
+                return new GetUserAppointmentsUsecase(repository);
             },
             inject: [AppointmentRepository]
         },

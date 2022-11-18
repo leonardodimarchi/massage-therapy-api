@@ -22,9 +22,7 @@ describe('ValidateToLoginUsecase', () => {
         password: '123456',
     });
 
-    const entity: UserEntity = {
-        ...mockedUserEntity,
-    };
+    const entity = mockedUserEntity;
 
     it('should return the user if the repository returns and the password is correct', async () => {
         repository.getByEmail.mockResolvedValueOnce(entity);
