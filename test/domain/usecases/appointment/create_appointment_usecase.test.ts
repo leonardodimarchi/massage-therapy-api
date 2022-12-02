@@ -1,6 +1,7 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
@@ -38,6 +39,18 @@ describe('CreateAppointmentUsecase', () => {
 
         expect(result).toEqual(proxy);
         expect(repository.create).toHaveBeenNthCalledWith(1, payload);
+    });
+
+    it('should always create a appointment with the PENDING status', async () => {
+        await usecase.call({
+            ...payload,
+            status: AppointmentStatusEnum.COMPLETED,
+        });
+
+        expect(repository.create).toHaveBeenNthCalledWith(1, {
+            ...payload,
+            status: AppointmentStatusEnum.PENDING,
+        });
     });
 
     it('should not create if the start date is before now', async () => {

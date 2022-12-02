@@ -1,6 +1,6 @@
 import { EntitySchema } from 'typeorm';
 import { BaseSchemaColumns } from './base_schema_columns';
-import { AppointmentEntity } from '../../../domain/entities/appointment_entity';
+import { AppointmentEntity } from '@/domain/entities/appointment_entity';
 import { AppointmentStatusEnum } from '@/domain/models/enums/appointment_status.enum';
 
 export const AppointmentSchema = new EntitySchema<AppointmentEntity>({

@@ -14,7 +14,7 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "typeorm:cli": "ts-node --project ./tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d src/infrastructure/configurations/ormconfig.ts",
-    "migration:generate": "npm run typeorm:cli -- migration:generate",
+    "migration:generate": "ts-node src/infrastructure/database/scripts/generate-migration.ts",
     "migration:run": "npm run typeorm:cli -- migration:run",
     "migration:revert": "npm run typeorm:cli -- migration:revert",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

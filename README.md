@@ -42,6 +42,7 @@ class AppointmentStatus {
     <<enumeration>>
     PENDING
     SCHEDULED
+    COMPLETED
     REPROVED
 }
 ```

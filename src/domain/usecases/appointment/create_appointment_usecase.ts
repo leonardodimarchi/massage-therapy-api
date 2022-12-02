@@ -1,5 +1,6 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 
@@ -27,8 +28,11 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentPayload, App
         if (hasConflictingDates)
             throw new ValidationException('A data de agendamento está indisponível');
 
-        const entity = await this.repository.create(params);
+        const entity = await this.repository.create({
+            ...params,
+            status: AppointmentStatusEnum.PENDING,
+        });
 
-        return new AppointmentProxy({...entity});
+        return new AppointmentProxy({ ...entity });
     }
 }
