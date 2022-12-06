@@ -22,6 +22,9 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentPayload, App
 
         if (params.endsAt?.getTime() < params.startsAt?.getTime())
             throw new ValidationException('A data final do agendamento não pode ser antes da data inicial');
+        
+        if (params.startsAt?.getDate() !== params.endsAt?.getDate())
+            throw new ValidationException('A data inicial e final do agendamento não podem ser em dias diferentes');
 
         const hasConflictingDates = await this.repository.hasConflictingDates(params.startsAt, params.endsAt);
 
