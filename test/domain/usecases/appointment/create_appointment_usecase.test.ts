@@ -110,6 +110,25 @@ describe('CreateAppointmentUsecase', () => {
         expect(repository.create).not.toHaveBeenCalled();
     });
 
+    it('should not create if the end date is equal start date', async () => {
+        const todayDate = new Date(2022, 10, 3, 15);
+        const startsAt = new Date(2022, 10, 3, 16, 10, 5);
+        const endsAt = new Date(2022, 10, 3, 16, 10, 5);
+
+        jest.useFakeTimers().setSystemTime(todayDate);
+
+        const invalidPayload = new AppointmentPayload({
+            ...payload,
+            startsAt,
+            endsAt,
+        })
+
+        expect(async () => {
+            await usecase.call(invalidPayload)
+        }).rejects.toThrowError(ValidationException);
+        expect(repository.create).not.toHaveBeenCalled();
+    });
+
     it('should not create if the start and end date don\'t have the same day', async () => {
         const todayDate = new Date(2022, 10, 2);
         const startsAt = new Date(2022, 10, 2);
