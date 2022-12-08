@@ -1,5 +1,6 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 
@@ -18,17 +19,26 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentPayload, App
 
         if (params.startsAt?.getTime() < new Date().getTime())
             throw new ValidationException('A data de agendamento não pode ser antes da data de hoje');
+        
+        if (params.startsAt?.getTime() === params.endsAt?.getTime())
+            throw new ValidationException('A data inicial não deve ser igual a data final do agendamento');
 
         if (params.endsAt?.getTime() < params.startsAt?.getTime())
             throw new ValidationException('A data final do agendamento não pode ser antes da data inicial');
+        
+        if (params.startsAt?.getDate() !== params.endsAt?.getDate())
+            throw new ValidationException('A data inicial e final do agendamento não podem ser em dias diferentes');
 
         const hasConflictingDates = await this.repository.hasConflictingDates(params.startsAt, params.endsAt);
 
         if (hasConflictingDates)
             throw new ValidationException('A data de agendamento está indisponível');
 
-        const entity = await this.repository.create(params);
+        const entity = await this.repository.create({
+            ...params,
+            status: AppointmentStatusEnum.PENDING,
+        });
 
-        return new AppointmentProxy({...entity});
+        return new AppointmentProxy({ ...entity });
     }
 }
