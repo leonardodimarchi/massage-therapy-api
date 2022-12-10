@@ -190,7 +190,7 @@ describe('AppointmentDatasource', () => {
             });
         });
 
-        it('should return with the correct page count', async () => {
+        it('should return with the correct page count and page', async () => {
             const limit = 5;
             const page = 1;
             const total = 15;
@@ -207,7 +207,8 @@ describe('AppointmentDatasource', () => {
                     page,
                 }
             });
-
+            
+            expect(result.page).toBe(1);
             expect(result.pageCount).toEqual(pageCount);
         });
 
