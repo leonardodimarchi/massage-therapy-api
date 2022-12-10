@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from "@nestjs/swagger";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 import { IsOptional } from "class-validator";
 
 export class PaginationOptionsQuery {
@@ -9,8 +9,9 @@ export class PaginationOptionsQuery {
         example: 1,
         default: 1,
     })
+    @IsOptional()
     @Type(() => Number)
-    @IsOptional({ message: 'Por favor, envie a página desejada' })
+    @Transform(({ value }) => Number(value))
     page?: number;
 
     @ApiPropertyOptional({
@@ -19,7 +20,8 @@ export class PaginationOptionsQuery {
         example: 10,
         default: 5,
     })
-    @Type(() => Number)
     @IsOptional()
+    @Type(() => Number)
+    @Transform(({ value }) => Number(value))
     limit?: number;
 }
