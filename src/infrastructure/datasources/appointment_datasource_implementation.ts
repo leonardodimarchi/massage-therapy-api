@@ -49,7 +49,7 @@ export class AppointmentDatasourceImplementation implements AppointmentDatasourc
         });
 
         return {
-            page: 1,
+            page,
             pageCount: Math.ceil(total / limit),
             count: items.length,
             items: items.map(i => new AppointmentEntity(i)),
