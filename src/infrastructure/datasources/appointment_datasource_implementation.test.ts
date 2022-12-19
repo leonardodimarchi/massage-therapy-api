@@ -3,7 +3,7 @@ import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { UserEntity } from "@/domain/entities/user_entity";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
-import { AppointmentDatasourceImplementation } from "@/infra/datasources/appointment_datasource_implementation";
+import { AppointmentDatasourceImplementation } from "./appointment_datasource_implementation";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
 import { mockedUserEntity } from "test/mocks/user_entity.mock";

@@ -1,9 +1,9 @@
 import { MockProxy, mock } from "jest-mock-extended";
-import { mockedUserEntity } from "../../mocks/user_entity.mock";
-import { UserDatasource } from "../../../src/infrastructure/contracts/datasources/user_datasource";
-import { UserRepositoryImplementation } from "../../../src/infrastructure/repositories/user_repository_implementation";
-import { UserRepository } from "../../../src/domain/contracts/repositories/user_repository";
-import { UserPayload } from "../../../src/domain/models/payloads/user_payload";
+import { UserDatasource } from "@/infra/contracts/datasources/user_datasource";
+import { UserRepositoryImplementation } from "./user_repository_implementation";
+import { UserRepository } from "@/domain/contracts/repositories/user_repository";
+import { UserPayload } from "@/domain/models/payloads/user_payload";
+import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
 describe('UserRepository', () => {
     let repository: UserRepository;

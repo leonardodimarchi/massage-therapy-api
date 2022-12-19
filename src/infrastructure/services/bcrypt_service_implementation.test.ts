@@ -1,5 +1,5 @@
-import { BcryptServiceImplementation } from "../../../src/infrastructure/services/bcrypt_service_implementation";
-import { BcryptService } from "../../../src/domain/contracts/services/bcrypt_service";
+import { BcryptServiceImplementation } from "./bcrypt_service_implementation";
+import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
 
 describe('BcryptService', () => {
     let service: BcryptService;
