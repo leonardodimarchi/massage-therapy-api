@@ -5,10 +5,8 @@ import { AppointmentSchema } from "@/infra/database/schema/appointment_schema";
 import { AppointmentController } from "@/presenter/controllers/appointment_controller";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
-import { AppointmentDatasource } from "@/infra/contracts/datasources/appointment_datasource";
-import { AppointmentDatasourceImplementation } from "@/infra/datasources/appointment_datasource_implementation";
-import { AppointmentRepositoryImplementation } from "@/infra/repositories/appointment_repository_implementation";
 import { GetUserAppointmentsUsecase } from "@/domain/usecases/appointment/get_user_appointments_usecase";
+import { TypeormAppointmentRepository } from "@/infra/database/repositories/typeorm_appointment_repository";
 
 @Module({
     imports: [
@@ -33,12 +31,7 @@ import { GetUserAppointmentsUsecase } from "@/domain/usecases/appointment/get_us
         },
         {
             provide: AppointmentRepository,
-            useFactory: (datasource: AppointmentDatasource) => new AppointmentRepositoryImplementation(datasource),
-            inject: [AppointmentDatasource]
-        },
-        {
-            provide: AppointmentDatasource,
-            useClass: AppointmentDatasourceImplementation,
+            useClass: TypeormAppointmentRepository
         },
     ],
 })

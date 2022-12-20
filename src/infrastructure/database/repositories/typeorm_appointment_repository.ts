@@ -2,13 +2,14 @@ import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { AppointmentSchema } from "@/infra/database/schema/appointment_schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
-import { AppointmentDatasource } from "@/infra/contracts/datasources/appointment_datasource";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
-import { GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
+import { AppointmentRepository, GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
+import { Injectable } from "@nestjs/common";
 
-export class AppointmentDatasourceImplementation implements AppointmentDatasource {
+@Injectable()
+export class TypeormAppointmentRepository implements AppointmentRepository {
     constructor(
         @InjectRepository(AppointmentSchema)
         private typeOrmRepository: Repository<AppointmentEntity>,
