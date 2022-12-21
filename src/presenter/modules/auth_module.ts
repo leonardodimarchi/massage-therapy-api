@@ -6,11 +6,11 @@ import { LocalStrategy } from "@/infra/strategies/authentication/local_strategy"
 import { JwtStrategy } from "@/infra/strategies/authentication/jwt_strategy";
 import { LoginUsecase } from "@/domain/usecases/user/login_usecase";
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
-import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
+import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { ValidateToLoginUsecase } from "@/domain/usecases/user/validate_to_login_usecase";
 import { JwtServiceImplementation } from "@/infra/services/jwt_service_implementation";
 import { JwtService } from "@/domain/contracts/services/jwt_service";
-import { BcryptServiceImplementation } from "@/infra/services/bcrypt_service_implementation";
+import { BcryptPasswordEncryptionService } from "@/infra/services/bcrypt_password_encryptation_service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserSchema } from "@/infra/database/schema/user_schema";
 import { ConfigService } from "@nestjs/config";
@@ -39,10 +39,10 @@ import { TypeormUserRepository } from "@/infra/database/repositories/typeorm_use
         },
         {
             provide: ValidateToLoginUsecase,
-            useFactory: (repository: UserRepository, bcryptService: BcryptService) => {
+            useFactory: (repository: UserRepository, bcryptService: PasswordEncryptionService) => {
                 return new ValidateToLoginUsecase(repository, bcryptService);
             },
-            inject: [UserRepository, BcryptService]
+            inject: [UserRepository, PasswordEncryptionService]
         },
         {
             provide: UserRepository,
@@ -53,8 +53,8 @@ import { TypeormUserRepository } from "@/infra/database/repositories/typeorm_use
             useClass: JwtServiceImplementation,
         },
         {
-            provide: BcryptService,
-            useClass: BcryptServiceImplementation,
+            provide: PasswordEncryptionService,
+            useClass: BcryptPasswordEncryptionService,
         },
     ],
 })

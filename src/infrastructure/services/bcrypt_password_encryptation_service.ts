@@ -1,7 +1,9 @@
-import { BcryptService } from "../../domain/contracts/services/bcrypt_service";
+import { PasswordEncryptionService } from "../../domain/contracts/services/password_encryptation_service";
 import * as bcrypt from 'bcrypt';
+import { Injectable } from "@nestjs/common";
 
-export class BcryptServiceImplementation implements BcryptService {
+@Injectable()
+export class BcryptPasswordEncryptionService implements PasswordEncryptionService {
     private readonly rounds: number = 10;
 
     async hash(hashString: string): Promise<string> {

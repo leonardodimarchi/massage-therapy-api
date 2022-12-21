@@ -1,8 +1,8 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
-import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
+import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
 import { UserSchema } from "@/infra/database/schema/user_schema";
-import { BcryptServiceImplementation } from "@/infra/services/bcrypt_service_implementation";
+import { BcryptPasswordEncryptionService } from "@/infra/services/bcrypt_password_encryptation_service";
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserController } from "@/presenter/controllers/user_controller";
@@ -18,18 +18,18 @@ import { TypeormUserRepository } from "@/infra/database/repositories/typeorm_use
     providers: [
         {
             provide: RegisterUsecase,
-            useFactory: (repository: UserRepository, bcryptService: BcryptService) => {
+            useFactory: (repository: UserRepository, bcryptService: PasswordEncryptionService) => {
                 return new RegisterUsecase(repository, bcryptService);
             },
-            inject: [UserRepository, BcryptService]
+            inject: [UserRepository, PasswordEncryptionService]
         },
         {
             provide: UserRepository,
             useClass: TypeormUserRepository,
         },
         {
-            provide: BcryptService,
-            useClass: BcryptServiceImplementation,
+            provide: PasswordEncryptionService,
+            useClass: BcryptPasswordEncryptionService,
         },
     ],
 })
