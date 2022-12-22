@@ -7,15 +7,15 @@ import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
 import { mockedUserEntity } from "test/mocks/user_entity.mock";
 import { FindOneOptions, Repository, MoreThanOrEqual, LessThanOrEqual, FindManyOptions } from "typeorm";
-import { TypeormAppointmentRepository } from "./typeorm_appointment_repository";
+import { TypeOrmAppointmentRepository } from "./typeorm_appointment_repository";
 
-describe('TypeormAppointmentRepository', () => {
+describe('TypeOrmAppointmentRepository', () => {
     let typeOrmRepository: MockProxy<Repository<AppointmentEntity>>;
-    let repository: TypeormAppointmentRepository;
+    let repository: TypeOrmAppointmentRepository;
 
     beforeEach(() => {
         typeOrmRepository = mock<Repository<AppointmentEntity>>();
-        repository = new TypeormAppointmentRepository(typeOrmRepository);
+        repository = new TypeOrmAppointmentRepository(typeOrmRepository);
     });
 
     describe('Create', () => {

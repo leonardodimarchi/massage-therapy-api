@@ -2,16 +2,16 @@ import { MockProxy, mock } from "jest-mock-extended";
 import { UserPayload } from "@/domain/models/payloads/user_payload";
 import { UserEntity } from "@/domain/entities/user_entity";
 import { Repository } from "typeorm";
-import { TypeormUserRepository } from "./typeorm_user_repository";
+import { TypeOrmUserRepository } from "./typeorm_user_repository";
 import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
-describe('TypeormUserRepository', () => {
+describe('TypeOrmUserRepository', () => {
     let typeOrmRepository: MockProxy<Repository<UserEntity>>;
-    let repository: TypeormUserRepository;
+    let repository: TypeOrmUserRepository;
 
     beforeEach(() => {
         typeOrmRepository = mock<Repository<UserEntity>>();
-        repository = new TypeormUserRepository(typeOrmRepository);
+        repository = new TypeOrmUserRepository(typeOrmRepository);
     });
 
     describe('Register', () => {

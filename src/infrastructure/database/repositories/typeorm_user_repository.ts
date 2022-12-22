@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { UserSchema } from "../schema/user_schema";
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 
-export class TypeormUserRepository implements UserRepository {
+export class TypeOrmUserRepository implements UserRepository {
     constructor(
         @InjectRepository(UserSchema)
         private typeOrmRepository: Repository<UserEntity>,

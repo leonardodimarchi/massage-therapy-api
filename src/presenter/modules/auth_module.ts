@@ -15,7 +15,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserSchema } from "@/infra/database/schema/user_schema";
 import { ConfigService } from "@nestjs/config";
 import { ENV_AUTH_CONFIG_KEY } from "@/infra/configurations/authentication.config";
-import { TypeormUserRepository } from "@/infra/database/repositories/typeorm_user_repository";
+import { TypeOrmUserRepository } from "@/infra/database/repositories/typeorm_user_repository";
 
 @Module({
     imports: [
@@ -46,7 +46,7 @@ import { TypeormUserRepository } from "@/infra/database/repositories/typeorm_use
         },
         {
             provide: UserRepository,
-            useClass: TypeormUserRepository,
+            useClass: TypeOrmUserRepository,
         },
         {
             provide: JwtService,

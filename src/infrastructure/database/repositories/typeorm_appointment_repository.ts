@@ -9,7 +9,7 @@ import { PaginationOptions } from "@/domain/models/interfaces/pagination_options
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
-export class TypeormAppointmentRepository implements AppointmentRepository {
+export class TypeOrmAppointmentRepository implements AppointmentRepository {
     constructor(
         @InjectRepository(AppointmentSchema)
         private typeOrmRepository: Repository<AppointmentEntity>,

@@ -7,7 +7,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserController } from "@/presenter/controllers/user_controller";
 import { AuthModule } from "@/presenter/modules/auth_module";
-import { TypeormUserRepository } from "@/infra/database/repositories/typeorm_user_repository";
+import { TypeOrmUserRepository } from "@/infra/database/repositories/typeorm_user_repository";
 
 @Module({
     imports: [
@@ -25,7 +25,7 @@ import { TypeormUserRepository } from "@/infra/database/repositories/typeorm_use
         },
         {
             provide: UserRepository,
-            useClass: TypeormUserRepository,
+            useClass: TypeOrmUserRepository,
         },
         {
             provide: PasswordEncryptionService,
