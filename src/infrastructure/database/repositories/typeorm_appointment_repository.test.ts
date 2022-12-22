@@ -3,19 +3,19 @@ import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { UserEntity } from "@/domain/entities/user_entity";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
-import { AppointmentDatasourceImplementation } from "@/infra/datasources/appointment_datasource_implementation";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
 import { mockedUserEntity } from "test/mocks/user_entity.mock";
 import { FindOneOptions, Repository, MoreThanOrEqual, LessThanOrEqual, FindManyOptions } from "typeorm";
+import { TypeormAppointmentRepository } from "./typeorm_appointment_repository";
 
-describe('AppointmentDatasource', () => {
+describe('TypeormAppointmentRepository', () => {
     let typeOrmRepository: MockProxy<Repository<AppointmentEntity>>;
-    let datasource: AppointmentDatasourceImplementation;
+    let repository: TypeormAppointmentRepository;
 
     beforeEach(() => {
         typeOrmRepository = mock<Repository<AppointmentEntity>>();
-        datasource = new AppointmentDatasourceImplementation(typeOrmRepository);
+        repository = new TypeormAppointmentRepository(typeOrmRepository);
     });
 
     describe('Create', () => {
@@ -32,7 +32,7 @@ describe('AppointmentDatasource', () => {
         it('should create the entity at the database', async () => {
             typeOrmRepository.save.mockResolvedValue(entity);
 
-            const result = await datasource.create(payload);
+            const result = await repository.create(payload);
 
             expect(result).toEqual(entity);
             expect(typeOrmRepository.save).toHaveBeenCalledTimes(1)
@@ -47,7 +47,7 @@ describe('AppointmentDatasource', () => {
             const startDate = new Date(2022, 10, 2);
             const endDate = new Date(2022, 10, 6);
 
-            const result = await datasource.hasConflictingDates(startDate, endDate);
+            const result = await repository.hasConflictingDates(startDate, endDate);
 
             expect(typeOrmRepository.findOne).toHaveBeenCalledTimes(1);
             expect(result).toBeTruthy();
@@ -59,7 +59,7 @@ describe('AppointmentDatasource', () => {
             const startDate = new Date(2022, 10, 2);
             const endDate = new Date(2022, 10, 6);
 
-            const result = await datasource.hasConflictingDates(startDate, endDate);
+            const result = await repository.hasConflictingDates(startDate, endDate);
 
             expect(typeOrmRepository.findOne).toHaveBeenCalledTimes(1);
             expect(result).toBeFalsy();
@@ -75,7 +75,7 @@ describe('AppointmentDatasource', () => {
                 }
             };
 
-            await datasource.hasConflictingDates(startDate, endDate);
+            await repository.hasConflictingDates(startDate, endDate);
 
             expect(typeOrmRepository.findOne).toHaveBeenCalledTimes(1)
             expect(typeOrmRepository.findOne).toHaveBeenCalledWith(expectedOptions);
@@ -101,7 +101,7 @@ describe('AppointmentDatasource', () => {
                 0,
             ]);
 
-            await datasource.getUserAppointments(params);
+            await repository.getUserAppointments(params);
 
             expect(typeOrmRepository.findAndCount).toHaveBeenCalledTimes(1)
             expect(typeOrmRepository.findAndCount).toHaveBeenCalledWith<FindManyOptions<AppointmentEntity>[]>({
@@ -121,7 +121,7 @@ describe('AppointmentDatasource', () => {
                 0,
             ]);
 
-            await datasource.getUserAppointments({
+            await repository.getUserAppointments({
                 ...params,
                 paginationOptions: {
                     limit,
@@ -145,7 +145,7 @@ describe('AppointmentDatasource', () => {
                 0,
             ]);
 
-            await datasource.getUserAppointments({
+            await repository.getUserAppointments({
                 ...params,
                 paginationOptions: {
                     limit: undefined,
@@ -172,7 +172,7 @@ describe('AppointmentDatasource', () => {
                 0,
             ]);
 
-            await datasource.getUserAppointments({
+            await repository.getUserAppointments({
                 ...params,
                 paginationOptions: {
                     limit,
@@ -200,7 +200,7 @@ describe('AppointmentDatasource', () => {
                 total,
             ]);
 
-            const result = await datasource.getUserAppointments({
+            const result = await repository.getUserAppointments({
                 ...params,
                 paginationOptions: {
                     limit,
@@ -229,7 +229,7 @@ describe('AppointmentDatasource', () => {
                 items: mockedEntityList,
             }
 
-            const result = await datasource.getUserAppointments({
+            const result = await repository.getUserAppointments({
                 ...params,
                 paginationOptions: {
                     limit: mockedEntityList.length,

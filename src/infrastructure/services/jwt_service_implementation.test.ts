@@ -1,6 +1,6 @@
 import { JwtService } from "@nestjs/jwt";
 import { mock, MockProxy } from "jest-mock-extended";
-import { JwtServiceImplementation } from "../../../src/infrastructure/services/jwt_service_implementation";
+import { JwtServiceImplementation } from "./jwt_service_implementation";
 
 describe('JwtService', () => {
     let externalService: MockProxy<JwtService>;

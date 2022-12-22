@@ -1,5 +1,5 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
-import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
+import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { UserPayload } from "@/domain/models/payloads/user_payload";
 import { UserProxy } from "@/domain/models/proxies/user_proxy";
@@ -10,7 +10,7 @@ export class RegisterUsecase implements UseCase<UserPayload, UserProxy> {
 
     constructor(
         private readonly repository: UserRepository,
-        private readonly bcryptService: BcryptService,
+        private readonly bcryptService: PasswordEncryptionService,
     ) {}
 
     public async call(params: UserPayload): Promise<UserProxy> {

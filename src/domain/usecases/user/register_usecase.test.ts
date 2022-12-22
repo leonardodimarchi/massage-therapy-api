@@ -1,5 +1,5 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
-import { BcryptService } from "@/domain/contracts/services/bcrypt_service";
+import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { UserEntity } from "@/domain/entities/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { UserPayload } from "@/domain/models/payloads/user_payload";
@@ -10,16 +10,16 @@ import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
 describe('RegisterUsecase', () => {
     let repository: MockProxy<UserRepository>;
-    let bcryptService: MockProxy<BcryptService>;
+    let encryptationService: MockProxy<PasswordEncryptionService>;
     let usecase: RegisterUsecase;
 
     beforeEach(() => {
         repository = mock<UserRepository>();
-        bcryptService = mock<BcryptService>();
-        usecase = new RegisterUsecase(repository, bcryptService);
+        encryptationService = mock<PasswordEncryptionService>();
+        usecase = new RegisterUsecase(repository, encryptationService);
 
 
-        bcryptService.hash.mockResolvedValueOnce(hashPassword);
+        encryptationService.hash.mockResolvedValueOnce(hashPassword);
     });
 
     const hashPassword = 'hashPassword';
@@ -57,7 +57,7 @@ describe('RegisterUsecase', () => {
             ...params,
         }));
 
-        expect(bcryptService.hash).toHaveBeenNthCalledWith(1, params.password);
+        expect(encryptationService.hash).toHaveBeenNthCalledWith(1, params.password);
     });
 
     it('should not call register with invalid email', async () => {
