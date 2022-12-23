@@ -18,6 +18,6 @@ export class TypeOrmUserRepository implements UserRepository {
     public async getByEmail(email: string): Promise<UserEntity> {
         return await this.typeOrmRepository.findOne({
             where: { email }
-        })
+        });
     }
 }

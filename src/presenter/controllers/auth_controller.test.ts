@@ -5,7 +5,7 @@ import { AuthController } from "@/presenter/controllers/auth_controller";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
-describe('UserController', () => {
+describe('AuthController', () => {
     let controller: AuthController;
     let loginUsecase: MockProxy<LoginUsecase>;
 

@@ -1,8 +1,7 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
 import { mock, MockProxy } from "jest-mock-extended";
 import { UserProxy } from "@/domain/models/proxies/user_proxy";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { UserPayload, UserPayloadProps } from "@/domain/models/payloads/user_payload";
+import { UserPayload } from "@/domain/models/payloads/user_payload";
 import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
 import { UserController } from "@/presenter/controllers/user_controller";
 import { CreateUserDto } from "@/presenter/dto/user/create-user.dto";
@@ -60,16 +59,18 @@ describe('UserController', () => {
             expect(result).toEqual(expectedResult);
         });
 
-        it('should throw an Forbidden HttpException when receiving a ValidationException', async () => {
+        it('should throw an BadRequest HttpException when receiving a ValidationException', async () => {
             const mockedErrorMessage = 'Mocked error';
             registerUsecase.call.mockImplementationOnce(() => {
                 throw new ValidationException(mockedErrorMessage);
             });
 
-            expect(async () => await controller.register(params)).rejects.toThrow(new HttpException(
-                mockedErrorMessage,
-                HttpStatus.FORBIDDEN,
-            ));
+            expect.assertions(1);
+            try {
+                await controller.register(params);
+            } catch (e) {
+                expect(e.status).toBe(400);
+            }
         });
     });
 });

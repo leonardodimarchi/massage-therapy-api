@@ -29,6 +29,11 @@ export class RegisterUsecase implements UseCase<UserPayload, UserProxy> {
         if (!UserValidator.isValidPassword(params.password))
             throw new ValidationException('Senha inválida');
 
+        const hasUserWithEmail = await this.repository.getByEmail(params.email);
+
+        if (hasUserWithEmail) 
+            throw new ValidationException('Email já cadastrado');
+
         params.password = await this.bcryptService.hash(params.password);
 
         const entity = await this.repository.register(params);

@@ -25,10 +25,7 @@ export class UserController {
             }
         } catch (error) {
             if (error instanceof ValidationException)
-                throw new HttpException(
-                    error.message,
-                    HttpStatus.BAD_REQUEST,
-                );
+                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
 
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -18,7 +18,6 @@ describe('RegisterUsecase', () => {
         encryptationService = mock<PasswordEncryptionService>();
         usecase = new RegisterUsecase(repository, encryptationService);
 
-
         encryptationService.hash.mockResolvedValueOnce(hashPassword);
     });
 
@@ -118,5 +117,12 @@ describe('RegisterUsecase', () => {
 
         expect(usecaseCall()).rejects.toThrow(ValidationException);
         expect(repository.register).not.toHaveBeenCalled();
+    });
+
+    it('should not call register if the email already exists', async () => {
+        repository.getByEmail.mockResolvedValueOnce(mockedUserEntity);
+        const usecaseCall = async () => await usecase.call(params);        
+
+        expect(usecaseCall()).rejects.toThrow(ValidationException);
     });
 });
