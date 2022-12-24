@@ -3,14 +3,16 @@ import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { AppointmentPayload, AppointmentPayloadProps } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
-import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
+import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { GetUserAppointmentsUsecase, GetUserAppointmentsUsecaseInput } from "@/domain/usecases/appointment/get_user_appointments_usecase";
 import { AppointmentController } from "@/presenter/controllers/appointment_controller";
 import { PaginationOptionsQuery } from "@/presenter/models/queries/pagination_options.query";
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { MockProxy, mock } from "jest-mock-extended";
+import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
 import { mockedUserEntity } from "test/mocks/user_entity.mock";
-import { AppointmentViewModel } from "../models/view-models/appointment/appointment.view-model";
+import { CreateAppointmentPayload } from "../models/payloads/appointment/create-appointment.payload";
+import { AppointmentViewModelMapper } from "../models/view-models/appointment/appointment.view-model.mapper";
 
 describe('AppointmentController', () => {
     let controller: AppointmentController;
@@ -24,57 +26,34 @@ describe('AppointmentController', () => {
     });
 
     describe('Create', () => {
-        const mockedPayloadProperties: AppointmentPayloadProps = {
-            userId: 2,
+        const input: CreateAppointmentUsecaseInput = {
             complaint: '',
             isUnderMedicalTreatment: false,
             symptoms: '',
             startsAt: new Date(2023, 7, 20),
             endsAt: new Date(2023, 8, 4),
-        };
-
-        const proxy = new AppointmentProxy({
-            id: 1,
-            createdAt: new Date(2023, 7, 20),
-            updatedAt: new Date(2023, 7, 20),
             userId: 2,
-            complaint: '',
-            isUnderMedicalTreatment: false,
-            symptoms: '',
-            startsAt: new Date(2023, 7, 20),
-            endsAt: new Date(2023, 8, 4),
-            status: AppointmentStatusEnum.PENDING,
-        });
-
-        const expectedResult: AppointmentViewModel = {
-            id: 1,
-            createdAt: new Date(2023, 7, 20),
-            updatedAt: new Date(2023, 7, 20),
-            userId: 2,
-            complaint: '',
-            isUnderMedicalTreatment: false,
-            symptoms: '',
-            startsAt: new Date(2023, 7, 20),
-            endsAt: new Date(2023, 8, 4),
-            status: AppointmentStatusEnum.PENDING,
         }
 
+        const usecaseOutput = mockedAppointmentEntity;
+
+        const expectedResult = AppointmentViewModelMapper.toModel(usecaseOutput);
+
         it('should call the create usecase', async () => {
-            createAppointmentUsecase.call.mockResolvedValueOnce(proxy);
+            createAppointmentUsecase.call.mockResolvedValueOnce({ createdAppointment: usecaseOutput });
 
             await controller.create({
-                user: new UserEntity({...mockedUserEntity, id: 2}),
-            }, mockedPayloadProperties);
+                user: new UserEntity({...mockedUserEntity, id: 2 }),
+            }, input);
 
-            expect(createAppointmentUsecase.call).toHaveBeenCalledWith(new AppointmentPayload({...mockedPayloadProperties}));
         });
 
         it('should return a ViewModel', async () => {
-            createAppointmentUsecase.call.mockResolvedValueOnce(proxy);
+            createAppointmentUsecase.call.mockResolvedValueOnce({ createdAppointment: usecaseOutput });
 
             const result = await controller.create({
-                user: mockedUserEntity,
-            }, mockedPayloadProperties);
+                user: new UserEntity({ ...mockedUserEntity, id: 2 }),
+            }, input);
 
             expect(result).toEqual(expectedResult);
         });
@@ -87,7 +66,7 @@ describe('AppointmentController', () => {
 
             expect(async () => await controller.create({
                 user: mockedUserEntity,
-            }, mockedPayloadProperties)).rejects.toThrow(new HttpException(
+            }, input)).rejects.toThrow(new HttpException(
                 mockedErrorMessage,
                 HttpStatus.FORBIDDEN,
             ));

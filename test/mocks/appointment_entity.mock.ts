@@ -5,7 +5,7 @@ export const mockedAppointmentEntity = new AppointmentEntity({
     id: 1,
     createdAt: new Date(2023, 7, 20),
     updatedAt: new Date(2023, 7, 20),
-    userId: 2,
+    userId: 1,
     complaint: '',
     isUnderMedicalTreatment: false,
     symptoms: '',

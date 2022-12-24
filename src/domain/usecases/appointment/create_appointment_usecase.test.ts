@@ -4,7 +4,7 @@ import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
-import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
+import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
 
@@ -17,38 +17,30 @@ describe('CreateAppointmentUsecase', () => {
         usecase = new CreateAppointmentUsecase(repository);
     });
 
-    const entity: AppointmentEntity = mockedAppointmentEntity;
+    const entity = mockedAppointmentEntity;
 
-    const proxy: AppointmentProxy = new AppointmentProxy({
-        ...entity,
-    });
-
-    const payload: AppointmentPayload = new AppointmentPayload({
+    const input: CreateAppointmentUsecaseInput = {
         userId: 2,
         complaint: 'Valid complaint',
         isUnderMedicalTreatment: false,
         symptoms: 'Valid symptoms',
         startsAt: new Date(2023, 7, 20, 18),
         endsAt: new Date(2023, 7, 20, 19)
-    });
+    };
 
-    it('should get a appointment proxy when calling the repository successfully', async () => {
+    it('should get the created appointment when creating successfully', async () => {
         repository.create.mockResolvedValue(entity);
 
-        const result = await usecase.call(payload);
+        const { createdAppointment } = await usecase.call(input);
 
-        expect(result).toEqual(proxy);
-        expect(repository.create).toHaveBeenNthCalledWith(1, payload);
+        expect(createdAppointment).toEqual(entity);
     });
 
     it('should always create a appointment with the PENDING status', async () => {
-        await usecase.call({
-            ...payload,
-            status: AppointmentStatusEnum.COMPLETED,
-        });
+        await usecase.call(input);
 
         expect(repository.create).toHaveBeenNthCalledWith(1, {
-            ...payload,
+            ...input,
             status: AppointmentStatusEnum.PENDING,
         });
     });
@@ -61,7 +53,7 @@ describe('CreateAppointmentUsecase', () => {
         jest.useFakeTimers().setSystemTime(todayDate);
 
         const invalidPayload = new AppointmentPayload({
-            ...payload,
+            ...input,
             startsAt,
             endsAt,
         })
@@ -79,11 +71,11 @@ describe('CreateAppointmentUsecase', () => {
 
         jest.useFakeTimers().setSystemTime(todayDate);
 
-        const invalidPayload = new AppointmentPayload({
-            ...payload,
+        const invalidPayload: CreateAppointmentUsecaseInput = {
+            ...input,
             startsAt,
             endsAt,
-        })
+        };
 
         expect(async () => {
             await usecase.call(invalidPayload)
@@ -99,7 +91,7 @@ describe('CreateAppointmentUsecase', () => {
         jest.useFakeTimers().setSystemTime(todayDate);
 
         const invalidPayload = new AppointmentPayload({
-            ...payload,
+            ...input,
             startsAt,
             endsAt,
         })
@@ -118,7 +110,7 @@ describe('CreateAppointmentUsecase', () => {
         jest.useFakeTimers().setSystemTime(todayDate);
 
         const invalidPayload = new AppointmentPayload({
-            ...payload,
+            ...input,
             startsAt,
             endsAt,
         })
@@ -137,7 +129,7 @@ describe('CreateAppointmentUsecase', () => {
         jest.useFakeTimers().setSystemTime(todayDate);
 
         const invalidPayload = new AppointmentPayload({
-            ...payload,
+            ...input,
             startsAt,
             endsAt,
         });
@@ -152,15 +144,15 @@ describe('CreateAppointmentUsecase', () => {
         repository.hasConflictingDates.mockResolvedValueOnce(true);
 
         expect(async () => {
-            await usecase.call(payload)
+            await usecase.call(input)
         }).rejects.toThrowError(ValidationException);
-        expect(repository.hasConflictingDates).toHaveBeenNthCalledWith(1, payload.startsAt, payload.endsAt);
+        expect(repository.hasConflictingDates).toHaveBeenNthCalledWith(1, input.startsAt, input.endsAt);
     });
 
     it('should check if there is a valid complaint', async () => {
         expect(async () => {
             await usecase.call(new AppointmentPayload({
-                ...payload,
+                ...input,
                 complaint: '',
             }))
         }).rejects.toThrowError(ValidationException);
@@ -169,7 +161,7 @@ describe('CreateAppointmentUsecase', () => {
     it('should check if there is a valid symptom', async () => {
         expect(async () => {
             await usecase.call(new AppointmentPayload({
-                ...payload,
+                ...input,
                 symptoms: '',
             }))
         }).rejects.toThrowError(ValidationException);
