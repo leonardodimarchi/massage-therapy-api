@@ -1,8 +1,8 @@
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { BaseOutputDto } from "../shared/base-output.dto";
+import { BaseEntityViewModel } from "../shared/base-entity.view-model";
 
-export class CreatedAppointmentDto extends BaseOutputDto {
+export class AppointmentViewModel extends BaseEntityViewModel {
     @ApiProperty()
     userId: number;
 

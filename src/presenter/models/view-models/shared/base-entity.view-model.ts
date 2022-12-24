@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 
-export class BaseOutputDto {
+export class BaseEntityViewModel {
     @ApiProperty()
     id: number;
 

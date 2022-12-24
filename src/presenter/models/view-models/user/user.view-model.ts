@@ -1,12 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsDateString } from "class-validator";
-import { BaseOutputDto } from "../shared/base-output.dto";
+import { IsDateString, IsString } from "class-validator";
+import { BaseEntityViewModel } from "../shared/base-entity.view-model";
 
-class JwtDto {
-    access_token: string;
-}
-
-class LoggedUserDto extends BaseOutputDto {
+export class UserViewModel extends BaseEntityViewModel {
     @ApiProperty({
         required: true,
     })
@@ -30,12 +26,4 @@ class LoggedUserDto extends BaseOutputDto {
     })
     @IsDateString({}, { message: 'É necessário enviar uma data de nascimento válida' })
     birthDate: Date;
-}
-
-export class SuccessLoginDto {
-    @ApiProperty()
-    jwt: JwtDto;
-
-    @ApiProperty()
-    user: LoggedUserDto;
 }

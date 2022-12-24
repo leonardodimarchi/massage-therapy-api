@@ -6,11 +6,10 @@ import { GetUserAppointmentsUsecase } from "@/domain/usecases/appointment/get_us
 import { JwtAuthGuard } from "@/infra/guards/authentication/jwt_auth_guard";
 import { Controller, Post, Body, HttpException, HttpStatus, UseGuards, Req, Query, Get } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { AppointmentDto } from "../dto/appointment/appointment.dto";
-import { CreateAppointmentDto } from "../dto/appointment/create-appointment.dto";
-import { CreatedAppointmentDto } from "../dto/appointment/created-appointment.dto";
-import { PaginatedItemsDto } from "../dto/shared/paginated-items.dto";
+import { CreateAppointmentPayload } from "../models/payloads/appointment/create-appointment.payload";
 import { PaginationOptionsQuery } from "../models/queries/pagination_options.query";
+import { AppointmentViewModel } from "../models/view-models/appointment/appointment.view-model";
+import { PaginatedItemsViewModel } from "../models/view-models/shared/paginated-items.view-model";
 
 @ApiTags('Appointments')
 @Controller('appointments')
@@ -23,8 +22,8 @@ export class AppointmentController {
     @UseGuards(JwtAuthGuard)
     @Post()
     @ApiOperation({ summary: 'Cadastrar um novo agendamento' })
-    @ApiCreatedResponse({ description: 'O agendamento foi criado com sucesso', type: CreatedAppointmentDto })
-    public async create(@Req() req: { user: UserEntity }, @Body() payload: CreateAppointmentDto): Promise<CreatedAppointmentDto> {
+    @ApiCreatedResponse({ description: 'O agendamento foi criado com sucesso', type: CreateAppointmentPayload })
+    public async create(@Req() req: { user: UserEntity }, @Body() payload: CreateAppointmentPayload): Promise<AppointmentViewModel> {
         try {
             const result = await this.createAppointmentUsecase.call(new AppointmentPayload({
                 ...payload,
@@ -32,8 +31,19 @@ export class AppointmentController {
             }));
 
             return {
-                ...result,
-            }
+                id: result.id,
+                createdAt: result.createdAt,
+                updatedAt: result.updatedAt,
+                userId: result.userId,
+                complaint: result.complaint,
+                isUnderMedicalTreatment: result.isUnderMedicalTreatment,
+                symptoms: result.symptoms,
+                startsAt: result.startsAt,
+                endsAt: result.endsAt,
+                status: result.status,
+                isPregnant: result.isPregnant,
+                pregnantWeeks: result.pregnantWeeks,
+            };
         } catch (error) {
             if (error instanceof ValidationException)
                 throw new HttpException(
@@ -48,11 +58,11 @@ export class AppointmentController {
     @UseGuards(JwtAuthGuard)
     @Get()
     @ApiOperation({ summary: 'Listar seus agendamentos' })
-    @ApiCreatedResponse({ description: 'Listagem obtida com sucesso', type: PaginatedItemsDto<AppointmentDto> })
+    @ApiCreatedResponse({ description: 'Listagem obtida com sucesso', type: PaginatedItemsViewModel<AppointmentViewModel> })
     public async getUserAppointments(
         @Req() req: { user: UserEntity },
         @Query() paginationOptionsQuery: PaginationOptionsQuery,
-    ): Promise<PaginatedItemsDto<AppointmentDto>> {
+    ): Promise<PaginatedItemsViewModel<AppointmentViewModel>> {
         return await this.getAppointmentsUsecase.call({
             user: req.user,
             paginationOptions: {

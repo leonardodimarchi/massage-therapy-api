@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsBoolean, IsString, IsDateString, IsNumber, IsOptional } from "class-validator";
 
-export class CreateAppointmentDto {
+export class CreateAppointmentPayload {
     @ApiProperty({
         required: true,
     })
