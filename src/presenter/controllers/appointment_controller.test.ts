@@ -26,13 +26,12 @@ describe('AppointmentController', () => {
     });
 
     describe('Create', () => {
-        const input: CreateAppointmentUsecaseInput = {
+        const input: CreateAppointmentPayload = {
             complaint: '',
             isUnderMedicalTreatment: false,
             symptoms: '',
-            startsAt: new Date(2023, 7, 20),
-            endsAt: new Date(2023, 8, 4),
-            userId: 2,
+            startsAt: new Date(2023, 7, 20).toISOString(),
+            endsAt: new Date(2023, 8, 4).toISOString(),
         }
 
         const usecaseOutput = mockedAppointmentEntity;
@@ -45,7 +44,6 @@ describe('AppointmentController', () => {
             await controller.create({
                 user: new UserEntity({...mockedUserEntity, id: 2 }),
             }, input);
-
         });
 
         it('should return a ViewModel', async () => {

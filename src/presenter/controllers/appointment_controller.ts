@@ -38,8 +38,8 @@ export class AppointmentController {
         try {
             const { createdAppointment } = await this.createAppointmentUsecase.call({
                 complaint,
-                startsAt,
-                endsAt,
+                startsAt: new Date(startsAt),
+                endsAt: new Date(endsAt),
                 symptoms,
                 isPregnant,
                 isUnderMedicalTreatment,
