@@ -1,9 +1,7 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
-import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";

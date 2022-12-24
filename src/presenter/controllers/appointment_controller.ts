@@ -67,12 +67,17 @@ export class AppointmentController {
         @Req() req: { user: UserEntity },
         @Query() paginationOptionsQuery: PaginationOptionsQuery,
     ): Promise<PaginatedItemsViewModel<AppointmentViewModel>> {
-        return await this.getAppointmentsUsecase.call({
+        const { paginatedItems } = await this.getAppointmentsUsecase.call({
             user: req.user,
             paginationOptions: {
                 page: paginationOptionsQuery.page,
                 limit: paginationOptionsQuery.limit,
             }
         });
+
+        return {
+            ...paginatedItems,
+            items: paginatedItems.items.map(item => AppointmentViewModelMapper.toModel(item)),
+        };
     }
 }

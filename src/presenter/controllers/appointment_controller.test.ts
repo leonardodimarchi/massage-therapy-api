@@ -1,9 +1,7 @@
 import { UserEntity } from "@/domain/entities/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
-import { AppointmentPayload, AppointmentPayloadProps } from "@/domain/models/payloads/appointment_payload";
-import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
-import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
+import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
+import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { GetUserAppointmentsUsecase, GetUserAppointmentsUsecaseInput } from "@/domain/usecases/appointment/get_user_appointments_usecase";
 import { AppointmentController } from "@/presenter/controllers/appointment_controller";
 import { PaginationOptionsQuery } from "@/presenter/models/queries/pagination_options.query";
@@ -12,6 +10,7 @@ import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
 import { mockedUserEntity } from "test/mocks/user_entity.mock";
 import { CreateAppointmentPayload } from "../models/payloads/appointment/create-appointment.payload";
+import { AppointmentViewModel } from "../models/view-models/appointment/appointment.view-model";
 import { AppointmentViewModelMapper } from "../models/view-models/appointment/appointment.view-model.mapper";
 
 describe('AppointmentController', () => {
@@ -77,7 +76,16 @@ describe('AppointmentController', () => {
             page: 2,
         }
 
-        it('should call the create usecase', async () => {
+        it('should call the usecase', async () => {
+            getUserAppointmentsUsecase.call.mockResolvedValueOnce({
+                paginatedItems: {
+                    count: 0,
+                    items: [],
+                    page: 1,
+                    pageCount: 1,
+                    total: 0,
+                },
+            })
             const expectedParams: GetUserAppointmentsUsecaseInput = {
                 user: request.user,
                 paginationOptions: {
