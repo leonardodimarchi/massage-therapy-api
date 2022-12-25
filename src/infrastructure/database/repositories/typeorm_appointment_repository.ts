@@ -2,11 +2,11 @@ import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { AppointmentSchema } from "@/infra/database/schema/appointment_schema";
 import { InjectRepository } from "@nestjs/typeorm";
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
-import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { AppointmentRepository, GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 import { Injectable } from "@nestjs/common";
+import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 
 @Injectable()
 export class TypeOrmAppointmentRepository implements AppointmentRepository {
@@ -15,7 +15,17 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
         private typeOrmRepository: Repository<AppointmentEntity>,
     ) { }
 
-    public async create(params: AppointmentPayload): Promise<AppointmentEntity> {
+    public async create(params: {
+        userId: number;
+        complaint: string;
+        isUnderMedicalTreatment: boolean;
+        symptoms: string;
+        startsAt: Date;
+        endsAt: Date;
+        isPregnant?: boolean;
+        pregnantWeeks?: number;
+        status?: AppointmentStatusEnum,
+    }): Promise<AppointmentEntity> {
         return await this.typeOrmRepository.save(params);
     }
 

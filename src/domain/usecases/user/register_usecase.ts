@@ -1,43 +1,67 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
+import { UserEntity } from "@/domain/entities/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { UserPayload } from "@/domain/models/payloads/user_payload";
-import { UserProxy } from "@/domain/models/proxies/user_proxy";
 import { UserValidator } from "@/domain/validators/user_validator";
 
+export interface RegisterUseCaseInput {
+    email: string;
+    name: string;
+    phone: string;
+    birthDate: Date;
+    password: string;
+}
 
-export class RegisterUsecase implements UseCase<UserPayload, UserProxy> {
+export interface RegisterUseCaseOutput {
+    createdUser: UserEntity,
+}
+
+export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUseCaseOutput> {
 
     constructor(
         private readonly repository: UserRepository,
         private readonly bcryptService: PasswordEncryptionService,
     ) {}
 
-    public async call(params: UserPayload): Promise<UserProxy> {
-        if (!UserValidator.isValidEmail(params.email))
+    public async call({
+        email,
+        name,
+        phone,
+        birthDate,
+        password,
+    }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
+        if (!UserValidator.isValidEmail(email))
             throw new ValidationException('Email inválido');
 
-        if (!UserValidator.isValidName(params.name))
+        if (!UserValidator.isValidName(name))
             throw new ValidationException('Nome inválido');
 
-        if (!UserValidator.isValidPhone(params.phone))
+        if (!UserValidator.isValidPhone(phone))
             throw new ValidationException('Telefone inválido');
 
-        if (!UserValidator.isValidBirthDate(params.birthDate))
+        if (!UserValidator.isValidBirthDate(birthDate))
             throw new ValidationException('Data de nascimento inválida');
 
-        if (!UserValidator.isValidPassword(params.password))
+        if (!UserValidator.isValidPassword(password))
             throw new ValidationException('Senha inválida');
 
-        const hasUserWithEmail = await this.repository.getByEmail(params.email);
+        const hasUserWithEmail = await this.repository.getByEmail(email);
 
         if (hasUserWithEmail) 
             throw new ValidationException('Email já cadastrado');
 
-        params.password = await this.bcryptService.hash(params.password);
+        password = await this.bcryptService.hash(password);
 
-        const entity = await this.repository.register(params);
+        const createdUser = await this.repository.register({
+            email,
+            name,
+            phone,
+            birthDate,
+            password,
+        });
 
-        return new UserProxy({...entity});
+        return {
+            createdUser,
+        };
     }
 }

@@ -1,5 +1,4 @@
-import { UserPayload } from "../../../domain/models/payloads/user_payload";
-import { UserEntity } from "../../../domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user_entity";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserSchema } from "../schema/user_schema";
@@ -11,7 +10,13 @@ export class TypeOrmUserRepository implements UserRepository {
         private typeOrmRepository: Repository<UserEntity>,
     ) { }
 
-    public async register(params: UserPayload): Promise<UserEntity> {
+    public async register(params: {
+        email: string;
+        name: string;
+        phone: string;
+        birthDate: Date;
+        password: string;
+    }): Promise<UserEntity> {
         return await this.typeOrmRepository.save(params);
     }
 

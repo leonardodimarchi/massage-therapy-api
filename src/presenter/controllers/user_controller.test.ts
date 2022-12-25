@@ -1,11 +1,10 @@
 import { mock, MockProxy } from "jest-mock-extended";
-import { UserProxy } from "@/domain/models/proxies/user_proxy";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { UserPayload } from "@/domain/models/payloads/user_payload";
 import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
 import { UserController } from "@/presenter/controllers/user_controller";
 import { CreateUserPayload } from "@/presenter/models/payloads/user/create-user.payload";
-import { UserViewModel } from "../models/view-models/user/user.view-model";
+import { UserViewModelMapper } from "../models/view-models/user/user.view-model.mapper";
+import { mockedUserEntity } from "test/mocks/user_entity.mock";
 
 describe('UserController', () => {
     let controller: UserController;
@@ -25,34 +24,20 @@ describe('UserController', () => {
             password: '123456'
         };
 
-        const proxy = new UserProxy({
-            id: 1,
-            createdAt: new Date(11, 10, 2000),
-            updatedAt: new Date(11, 10, 2000),
-            email: 'Mocked email',
-            name: 'Mocked Name',
-            birthDate: new Date(11, 10, 2000),
-            phone: 'Mocked phone',
-        });
+        const usecaseOutput = mockedUserEntity;
 
-        const expectedResult: UserViewModel = {
-            id: 1,
-            createdAt: new Date(11, 10, 2000),
-            updatedAt: new Date(11, 10, 2000),
-            email: 'Mocked email',
-            name: 'Mocked Name',
-            birthDate: new Date(11, 10, 2000),
-            phone: 'Mocked phone',
-        }
+        const expectedResult = UserViewModelMapper.toModel(usecaseOutput);
 
         it('should call register usecase', async () => {
+            registerUsecase.call.mockResolvedValueOnce({ createdUser: usecaseOutput });
+
             await controller.register(params);
 
-            expect(registerUsecase.call).toHaveBeenCalledWith(new UserPayload(params));
+            expect(registerUsecase.call).toHaveBeenCalledTimes(1);
         });
 
-        it('should return a UserProxy', async () => {
-            registerUsecase.call.mockResolvedValueOnce(proxy);
+        it('should return the ViewModel', async () => {
+            registerUsecase.call.mockResolvedValueOnce({ createdUser: usecaseOutput });
 
             const result = await controller.register(params);
 

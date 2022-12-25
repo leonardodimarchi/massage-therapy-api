@@ -1,5 +1,4 @@
 import { MockProxy, mock } from "jest-mock-extended";
-import { UserPayload } from "@/domain/models/payloads/user_payload";
 import { UserEntity } from "@/domain/entities/user_entity";
 import { Repository } from "typeorm";
 import { TypeOrmUserRepository } from "./typeorm_user_repository";
@@ -16,13 +15,13 @@ describe('TypeOrmUserRepository', () => {
 
     describe('Register', () => {
         const entity = mockedUserEntity;
-        const payload = new UserPayload({
+        const payload = {
             email: 'valid@email.com',
             name: 'Mocked name',
             phone: '15992280628',
             birthDate: new Date(),
-            password: '123456'
-        });
+            password: '123456',
+        };
 
         it('should create the entity at the database', async () => {
             typeOrmRepository.save.mockResolvedValue(entity);

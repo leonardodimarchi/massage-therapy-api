@@ -2,7 +2,6 @@ import { GetUserAppointmentsParams } from "@/domain/contracts/repositories/appoi
 import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { UserEntity } from "@/domain/entities/user_entity";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
-import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
 import { mockedUserEntity } from "test/mocks/user_entity.mock";
@@ -20,14 +19,14 @@ describe('TypeOrmAppointmentRepository', () => {
 
     describe('Create', () => {
         const entity = mockedAppointmentEntity;
-        const payload: AppointmentPayload = new AppointmentPayload({
+        const payload = {
             userId: 2,
             complaint: '',
             isUnderMedicalTreatment: false,
             symptoms: '',
             startsAt: new Date(2023, 7, 20),
             endsAt: new Date(2023, 8, 4)
-        });
+        };
 
         it('should create the entity at the database', async () => {
             typeOrmRepository.save.mockResolvedValue(entity);

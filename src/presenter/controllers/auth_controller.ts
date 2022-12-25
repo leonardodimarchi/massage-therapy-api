@@ -22,12 +22,14 @@ export class AuthController {
     })
     @ApiOperation({ summary: 'Gerar um token de usuário (JWT)' })
     @ApiOkResponse({ description: 'O token foi gerado com sucesso', type: SuccessLoginViewModel })
-    public async login(@Request() req: { user: UserEntity }): Promise<SuccessLoginViewModel> {
-      const { jwt, loggedUser } = this.loginUsecase.call(req.user);
+    public async login(@Request() { user }: { user: UserEntity }): Promise<SuccessLoginViewModel> {
+      const { jwt } = this.loginUsecase.call({
+        user,
+      });
 
       return {
         jwt,
-        user: loggedUser
+        user,
       }
     }
 }

@@ -1,7 +1,6 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
-import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
 import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
@@ -50,11 +49,11 @@ describe('CreateAppointmentUsecase', () => {
 
         jest.useFakeTimers().setSystemTime(todayDate);
 
-        const invalidPayload = new AppointmentPayload({
+        const invalidPayload: CreateAppointmentUsecaseInput = {
             ...input,
             startsAt,
             endsAt,
-        })
+        };
 
         expect(async () => {
             await usecase.call(invalidPayload)
@@ -88,11 +87,11 @@ describe('CreateAppointmentUsecase', () => {
 
         jest.useFakeTimers().setSystemTime(todayDate);
 
-        const invalidPayload = new AppointmentPayload({
+        const invalidPayload: CreateAppointmentUsecaseInput = {
             ...input,
             startsAt,
             endsAt,
-        })
+        }
 
         expect(async () => {
             await usecase.call(invalidPayload)
@@ -107,11 +106,11 @@ describe('CreateAppointmentUsecase', () => {
 
         jest.useFakeTimers().setSystemTime(todayDate);
 
-        const invalidPayload = new AppointmentPayload({
+        const invalidPayload: CreateAppointmentUsecaseInput = {
             ...input,
             startsAt,
             endsAt,
-        })
+        }
 
         expect(async () => {
             await usecase.call(invalidPayload)
@@ -126,11 +125,11 @@ describe('CreateAppointmentUsecase', () => {
 
         jest.useFakeTimers().setSystemTime(todayDate);
 
-        const invalidPayload = new AppointmentPayload({
+        const invalidPayload: CreateAppointmentUsecaseInput = {
             ...input,
             startsAt,
             endsAt,
-        });
+        };
 
         expect(async () => {
             await usecase.call(invalidPayload)
@@ -149,19 +148,19 @@ describe('CreateAppointmentUsecase', () => {
 
     it('should check if there is a valid complaint', async () => {
         expect(async () => {
-            await usecase.call(new AppointmentPayload({
+            await usecase.call({
                 ...input,
                 complaint: '',
-            }))
+            })
         }).rejects.toThrowError(ValidationException);
     });
 
     it('should check if there is a valid symptom', async () => {
         expect(async () => {
-            await usecase.call(new AppointmentPayload({
+            await usecase.call({
                 ...input,
                 symptoms: '',
-            }))
+            })
         }).rejects.toThrowError(ValidationException);
     });
 });
