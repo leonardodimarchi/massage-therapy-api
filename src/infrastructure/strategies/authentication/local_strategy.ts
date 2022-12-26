@@ -22,7 +22,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (!isValidPassword)
       throw new BadRequestException('Senha inválida.'); 
 
-    const user = await this.validateToLoginUsecase.call({
+    const { user } = await this.validateToLoginUsecase.call({
         email,
         password,
     });

@@ -48,10 +48,12 @@ export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecas
         if (hasConflictingDates)
             throw new ValidationException('A data de agendamento está indisponível');
 
-        const createdAppointment = await this.repository.create({
+        const entity = new AppointmentEntity({
             ...params,
             status: AppointmentStatusEnum.PENDING,
-        });
+        })
+
+        const createdAppointment = await this.repository.create(entity);
 
         return { 
             createdAppointment,

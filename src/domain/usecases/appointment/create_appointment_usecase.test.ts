@@ -3,7 +3,7 @@ import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
-import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
+import { makeAppointment } from "test/factories/appointment_factory";
 
 describe('CreateAppointmentUsecase', () => {
     let repository: MockProxy<AppointmentRepository>;
@@ -14,7 +14,7 @@ describe('CreateAppointmentUsecase', () => {
         usecase = new CreateAppointmentUsecase(repository);
     });
 
-    const entity = mockedAppointmentEntity;
+    const entity = makeAppointment();
 
     const input: CreateAppointmentUsecaseInput = {
         userId: 2,
@@ -36,10 +36,9 @@ describe('CreateAppointmentUsecase', () => {
     it('should always create a appointment with the PENDING status', async () => {
         await usecase.call(input);
 
-        expect(repository.create).toHaveBeenNthCalledWith(1, {
-            ...input,
+        expect(repository.create).toHaveBeenNthCalledWith(1, expect.objectContaining({
             status: AppointmentStatusEnum.PENDING,
-        });
+        }));
     });
 
     it('should not create if the start date is before now', async () => {

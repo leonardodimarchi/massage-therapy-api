@@ -52,13 +52,14 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
 
         password = await this.bcryptService.hash(password);
 
-        const createdUser = await this.repository.register({
+        const userToCreate = new UserEntity({
             email,
             name,
             phone,
             birthDate,
             password,
         });
+        const createdUser = await this.repository.register(userToCreate);
 
         return {
             createdUser,

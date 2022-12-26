@@ -1,7 +1,7 @@
 import { LoginUsecase, LoginUseCaseInput, LoginUseCaseOutput } from "@/domain/usecases/user/login_usecase";
 import { JwtService } from "@nestjs/jwt";
 import { MockProxy, mock } from "jest-mock-extended";
-import { mockedUserEntity } from "test/mocks/user_entity.mock";
+import { makeUser } from "test/factories/user_factory";
 
 describe('LoginUsecase', () => {
     let jwtService: MockProxy<JwtService>;
@@ -15,7 +15,7 @@ describe('LoginUsecase', () => {
     const accessToken = 'mocked access_token';
 
     const input: LoginUseCaseInput = {
-        user: mockedUserEntity,
+        user: makeUser(),
     };
 
     const expectedResult: LoginUseCaseOutput = {

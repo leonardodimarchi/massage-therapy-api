@@ -5,6 +5,7 @@ import { Controller, UseGuards, Post, Request } from "@nestjs/common";
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { LoginPayload } from "../models/payloads/auth/login.payload";
 import { SuccessLoginViewModel } from "../models/view-models/auth/success-login.view-model";
+import { UserViewModelMapper } from "../models/view-models/user/user.view-model.mapper";
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -29,7 +30,7 @@ export class AuthController {
 
       return {
         jwt,
-        user,
+        user: UserViewModelMapper.toModel(user),
       }
     }
 }

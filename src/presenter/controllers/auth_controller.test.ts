@@ -1,7 +1,7 @@
 import { LoginUsecase, LoginUseCaseOutput } from "@/domain/usecases/user/login_usecase";
 import { AuthController } from "@/presenter/controllers/auth_controller";
 import { MockProxy, mock } from "jest-mock-extended";
-import { mockedUserEntity } from "test/mocks/user_entity.mock";
+import { makeUser } from "test/factories/user_factory";
 
 describe('AuthController', () => {
     let controller: AuthController;
@@ -12,7 +12,7 @@ describe('AuthController', () => {
         controller = new AuthController(loginUsecase);
     });
 
-    const mockedEntity = mockedUserEntity;
+    const mockedEntity = makeUser();
 
     describe('Login', () => {
         const usecaseOutput: LoginUseCaseOutput = {
@@ -22,7 +22,6 @@ describe('AuthController', () => {
         }
 
         it('should call login usecase with the user entity', () => {
-
             loginUsecase.call.mockReturnValueOnce(usecaseOutput)
 
             controller.login({ user: mockedEntity });

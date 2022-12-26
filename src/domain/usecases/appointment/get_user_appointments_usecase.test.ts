@@ -2,8 +2,8 @@ import { AppointmentRepository } from "@/domain/contracts/repositories/appointme
 import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 import { GetUserAppointmentsUsecase, GetUserAppointmentsUsecaseInput } from "@/domain/usecases/appointment/get_user_appointments_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
-import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
-import { mockedUserEntity } from "test/mocks/user_entity.mock";
+import { makeAppointment } from "test/factories/appointment_factory";
+import { makeUser } from "test/factories/user_factory";
 
 describe('GetAppointmentsUsecase', () => {
     let repository: MockProxy<AppointmentRepository>;
@@ -14,12 +14,12 @@ describe('GetAppointmentsUsecase', () => {
         usecase = new GetUserAppointmentsUsecase(repository);
     });
 
-    const user = mockedUserEntity;
+    const user = makeUser();
     const paginationOptions: PaginationOptions = {
         limit: 5,
         page: 1,
     };
-    const entity = mockedAppointmentEntity;
+    const entity = makeAppointment();
 
     it('should call the repository', () => {
         const input: GetUserAppointmentsUsecaseInput = { user, paginationOptions };

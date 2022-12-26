@@ -4,7 +4,7 @@ import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
 import { UserController } from "@/presenter/controllers/user_controller";
 import { CreateUserPayload } from "@/presenter/models/payloads/user/create-user.payload";
 import { UserViewModelMapper } from "../models/view-models/user/user.view-model.mapper";
-import { mockedUserEntity } from "test/mocks/user_entity.mock";
+import { makeUser } from "test/factories/user_factory";
 
 describe('UserController', () => {
     let controller: UserController;
@@ -24,7 +24,7 @@ describe('UserController', () => {
             password: '123456'
         };
 
-        const usecaseOutput = mockedUserEntity;
+        const usecaseOutput = makeUser();
 
         const expectedResult = UserViewModelMapper.toModel(usecaseOutput);
 

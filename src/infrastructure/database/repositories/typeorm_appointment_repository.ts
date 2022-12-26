@@ -6,7 +6,6 @@ import { AppointmentRepository, GetUserAppointmentsParams } from "@/domain/contr
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 import { Injectable } from "@nestjs/common";
-import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 
 @Injectable()
 export class TypeOrmAppointmentRepository implements AppointmentRepository {
@@ -15,18 +14,21 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
         private typeOrmRepository: Repository<AppointmentEntity>,
     ) { }
 
-    public async create(params: {
-        userId: number;
-        complaint: string;
-        isUnderMedicalTreatment: boolean;
-        symptoms: string;
-        startsAt: Date;
-        endsAt: Date;
-        isPregnant?: boolean;
-        pregnantWeeks?: number;
-        status?: AppointmentStatusEnum,
-    }): Promise<AppointmentEntity> {
-        return await this.typeOrmRepository.save(params);
+    public async create(appointment: AppointmentEntity): Promise<AppointmentEntity> {
+        return await this.typeOrmRepository.save({
+            complaint: appointment.complaint,
+            createdAt: appointment.createdAt,
+            endsAt: appointment.endsAt,
+            id: appointment.id,
+            isPregnant: appointment.isPregnant,
+            isUnderMedicalTreatment: appointment.isUnderMedicalTreatment,
+            pregnantWeeks: appointment.pregnantWeeks,
+            startsAt: appointment.startsAt,
+            status: appointment.status,
+            symptoms: appointment.symptoms,
+            updatedAt: appointment.updatedAt,
+            userId: appointment.userId,
+        });
     }
 
     public async hasConflictingDates(startDate: Date, endDate: Date): Promise<boolean> {
@@ -51,19 +53,33 @@ export class TypeOrmAppointmentRepository implements AppointmentRepository {
             ...paginationOptions.limit && { limit: paginationOptions.limit },
         });
 
-        const [items, total] = await this.typeOrmRepository.findAndCount({
+        const [rawItems, total] = await this.typeOrmRepository.findAndCount({
             where: {
                 userId: user.id,
             },
-            skip: (page-1) * limit,
+            skip: (page - 1) * limit,
             take: limit,
         });
 
         return {
             page,
             pageCount: Math.ceil(total / limit),
-            count: items.length,
-            items: items.map(i => new AppointmentEntity(i)),
+            count: rawItems.length,
+            items: rawItems.map(i => new AppointmentEntity({
+                complaint: i.complaint,
+                endsAt: i.endsAt,
+                isPregnant: i.isPregnant,
+                isUnderMedicalTreatment: i.isUnderMedicalTreatment,
+                pregnantWeeks: i.pregnantWeeks,
+                startsAt: i.startsAt,
+                status: i.status,
+                symptoms: i.symptoms,
+                userId: i.userId,
+            }, {
+                id: i.id,
+                createdAt: i.createdAt,
+                updatedAt: i.updatedAt,
+            })),
             total,
         }
     }

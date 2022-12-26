@@ -2,7 +2,7 @@ import { UserRepository } from "@/domain/contracts/repositories/user_repository"
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { ValidateToLoginUsecase, ValidateToLoginUsecaseInput, ValidateToLoginUsecaseOutput } from "@/domain/usecases/user/validate_to_login_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
-import { mockedUserEntity } from "test/mocks/user_entity.mock";
+import { makeUser } from "test/factories/user_factory";
 
 describe('ValidateToLoginUsecase', () => {
     let repository: MockProxy<UserRepository>;
@@ -15,7 +15,7 @@ describe('ValidateToLoginUsecase', () => {
         usecase = new ValidateToLoginUsecase(repository, encryptationService);
     });
 
-    const entity = mockedUserEntity;
+    const entity = makeUser();
 
     const input: ValidateToLoginUsecaseInput = {
         email: 'valid@email.com',

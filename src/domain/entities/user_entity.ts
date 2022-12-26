@@ -1,7 +1,7 @@
-import { BaseEntityProperties, Entity } from "../shared/entity";
+import { Entity, EntityProps } from "../shared/entity";
 import { AppointmentEntity } from "./appointment_entity";
 
-interface UserProperties extends BaseEntityProperties {
+interface UserProps {
     email: string;
     name: string;
     phone: string;
@@ -12,23 +12,55 @@ interface UserProperties extends BaseEntityProperties {
 }
 
 export class UserEntity extends Entity {
-    email: string;
-    name: string;
-    phone: string;
-    birthDate: Date;
-    password: string;
+    private props: UserProps;
 
-    appointments?: AppointmentEntity[];
+    constructor(props: UserProps, entityProps?: EntityProps) {
+        super(entityProps);
 
-    constructor(props: UserProperties) {
-        super(props);
-
-        this.email = props.email;
-        this.name = props.name;
-        this.phone = props.phone;
-        this.birthDate = props.birthDate;
-        this.password = props.password;
-
-        this.appointments = props.appointments;
+        this.props = props;
     }
+    
+    public set email(email: string) {
+      this.props.email = email;
+    }
+    
+    public get email(): string {
+      return this.props.email;
+    }
+    
+    public set name(name: string) {
+      this.props.name = name;
+    }
+    
+    public get name(): string {
+      return this.props.name;
+    }
+
+    public set phone(phone: string) {
+      this.props.phone = phone;
+    }
+    
+    public get phone(): string {
+      return this.props.phone;
+    }
+    
+    public set birthDate(birthDate: Date) {
+      this.props.birthDate = birthDate;
+    }
+    
+    public get birthDate(): Date {
+      return this.props.birthDate;
+    }
+    
+    public set password(password: string) {
+      this.props.password = password;
+    }
+    
+    public get password(): string {
+      return this.props.password;
+    }
+    
+    public get appointments(): AppointmentEntity[] {
+        return this.props.appointments;
+      }
 }

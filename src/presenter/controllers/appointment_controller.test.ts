@@ -7,10 +7,9 @@ import { AppointmentController } from "@/presenter/controllers/appointment_contr
 import { PaginationOptionsQuery } from "@/presenter/models/queries/pagination_options.query";
 import { HttpException, HttpStatus } from "@nestjs/common";
 import { MockProxy, mock } from "jest-mock-extended";
-import { mockedAppointmentEntity } from "test/mocks/appointment_entity.mock";
-import { mockedUserEntity } from "test/mocks/user_entity.mock";
+import { makeAppointment } from "test/factories/appointment_factory";
+import { makeUser } from "test/factories/user_factory";
 import { CreateAppointmentPayload } from "../models/payloads/appointment/create-appointment.payload";
-import { AppointmentViewModel } from "../models/view-models/appointment/appointment.view-model";
 import { AppointmentViewModelMapper } from "../models/view-models/appointment/appointment.view-model.mapper";
 
 describe('AppointmentController', () => {
@@ -33,7 +32,7 @@ describe('AppointmentController', () => {
             endsAt: new Date(2023, 8, 4).toISOString(),
         }
 
-        const usecaseOutput = mockedAppointmentEntity;
+        const usecaseOutput = makeAppointment();
 
         const expectedResult = AppointmentViewModelMapper.toModel(usecaseOutput);
 
@@ -41,7 +40,7 @@ describe('AppointmentController', () => {
             createAppointmentUsecase.call.mockResolvedValueOnce({ createdAppointment: usecaseOutput });
 
             await controller.create({
-                user: new UserEntity({...mockedUserEntity, id: 2 }),
+                user: makeUser({ entityPropsOverride: { id: 2 } }),
             }, input);
         });
 
@@ -49,7 +48,7 @@ describe('AppointmentController', () => {
             createAppointmentUsecase.call.mockResolvedValueOnce({ createdAppointment: usecaseOutput });
 
             const result = await controller.create({
-                user: new UserEntity({ ...mockedUserEntity, id: 2 }),
+                user: makeUser({ entityPropsOverride: { id: 2 } }),
             }, input);
 
             expect(result).toEqual(expectedResult);
@@ -62,7 +61,7 @@ describe('AppointmentController', () => {
             });
 
             expect(async () => await controller.create({
-                user: mockedUserEntity,
+                user: makeUser(),
             }, input)).rejects.toThrow(new HttpException(
                 mockedErrorMessage,
                 HttpStatus.FORBIDDEN,
@@ -71,7 +70,7 @@ describe('AppointmentController', () => {
     });
 
     describe('GetUserAppointments', () => {
-        const request = { user: mockedUserEntity };
+        const request = { user: makeUser() };
         const paginationOptionsQuery: PaginationOptionsQuery = {
             page: 2,
         }
