@@ -1,16 +1,15 @@
 import { UserEntity } from "@/domain/entities/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { GetUserAppointmentsUsecase } from "@/domain/usecases/appointment/get_user_appointments_usecase";
 import { JwtAuthGuard } from "@/infra/guards/authentication/jwt_auth_guard";
 import { Controller, Post, Body, HttpException, HttpStatus, UseGuards, Req, Query, Get } from "@nestjs/common";
 import { ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { AppointmentDto } from "../dto/appointment/appointment.dto";
-import { CreateAppointmentDto } from "../dto/appointment/create-appointment.dto";
-import { CreatedAppointmentDto } from "../dto/appointment/created-appointment.dto";
-import { PaginatedItemsDto } from "../dto/shared/paginated-items.dto";
+import { CreateAppointmentPayload } from "../models/payloads/appointment/create-appointment.payload";
 import { PaginationOptionsQuery } from "../models/queries/pagination_options.query";
+import { AppointmentViewModel } from "../models/view-models/appointment/appointment.view-model";
+import { AppointmentViewModelMapper } from "../models/view-models/appointment/appointment.view-model.mapper";
+import { PaginatedItemsViewModel } from "../models/view-models/shared/paginated-items.view-model";
 
 @ApiTags('Appointments')
 @Controller('appointments')
@@ -23,17 +22,31 @@ export class AppointmentController {
     @UseGuards(JwtAuthGuard)
     @Post()
     @ApiOperation({ summary: 'Cadastrar um novo agendamento' })
-    @ApiCreatedResponse({ description: 'O agendamento foi criado com sucesso', type: CreatedAppointmentDto })
-    public async create(@Req() req: { user: UserEntity }, @Body() payload: CreateAppointmentDto): Promise<CreatedAppointmentDto> {
+    @ApiCreatedResponse({ description: 'O agendamento foi criado com sucesso', type: CreateAppointmentPayload })
+    public async create(
+        @Req() req: { user: UserEntity },
+         @Body() {
+            complaint,
+            startsAt,
+            endsAt,
+            symptoms,
+            isPregnant,
+            isUnderMedicalTreatment,
+            pregnantWeeks,
+         }: CreateAppointmentPayload): Promise<AppointmentViewModel> {
         try {
-            const result = await this.createAppointmentUsecase.call(new AppointmentPayload({
-                ...payload,
-                userId: req.user.id
-            }));
+            const { createdAppointment } = await this.createAppointmentUsecase.call({
+                complaint,
+                startsAt: new Date(startsAt),
+                endsAt: new Date(endsAt),
+                symptoms,
+                isPregnant,
+                isUnderMedicalTreatment,
+                pregnantWeeks,
+                userId: req.user.id,
+            });
 
-            return {
-                ...result,
-            }
+            return AppointmentViewModelMapper.toModel(createdAppointment);
         } catch (error) {
             if (error instanceof ValidationException)
                 throw new HttpException(
@@ -48,17 +61,22 @@ export class AppointmentController {
     @UseGuards(JwtAuthGuard)
     @Get()
     @ApiOperation({ summary: 'Listar seus agendamentos' })
-    @ApiCreatedResponse({ description: 'Listagem obtida com sucesso', type: PaginatedItemsDto<AppointmentDto> })
+    @ApiCreatedResponse({ description: 'Listagem obtida com sucesso', type: PaginatedItemsViewModel<AppointmentViewModel> })
     public async getUserAppointments(
         @Req() req: { user: UserEntity },
         @Query() paginationOptionsQuery: PaginationOptionsQuery,
-    ): Promise<PaginatedItemsDto<AppointmentDto>> {
-        return await this.getAppointmentsUsecase.call({
+    ): Promise<PaginatedItemsViewModel<AppointmentViewModel>> {
+        const { paginatedItems } = await this.getAppointmentsUsecase.call({
             user: req.user,
             paginationOptions: {
                 page: paginationOptionsQuery.page,
                 limit: paginationOptionsQuery.limit,
             }
         });
+
+        return {
+            ...paginatedItems,
+            items: paginatedItems.items.map(item => AppointmentViewModelMapper.toModel(item)),
+        };
     }
 }

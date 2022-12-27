@@ -1,12 +1,10 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
 import { mock, MockProxy } from "jest-mock-extended";
-import { UserProxy } from "@/domain/models/proxies/user_proxy";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { UserPayload, UserPayloadProps } from "@/domain/models/payloads/user_payload";
 import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
 import { UserController } from "@/presenter/controllers/user_controller";
-import { CreateUserDto } from "@/presenter/dto/user/create-user.dto";
-import { CreatedUserDto } from "@/presenter/dto/user/created-user.dto";
+import { CreateUserPayload } from "@/presenter/models/payloads/user/create-user.payload";
+import { UserViewModelMapper } from "../models/view-models/user/user.view-model.mapper";
+import { makeUser } from "test/factories/user_factory";
 
 describe('UserController', () => {
     let controller: UserController;
@@ -18,7 +16,7 @@ describe('UserController', () => {
     });
    
     describe('Register', () => {
-        const params: CreateUserDto = {
+        const params: CreateUserPayload = {
             email: 'Mocked email',
             name: 'Mocked Name',
             birthDate: new Date(11, 10, 2000),
@@ -26,50 +24,38 @@ describe('UserController', () => {
             password: '123456'
         };
 
-        const proxy = new UserProxy({
-            id: 1,
-            createdAt: new Date(11, 10, 2000),
-            updatedAt: new Date(11, 10, 2000),
-            email: 'Mocked email',
-            name: 'Mocked Name',
-            birthDate: new Date(11, 10, 2000),
-            phone: 'Mocked phone',
-        });
+        const usecaseOutput = makeUser();
 
-        const expectedResult: CreatedUserDto = {
-            id: 1,
-            createdAt: new Date(11, 10, 2000),
-            updatedAt: new Date(11, 10, 2000),
-            email: 'Mocked email',
-            name: 'Mocked Name',
-            birthDate: new Date(11, 10, 2000),
-            phone: 'Mocked phone',
-        }
+        const expectedResult = UserViewModelMapper.toModel(usecaseOutput);
 
         it('should call register usecase', async () => {
+            registerUsecase.call.mockResolvedValueOnce({ createdUser: usecaseOutput });
+
             await controller.register(params);
 
-            expect(registerUsecase.call).toHaveBeenCalledWith(new UserPayload(params));
+            expect(registerUsecase.call).toHaveBeenCalledTimes(1);
         });
 
-        it('should return a UserProxy', async () => {
-            registerUsecase.call.mockResolvedValueOnce(proxy);
+        it('should return the ViewModel', async () => {
+            registerUsecase.call.mockResolvedValueOnce({ createdUser: usecaseOutput });
 
             const result = await controller.register(params);
 
             expect(result).toEqual(expectedResult);
         });
 
-        it('should throw an Forbidden HttpException when receiving a ValidationException', async () => {
+        it('should throw an BadRequest HttpException when receiving a ValidationException', async () => {
             const mockedErrorMessage = 'Mocked error';
             registerUsecase.call.mockImplementationOnce(() => {
                 throw new ValidationException(mockedErrorMessage);
             });
 
-            expect(async () => await controller.register(params)).rejects.toThrow(new HttpException(
-                mockedErrorMessage,
-                HttpStatus.FORBIDDEN,
-            ));
+            expect.assertions(1);
+            try {
+                await controller.register(params);
+            } catch (e) {
+                expect(e.status).toBe(400);
+            }
         });
     });
 });

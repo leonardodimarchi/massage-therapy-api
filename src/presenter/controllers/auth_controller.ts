@@ -3,8 +3,9 @@ import { LoginUsecase } from "@/domain/usecases/user/login_usecase";
 import { LocalAuthGuard } from "@/infra/guards/authentication/local_auth_guard";
 import { Controller, UseGuards, Post, Request } from "@nestjs/common";
 import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { SuccessLoginDto } from "@/presenter/dto/auth/success-login.dto";
-import { LoginDto } from "../dto/auth/login.dto";
+import { LoginPayload } from "../models/payloads/auth/login.payload";
+import { SuccessLoginViewModel } from "../models/view-models/auth/success-login.view-model";
+import { UserViewModelMapper } from "../models/view-models/user/user.view-model.mapper";
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -17,17 +18,19 @@ export class AuthController {
     @Post('login')
     @ApiBody({
       description: 'Os dados para login',
-      type: LoginDto,
+      type: LoginPayload,
       required: true,
     })
     @ApiOperation({ summary: 'Gerar um token de usuário (JWT)' })
-    @ApiOkResponse({ description: 'O token foi gerado com sucesso', type: SuccessLoginDto })
-    public async login(@Request() req: { user: UserEntity }): Promise<SuccessLoginDto> {
-      const { jwt, loggedUser } = this.loginUsecase.call(req.user);
+    @ApiOkResponse({ description: 'O token foi gerado com sucesso', type: SuccessLoginViewModel })
+    public async login(@Request() { user }: { user: UserEntity }): Promise<SuccessLoginViewModel> {
+      const { jwt } = this.loginUsecase.call({
+        user,
+      });
 
       return {
         jwt,
-        user: loggedUser
+        user: UserViewModelMapper.toModel(user),
       }
     }
 }

@@ -1,10 +1,10 @@
 import { Body, Controller, HttpException, HttpStatus, Post } from "@nestjs/common";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
-import { UserPayload } from "@/domain/models/payloads/user_payload";
 import { ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { CreateUserDto } from "@/presenter/dto/user/create-user.dto";
-import { CreatedUserDto } from "../dto/user/created-user.dto";
+import { CreateUserPayload } from "@/presenter/models/payloads/user/create-user.payload";
+import { UserViewModel } from "../models/view-models/user/user.view-model";
+import { UserViewModelMapper } from "../models/view-models/user/user.view-model.mapper";
 
 @ApiTags('Users')
 @Controller('users')
@@ -15,20 +15,29 @@ export class UserController {
 
     @Post()
     @ApiOperation({ summary: 'Cadastrar um novo usuário' })
-    @ApiCreatedResponse({ description: 'O usuário foi criado com sucesso', type: CreatedUserDto })
-    public async register(@Body() payload: CreateUserDto): Promise<CreatedUserDto> {
+    @ApiCreatedResponse({ description: 'O usuário foi criado com sucesso', type: UserViewModel })
+    public async register(
+        @Body() {
+            email,
+            name,
+            phone,
+            birthDate,
+            password,
+        }: CreateUserPayload
+    ): Promise<UserViewModel> {
         try {
-            const createdUser = await this.registerUsecase.call(new UserPayload(payload));
+            const { createdUser } = await this.registerUsecase.call({
+                email,
+                name,
+                phone,
+                birthDate,
+                password,
+            });
 
-            return {
-                ...createdUser
-            }
+            return UserViewModelMapper.toModel(createdUser);
         } catch (error) {
             if (error instanceof ValidationException)
-                throw new HttpException(
-                    error.message,
-                    HttpStatus.BAD_REQUEST,
-                );
+                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
 
             throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,12 +1,12 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AuthModule } from "@/presenter/modules/auth_module";
-import { AppointmentSchema } from "@/infra/database/schema/appointment_schema";
+import { AppointmentSchema } from "@/infra/database/typeorm/schema/appointment_schema";
 import { AppointmentController } from "@/presenter/controllers/appointment_controller";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { GetUserAppointmentsUsecase } from "@/domain/usecases/appointment/get_user_appointments_usecase";
-import { TypeormAppointmentRepository } from "@/infra/database/repositories/typeorm_appointment_repository";
+import { TypeOrmAppointmentRepository } from "@/infra/database/typeorm/repositories/typeorm_appointment_repository";
 
 @Module({
     imports: [
@@ -31,7 +31,7 @@ import { TypeormAppointmentRepository } from "@/infra/database/repositories/type
         },
         {
             provide: AppointmentRepository,
-            useClass: TypeormAppointmentRepository
+            useClass: TypeOrmAppointmentRepository
         },
     ],
 })

@@ -12,7 +12,10 @@ describe('JwtService', () => {
     });
 
     it('should call nestjs jwt service', () => {
-        service.sign({});
+        service.sign({
+            email: 'test@email.com',
+            sub: 1,
+        });
 
         expect(externalService.sign).toHaveBeenCalledTimes(1);
     });

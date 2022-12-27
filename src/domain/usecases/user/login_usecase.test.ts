@@ -1,9 +1,7 @@
-import { JwtProxy } from "@/domain/models/proxies/jwt_proxy";
-import { UserProxy } from "@/domain/models/proxies/user_proxy";
-import { LoginUsecase } from "@/domain/usecases/user/login_usecase";
+import { LoginUsecase, LoginUseCaseInput, LoginUseCaseOutput } from "@/domain/usecases/user/login_usecase";
 import { JwtService } from "@nestjs/jwt";
 import { MockProxy, mock } from "jest-mock-extended";
-import { mockedUserEntity } from "test/mocks/user_entity.mock";
+import { makeUser } from "test/factories/user_factory";
 
 describe('LoginUsecase', () => {
     let jwtService: MockProxy<JwtService>;
@@ -14,24 +12,27 @@ describe('LoginUsecase', () => {
         usecase = new LoginUsecase(jwtService);
     });
 
-    const mockedEntity = mockedUserEntity;
-    const mockedUserProxy = new UserProxy({...mockedEntity});
-
     const accessToken = 'mocked access_token';
-    const jwtProxy = new JwtProxy({
-        access_token: accessToken,
-    });
 
-    it('should return the output with a JwtProxy having the correct access_token and user', () => {
+    const input: LoginUseCaseInput = {
+        user: makeUser(),
+    };
+
+    const expectedResult: LoginUseCaseOutput = {
+        jwt: {
+            access_token: accessToken,
+        }
+    };
+
+    it('should return the output with a jwt having the correct access_token', () => {
         jwtService.sign.mockReturnValueOnce(accessToken);
 
-        const result = usecase.call(mockedEntity);
+        const result = usecase.call(input);
 
         expect(jwtService.sign).toHaveBeenNthCalledWith(1, { 
-            email: mockedEntity.email,
-            sub: mockedEntity.id,
+            email: input.user.email,
+            sub: input.user.id,
         })
-        expect(result.jwt).toEqual(jwtProxy);
-        expect(result.loggedUser).toEqual(mockedUserProxy);
+        expect(result).toEqual(expectedResult);
     });
 });
