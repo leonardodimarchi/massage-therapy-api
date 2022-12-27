@@ -25,13 +25,13 @@ export class CreateAppointmentPayload {
         required: true,
     })
     @IsDateString({}, { message: 'É necessário enviar uma data de início válida' })
-    startsAt: Date;
+    startsAt: string;
 
     @ApiProperty({
         required: true,
     })
     @IsDateString({}, { message: 'É necessário enviar uma data de fim válida' })
-    endsAt: Date;
+    endsAt: string;
 
     @ApiPropertyOptional({
         required: false,

@@ -1,4 +1,4 @@
-import { JwtService } from "../../domain/contracts/services/jwt_service";
+import { JwtService, JwtSignParams } from "../../domain/contracts/services/jwt_service";
 import { JwtService as NestJwtService } from "@nestjs/jwt";
 import { Injectable } from "@nestjs/common";
 
@@ -8,7 +8,7 @@ export class JwtServiceImplementation implements JwtService {
     private readonly jwtService: NestJwtService,
   ) {}
 
-  public sign(payload: string | object): string {
+  public sign(payload: JwtSignParams): string {
     return this.jwtService.sign(payload);
   }
 }

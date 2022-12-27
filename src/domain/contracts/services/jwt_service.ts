@@ -1,3 +1,8 @@
+export interface JwtSignParams {
+    email: string,
+    sub: number,
+}
+
 export abstract class JwtService {
-    abstract sign(payload: object | string): string;
+    abstract sign(payload: JwtSignParams): string;
 }

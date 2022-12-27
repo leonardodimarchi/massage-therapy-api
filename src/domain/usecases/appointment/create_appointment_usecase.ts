@@ -1,16 +1,30 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
+import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
-import { AppointmentPayload } from "@/domain/models/payloads/appointment_payload";
-import { AppointmentProxy } from "@/domain/models/proxies/appointment_proxy";
 
-export class CreateAppointmentUsecase implements UseCase<AppointmentPayload, AppointmentProxy> {
+export interface CreateAppointmentUsecaseInput {
+    userId: number;
+    complaint: string;
+    isUnderMedicalTreatment: boolean;
+    symptoms: string;
+    startsAt: Date;
+    endsAt: Date;
+    isPregnant?: boolean;
+    pregnantWeeks?: number;
+}
+
+export interface CreateAppointmentUsecaseOutput {
+    createdAppointment: AppointmentEntity;
+}
+
+export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecaseInput, CreateAppointmentUsecaseOutput> {
 
     constructor(
         private readonly repository: AppointmentRepository,
     ) { }
 
-    public async call(params: AppointmentPayload): Promise<AppointmentProxy> {
+    public async call(params: CreateAppointmentUsecaseInput): Promise<CreateAppointmentUsecaseOutput> {
         if (!params.complaint?.trim()?.length)
             throw new ValidationException('É necessário enviar uma descrição');
 
@@ -19,13 +33,13 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentPayload, App
 
         if (params.startsAt?.getTime() < new Date().getTime())
             throw new ValidationException('A data de agendamento não pode ser antes da data de hoje');
-        
+
         if (params.startsAt?.getTime() === params.endsAt?.getTime())
             throw new ValidationException('A data inicial não deve ser igual a data final do agendamento');
 
         if (params.endsAt?.getTime() < params.startsAt?.getTime())
             throw new ValidationException('A data final do agendamento não pode ser antes da data inicial');
-        
+
         if (params.startsAt?.getDate() !== params.endsAt?.getDate())
             throw new ValidationException('A data inicial e final do agendamento não podem ser em dias diferentes');
 
@@ -34,11 +48,15 @@ export class CreateAppointmentUsecase implements UseCase<AppointmentPayload, App
         if (hasConflictingDates)
             throw new ValidationException('A data de agendamento está indisponível');
 
-        const entity = await this.repository.create({
+        const entity = new AppointmentEntity({
             ...params,
             status: AppointmentStatusEnum.PENDING,
-        });
+        })
 
-        return new AppointmentProxy({ ...entity });
+        const createdAppointment = await this.repository.create(entity);
+
+        return { 
+            createdAppointment,
+         };
     }
 }

@@ -1,43 +1,29 @@
-import { JwtProxy } from "../../../domain/models/proxies/jwt_proxy";
 import { JwtService } from "../../../domain/contracts/services/jwt_service";
 import { UserEntity } from "../../../domain/entities/user_entity";
-import { JwtPayload } from "../../../domain/models/payloads/jwt_payload";
-import { UserProxy } from "@/domain/models/proxies/user_proxy";
+import { JwtInterface } from "@/domain/models/interfaces/jwt.interface";
 
-export interface LoginUseCaseOutput {
-    loggedUser: UserProxy,
-    jwt: JwtProxy,
+export interface LoginUseCaseInput {
+    user: UserEntity,
 }
 
-export class LoginUsecase implements UseCase<UserEntity, LoginUseCaseOutput> {
+export interface LoginUseCaseOutput {
+    jwt: JwtInterface,
+}
+
+export class LoginUsecase implements UseCase<LoginUseCaseInput, LoginUseCaseOutput> {
 
     constructor(
         private readonly jwtService: JwtService,
     ) {}
 
-    public call(params: UserEntity): LoginUseCaseOutput {
-        const jwtPayload: JwtPayload = {
-            email: params.email,
-            sub: params.id,
-        };
-
-        const jwt = new JwtProxy({
-            access_token: this.jwtService.sign(jwtPayload),
-        });
-
-        const loggedUser = new UserProxy({
-            id: params.id,
-            createdAt: params.createdAt,
-            updatedAt: params.updatedAt,
-            birthDate: params.birthDate,
-            email: params.email,
-            name: params.name,
-            phone: params.phone,
-        });
-
+    public call({ user }: LoginUseCaseInput): LoginUseCaseOutput {
         return {
-            jwt,
-            loggedUser,
+            jwt: {
+                access_token: this.jwtService.sign({
+                    email: user.email,
+                    sub: user.id,
+                }),
+            },
         }
     }
 }
