@@ -22,7 +22,6 @@ export class TypeOrmUserRepository implements UserRepository {
             where: { email }
         });
 
-
         if (!raw)
             return null;
 
