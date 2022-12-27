@@ -5,7 +5,7 @@ import { AppointmentRepository, GetUserAppointmentsParams } from "@/domain/contr
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 import { Injectable } from "@nestjs/common";
-import { TypeOrmAppointmentMapper } from "../mappers/typeorm-appointment.mapper";
+import { TypeOrmAppointmentMapper } from "../mappers/typeorm_appointment.mapper";
 import { AppointmentSchema } from "../schema/appointment_schema";
 
 @Injectable()

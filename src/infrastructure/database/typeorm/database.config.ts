@@ -9,15 +9,13 @@ export const ENV_DB_CONFIG_KEY = 'database';
 
 export type DbConfig = DataSourceOptions;
 
-console.log(__dirname, join(__dirname, '../database', 'migrations', '*.ts'))
-
 export const dataSourceOptions: DataSourceOptions = {
     type: 'sqlite',
     logging: process.env.DB_LOGGING as LoggerOptions,
     database: process.env.DB_NAME,
     synchronize: Boolean(process.env.DB_SYNCHRONIZE),
-    entities: [join(__dirname, '../database', '**', '*_schema{.ts,.js}')],
-    migrations: [join(__dirname, '../database', 'migrations', '*.ts')],
+    entities: [join(__dirname, 'schema', '**', '*_schema{.ts,.js}')],
+    migrations: [join(__dirname, 'migrations', '*.ts')],
 }
 
 export default registerAs<DbConfig>(ENV_DB_CONFIG_KEY, () => {

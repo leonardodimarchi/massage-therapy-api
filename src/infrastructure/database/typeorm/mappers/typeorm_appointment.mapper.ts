@@ -1,5 +1,4 @@
 import { AppointmentEntity } from "@/domain/entities/appointment_entity";
-import { EntitySchema } from "typeorm";
 
 export class TypeOrmAppointmentMapper {
     static toSchema(appointment: AppointmentEntity) {

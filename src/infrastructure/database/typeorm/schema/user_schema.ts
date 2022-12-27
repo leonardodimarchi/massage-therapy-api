@@ -1,4 +1,4 @@
-import { UserEntity } from '../../../domain/entities/user_entity';
+import { UserEntity } from '@/domain/entities/user_entity';
 import { EntitySchema } from 'typeorm';
 import { BaseSchemaColumns } from './base_schema_columns';
 
