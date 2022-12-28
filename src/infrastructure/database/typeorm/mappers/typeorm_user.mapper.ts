@@ -1,8 +1,18 @@
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { UserEntity } from "@/domain/entities/user_entity";
 
+interface TypeOrmRawUser {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    email: string;
+    name: string;
+    phone: string;
+    birthDate: Date;
+    password: string;
+}
+
 export class TypeOrmUserMapper {
-    static toSchema(user: UserEntity) {
+    static toSchema(user: UserEntity): TypeOrmRawUser {
         return {
             id: user.id,
             birthDate: user.birthDate,
@@ -15,7 +25,7 @@ export class TypeOrmUserMapper {
         };
     }
 
-    static toDomain(raw: any): UserEntity {
+    static toDomain(raw: TypeOrmRawUser): UserEntity {
         return new UserEntity({
             email: raw.email,
             birthDate: raw.birthDate,
