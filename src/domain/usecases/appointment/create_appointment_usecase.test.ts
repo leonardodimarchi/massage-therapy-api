@@ -2,7 +2,6 @@ import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
-import { makeAppointment } from "test/factories/appointment_factory";
 import { InMemoryAppointmentRepository } from "test/repositories/in_memory_appointment_repository";
 
 describe('CreateAppointmentUsecase', () => {
@@ -13,8 +12,6 @@ describe('CreateAppointmentUsecase', () => {
         repository = new InMemoryAppointmentRepository();
         usecase = new CreateAppointmentUsecase(repository);
     });
-
-    const entity = makeAppointment();
 
     const input: CreateAppointmentUsecaseInput = {
         userId: 2,
