@@ -2,7 +2,7 @@ import { AppointmentStatusEnum } from "../models/enums/appointment_status.enum";
 import { EntityProps, Entity } from "../shared/entity";
 import { UserEntity } from "./user_entity";
 
-interface AppointmentProps {
+export interface AppointmentProps {
     complaint: string;
     isUnderMedicalTreatment: boolean;
     symptoms: string;

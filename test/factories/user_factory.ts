@@ -1,8 +1,8 @@
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity, UserProps } from "@/domain/entities/user_entity";
 import { EntityProps } from "@/domain/shared/entity";
 
 interface MakeUserOverrideProps {
-    override?: Partial<UserEntity>,
+    override?: Omit<Partial<UserProps>, keyof EntityProps>,
     entityPropsOverride?: Partial<EntityProps>,
 }
 

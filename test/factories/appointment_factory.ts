@@ -1,9 +1,9 @@
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { AppointmentEntity, AppointmentProps } from "@/domain/entities/appointment_entity";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { EntityProps } from "@/domain/shared/entity";
 
 interface MakeUserOverrideProps {
-    override?: Partial<AppointmentEntity>,
+    override?: Omit<Partial<AppointmentProps>, keyof EntityProps>,
     entityPropsOverride?: Partial<EntityProps>,
 }
 

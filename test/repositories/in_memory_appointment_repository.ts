@@ -24,14 +24,17 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
     }
 
     public async getUserAppointments(params: GetUserAppointmentsParams): Promise<PaginatedItems<AppointmentEntity>> {
-        const items = this.appointments.filter(appointment => appointment.userId === params.user.id);
+        const userItems = this.appointments.filter(appointment => appointment.userId === params.user.id);
+
+        const skippedItems = userItems.slice((params.paginationOptions.page - 1) * params.paginationOptions.limit);
+        const limittedItems = skippedItems.slice(0, params.paginationOptions.limit);
 
         return {
-            items,
-            count: items.length,
-            page: 1,
-            pageCount: 1,
-            total: items.length,
-        };
+            page: params.paginationOptions.page,
+            pageCount: Math.ceil(userItems.length / params.paginationOptions.limit),
+            count: limittedItems.length,
+            items: limittedItems,
+            total: userItems.length,
+        }
     }
 }
