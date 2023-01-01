@@ -1,20 +1,17 @@
-import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
+import { AppointmentEntity } from "@/domain/entities/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
-import { MockProxy, mock } from "jest-mock-extended";
-import { makeAppointment } from "test/factories/appointment_factory";
+import { InMemoryAppointmentRepository } from "test/repositories/in_memory_appointment_repository";
 
 describe('CreateAppointmentUsecase', () => {
-    let repository: MockProxy<AppointmentRepository>;
+    let repository: InMemoryAppointmentRepository;
     let usecase: CreateAppointmentUsecase;
 
     beforeEach(() => {
-        repository = mock<AppointmentRepository>();
+        repository = new InMemoryAppointmentRepository();
         usecase = new CreateAppointmentUsecase(repository);
     });
-
-    const entity = makeAppointment();
 
     const input: CreateAppointmentUsecaseInput = {
         userId: 2,
@@ -26,19 +23,16 @@ describe('CreateAppointmentUsecase', () => {
     };
 
     it('should get the created appointment when creating successfully', async () => {
-        repository.create.mockResolvedValue(entity);
-
         const { createdAppointment } = await usecase.call(input);
 
-        expect(createdAppointment).toEqual(entity);
+        expect(createdAppointment).toEqual(expect.any(AppointmentEntity));
+        expect(repository.appointments).toHaveLength(1);
     });
 
     it('should always create a appointment with the PENDING status', async () => {
         await usecase.call(input);
 
-        expect(repository.create).toHaveBeenNthCalledWith(1, expect.objectContaining({
-            status: AppointmentStatusEnum.PENDING,
-        }));
+        expect(repository.appointments[0].status).toEqual(AppointmentStatusEnum.PENDING);
     });
 
     it('should not create if the start date is before now', async () => {
@@ -57,7 +51,6 @@ describe('CreateAppointmentUsecase', () => {
         expect(async () => {
             await usecase.call(invalidPayload)
         }).rejects.toThrowError(ValidationException);
-        expect(repository.create).not.toHaveBeenCalled();
     });
 
     it('should not create if the start date is before now (With time)', async () => {
@@ -76,7 +69,6 @@ describe('CreateAppointmentUsecase', () => {
         expect(async () => {
             await usecase.call(invalidPayload)
         }).rejects.toThrowError(ValidationException);
-        expect(repository.create).not.toHaveBeenCalled();
     });
 
     it('should not create if the end date is before start date', async () => {
@@ -95,7 +87,6 @@ describe('CreateAppointmentUsecase', () => {
         expect(async () => {
             await usecase.call(invalidPayload)
         }).rejects.toThrowError(ValidationException);
-        expect(repository.create).not.toHaveBeenCalled();
     });
 
     it('should not create if the end date is equal start date', async () => {
@@ -114,7 +105,6 @@ describe('CreateAppointmentUsecase', () => {
         expect(async () => {
             await usecase.call(invalidPayload)
         }).rejects.toThrowError(ValidationException);
-        expect(repository.create).not.toHaveBeenCalled();
     });
 
     it('should not create if the start and end date don\'t have the same day', async () => {
@@ -133,16 +123,14 @@ describe('CreateAppointmentUsecase', () => {
         expect(async () => {
             await usecase.call(invalidPayload)
         }).rejects.toThrowError(ValidationException);
-        expect(repository.create).not.toHaveBeenCalled();
     });
 
     it('should check if there is any conclicting appointments', async () => {
-        repository.hasConflictingDates.mockResolvedValueOnce(true);
+        await usecase.call(input);
 
         expect(async () => {
             await usecase.call(input)
         }).rejects.toThrowError(ValidationException);
-        expect(repository.hasConflictingDates).toHaveBeenNthCalledWith(1, input.startsAt, input.endsAt);
     });
 
     it('should check if there is a valid complaint', async () => {

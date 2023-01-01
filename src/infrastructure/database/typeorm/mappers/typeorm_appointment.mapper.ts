@@ -1,7 +1,23 @@
 import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
+
+interface TypeOrmRawAppointment {
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    complaint: string;
+    isUnderMedicalTreatment: boolean;
+    symptoms: string;
+    startsAt: Date;
+    endsAt: Date;
+    isPregnant?: boolean;
+    pregnantWeeks?: number;
+    status: AppointmentStatusEnum;
+    userId: number;
+}
 
 export class TypeOrmAppointmentMapper {
-    static toSchema(appointment: AppointmentEntity) {
+    static toSchema(appointment: AppointmentEntity): TypeOrmRawAppointment {
         return {
             complaint: appointment.complaint,
             createdAt: appointment.createdAt,
@@ -18,7 +34,7 @@ export class TypeOrmAppointmentMapper {
         };
     }
 
-    static toDomain(raw: any): AppointmentEntity {
+    static toDomain(raw: TypeOrmRawAppointment): AppointmentEntity {
         return new AppointmentEntity({
             complaint: raw.complaint,
             endsAt: raw.endsAt,

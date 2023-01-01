@@ -8,7 +8,7 @@ export interface ValidateToLoginUsecaseInput {
 }
 
 export interface ValidateToLoginUsecaseOutput {
-    user: UserEntity,
+    user: UserEntity | null,
 }
 
 export class ValidateToLoginUsecase implements UseCase<ValidateToLoginUsecaseInput, ValidateToLoginUsecaseOutput> {
@@ -24,14 +24,20 @@ export class ValidateToLoginUsecase implements UseCase<ValidateToLoginUsecaseInp
     }: ValidateToLoginUsecaseInput): Promise<ValidateToLoginUsecaseOutput> {
         const user = await this.repository.getByEmail(email);
 
-        if (!user)
-            return null;
+        if (!user) {
+            return {
+                user: null,
+            };
+        }
 
         const isCorrectPassword = await this.bcryptService.compare(password, user.password);
 
-        if (!isCorrectPassword)
-            return null;
-
+        if (!isCorrectPassword) {
+            return {
+                user: null,
+            };
+        }
+            
         return {
             user,
         };

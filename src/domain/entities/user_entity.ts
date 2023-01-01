@@ -1,7 +1,7 @@
 import { Entity, EntityProps } from "../shared/entity";
 import { AppointmentEntity } from "./appointment_entity";
 
-interface UserProps {
+export interface UserProps {
     email: string;
     name: string;
     phone: string;

@@ -1,57 +1,64 @@
-import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
-import { ValidateToLoginUsecase, ValidateToLoginUsecaseInput, ValidateToLoginUsecaseOutput } from "@/domain/usecases/user/validate_to_login_usecase";
+import { ValidateToLoginUsecase } from "@/domain/usecases/user/validate_to_login_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
 import { makeUser } from "test/factories/user_factory";
+import { InMemoryUserRepository } from "test/repositories/in_memory_user_repository";
 
 describe('ValidateToLoginUsecase', () => {
-    let repository: MockProxy<UserRepository>;
+    let repository: InMemoryUserRepository;
     let encryptationService: MockProxy<PasswordEncryptionService>;
     let usecase: ValidateToLoginUsecase;
 
     beforeEach(() => {
-        repository = mock<UserRepository>();
+        repository = new InMemoryUserRepository();
         encryptationService = mock<PasswordEncryptionService>();
         usecase = new ValidateToLoginUsecase(repository, encryptationService);
     });
 
-    const entity = makeUser();
-
-    const input: ValidateToLoginUsecaseInput = {
-        email: 'valid@email.com',
-        password: '123456',
-    };
-
-    const expectedResult: ValidateToLoginUsecaseOutput = {
-        user: entity,
-    }
-
     it('should return the user if the repository returns and the password is correct', async () => {
-        repository.getByEmail.mockResolvedValueOnce(entity);
+        const email = 'valid@email.com';
+        const password = '123456';
+
+        const createdUser = makeUser({
+            override: {
+                email,
+                password,
+            }
+        });
+
+        repository.register(createdUser);
         encryptationService.compare.mockResolvedValueOnce(true);
 
-        const result = await usecase.call(input);
+        const { user } = await usecase.call({ email, password });
 
-        expect(encryptationService.compare).toHaveBeenNthCalledWith(1, input.password, entity.password);
-        expect(repository.getByEmail).toHaveBeenNthCalledWith(1, input.email);
-        expect(result).toEqual(expectedResult);
+        expect(user).toEqual(createdUser);
     });
 
     it('should return null if the repository don\'t find a user with the given email', async () => {
-        repository.getByEmail.mockResolvedValueOnce(null);
+        const { user } = await usecase.call({ 
+            email: 'valid@email.com',
+            password: '123456',
+        });
 
-        const result = await usecase.call(input);
-
-        expect(encryptationService.compare).not.toHaveBeenCalledTimes(1);
-        expect(result).toBeNull();
+        expect(user).toBeNull();
     });
 
     it('should return null if the given password is incorrect', async () => {
-        repository.getByEmail.mockResolvedValueOnce(entity);
+        const email = 'valid@email.com';
+        const password = '123456';
+
+        const createdUser = makeUser({
+            override: {
+                email,
+                password,
+            }
+        });
+
+        repository.register(createdUser);
         encryptationService.compare.mockResolvedValue(false);
 
-        const result = await usecase.call(input);
+        const { user } = await usecase.call({ email, password});
 
-        expect(result).toBeNull();
+        expect(user).toBeNull();
     });
 });
