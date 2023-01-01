@@ -1,8 +1,7 @@
-import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { UserEntity } from "@/domain/entities/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { RegisterUsecase, RegisterUseCaseInput, RegisterUseCaseOutput } from "@/domain/usecases/user/register_usecase";
+import { RegisterUsecase, RegisterUseCaseInput } from "@/domain/usecases/user/register_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
 import { makeUser } from "test/factories/user_factory";
 import { InMemoryUserRepository } from "test/repositories/in_memory_user_repository";
@@ -39,6 +38,17 @@ describe('RegisterUsecase', () => {
         birthDate: new Date(),
         password: hashPassword,
     };
+
+    it('should register the new user', async () => {
+        const { createdUser } = await usecase.call(input);
+
+        expect(repository.users[0].email).toEqual(input.email);
+        expect(repository.users[0].name).toEqual(input.name);
+        expect(repository.users[0].phone).toEqual(input.phone);
+        expect(repository.users[0].birthDate).toEqual(input.birthDate);
+        expect(repository.users[0].password).toEqual(input.password);
+        expect(repository.users[0]).toEqual(createdUser);
+    })
 
     it('should get an user when calling the repository successfully', async () => {
         const { createdUser } = await usecase.call(input);
