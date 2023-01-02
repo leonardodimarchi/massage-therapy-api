@@ -1,4 +1,4 @@
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
 import { AppointmentViewModel } from "./appointment.view-model";
 
 export class AppointmentViewModelMapper {
@@ -8,7 +8,7 @@ export class AppointmentViewModelMapper {
             createdAt: entity.createdAt,
             updatedAt: entity.updatedAt,
             userId: entity.userId,
-            complaint: entity.complaint,
+            complaint: entity.complaint.value,
             isUnderMedicalTreatment: entity.isUnderMedicalTreatment,
             symptoms: entity.symptoms,
             startsAt: entity.startsAt,

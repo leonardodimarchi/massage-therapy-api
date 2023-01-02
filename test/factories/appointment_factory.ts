@@ -1,4 +1,5 @@
-import { AppointmentEntity, AppointmentProps } from "@/domain/entities/appointment_entity";
+import { AppointmentEntity, AppointmentProps } from "@/domain/entities/appointment/appointment_entity";
+import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/appointment_complaint";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { EntityProps } from "@/domain/shared/entity";
 
@@ -13,7 +14,7 @@ export function makeAppointment(overrideProps: MakeUserOverrideProps = {}): Appo
 
     return new AppointmentEntity({
         userId: 1,
-        complaint: '',
+        complaint: new AppointmentComplaint('Those two last weeks i have been felling a strong headache'),
         isUnderMedicalTreatment: false,
         symptoms: '',
         startsAt: new Date(2023, 7, 20),

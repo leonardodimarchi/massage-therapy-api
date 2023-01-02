@@ -1,4 +1,4 @@
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
@@ -130,15 +130,6 @@ describe('CreateAppointmentUsecase', () => {
 
         expect(async () => {
             await usecase.call(input)
-        }).rejects.toThrowError(ValidationException);
-    });
-
-    it('should check if there is a valid complaint', async () => {
-        expect(async () => {
-            await usecase.call({
-                ...input,
-                complaint: '',
-            })
         }).rejects.toThrowError(ValidationException);
     });
 

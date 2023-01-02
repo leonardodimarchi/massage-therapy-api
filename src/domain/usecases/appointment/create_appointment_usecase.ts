@@ -1,5 +1,6 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
+import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/appointment_complaint";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 
@@ -25,9 +26,6 @@ export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecas
     ) { }
 
     public async call(params: CreateAppointmentUsecaseInput): Promise<CreateAppointmentUsecaseOutput> {
-        if (!params.complaint?.trim()?.length)
-            throw new ValidationException('É necessário enviar uma descrição');
-
         if (!params.symptoms?.trim()?.length)
             throw new ValidationException('É necessário enviar algum sintoma');
 
@@ -48,15 +46,35 @@ export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecas
         if (hasConflictingDates)
             throw new ValidationException('A data de agendamento está indisponível');
 
-        const entity = new AppointmentEntity({
-            ...params,
-            status: AppointmentStatusEnum.PENDING,
-        })
+        const entity = this.getEntity(params);
 
         const createdAppointment = await this.repository.create(entity);
 
-        return { 
+        return {
             createdAppointment,
-         };
+        };
+    }
+
+    private getEntity({
+        userId,
+        complaint,
+        isUnderMedicalTreatment,
+        symptoms,
+        startsAt,
+        endsAt,
+        isPregnant,
+        pregnantWeeks,
+    }: CreateAppointmentUsecaseInput): AppointmentEntity {
+        return new AppointmentEntity({
+            userId,
+            complaint: new AppointmentComplaint(complaint),
+            isUnderMedicalTreatment,
+            symptoms,
+            startsAt,
+            endsAt,
+            isPregnant,
+            pregnantWeeks,
+            status: AppointmentStatusEnum.PENDING,
+        })
     }
 }

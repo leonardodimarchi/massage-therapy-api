@@ -1,5 +1,5 @@
 import { AppointmentRepository, GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 
 export class InMemoryAppointmentRepository implements AppointmentRepository {

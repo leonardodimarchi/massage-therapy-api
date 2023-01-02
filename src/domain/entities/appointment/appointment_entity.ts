@@ -1,9 +1,11 @@
-import { AppointmentStatusEnum } from "../models/enums/appointment_status.enum";
-import { EntityProps, Entity } from "../shared/entity";
-import { UserEntity } from "./user_entity";
+import { Replace } from "src/helpers/replace";
+import { AppointmentStatusEnum } from "../../models/enums/appointment_status.enum";
+import { EntityProps, Entity } from "../../shared/entity";
+import { UserEntity } from "../user_entity";
+import { AppointmentComplaint } from "./value-objects/appointment_complaint";
 
 export interface AppointmentProps {
-    complaint: string;
+    complaint: AppointmentComplaint;
     isUnderMedicalTreatment: boolean;
     symptoms: string;
     startsAt: Date;
@@ -19,16 +21,20 @@ export interface AppointmentProps {
 export class AppointmentEntity extends Entity {
     private props: AppointmentProps
 
-    constructor(props: AppointmentProps, entityProps?: EntityProps) {
+    constructor(props: Replace<AppointmentProps, { status?: AppointmentStatusEnum }>, entityProps?: EntityProps) {
         super(entityProps);
-        this.props = props;
+
+        this.props = {
+            ...props,
+            status: props.status ?? AppointmentStatusEnum.PENDING,
+        };
     }
 
-    public set complaint(complaint: string) {
+    public set complaint(complaint: AppointmentComplaint) {
         this.props.complaint = complaint;
     }
 
-    public get complaint(): string {
+    public get complaint(): AppointmentComplaint {
         return this.props.complaint;
     }
 
