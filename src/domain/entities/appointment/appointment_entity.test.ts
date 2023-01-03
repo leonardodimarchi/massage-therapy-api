@@ -1,5 +1,6 @@
 import { AppointmentEntity } from "./appointment_entity";
 import { AppointmentComplaint } from "./value-objects/appointment_complaint";
+import { AppointmentSymptoms } from "./value-objects/appointment_symptoms";
 
 describe('AppointmentEntity', () => {
     it('should be able to instantiate the entity', () => {
@@ -8,7 +9,7 @@ describe('AppointmentEntity', () => {
             startsAt: new Date(2023, 7, 19, 5, 20),
             endsAt: new Date(2023, 7, 19, 6, 20),
             isUnderMedicalTreatment: false,
-            symptoms: 'Headache, Sore throat',
+            symptoms: new AppointmentSymptoms('Headache, Sore throat'),
             userId: 5,
         })
 

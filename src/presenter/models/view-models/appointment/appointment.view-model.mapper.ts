@@ -10,7 +10,7 @@ export class AppointmentViewModelMapper {
             userId: entity.userId,
             complaint: entity.complaint.value,
             isUnderMedicalTreatment: entity.isUnderMedicalTreatment,
-            symptoms: entity.symptoms,
+            symptoms: entity.symptoms.value,
             startsAt: entity.startsAt,
             endsAt: entity.endsAt,
             status: entity.status,

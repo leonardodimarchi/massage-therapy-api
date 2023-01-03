@@ -1,5 +1,6 @@
 import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
 import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/appointment_complaint";
+import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/appointment_symptoms";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 
 interface TypeOrmRawAppointment {
@@ -29,7 +30,7 @@ export class TypeOrmAppointmentMapper {
             pregnantWeeks: appointment.pregnantWeeks,
             startsAt: appointment.startsAt,
             status: appointment.status,
-            symptoms: appointment.symptoms,
+            symptoms: appointment.symptoms.value,
             updatedAt: appointment.updatedAt,
             userId: appointment.userId,
         };
@@ -42,7 +43,7 @@ export class TypeOrmAppointmentMapper {
             isUnderMedicalTreatment: raw.isUnderMedicalTreatment,
             startsAt: raw.startsAt,
             status: raw.status,
-            symptoms: raw.symptoms,
+            symptoms: new AppointmentSymptoms(raw.symptoms),
             userId: raw.userId,
             isPregnant: raw.isPregnant,
             pregnantWeeks: raw.pregnantWeeks,

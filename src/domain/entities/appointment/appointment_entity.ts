@@ -3,11 +3,12 @@ import { AppointmentStatusEnum } from "../../models/enums/appointment_status.enu
 import { EntityProps, Entity } from "../../shared/entity";
 import { UserEntity } from "../user_entity";
 import { AppointmentComplaint } from "./value-objects/appointment_complaint";
+import { AppointmentSymptoms } from "./value-objects/appointment_symptoms";
 
 export interface AppointmentProps {
     complaint: AppointmentComplaint;
     isUnderMedicalTreatment: boolean;
-    symptoms: string;
+    symptoms: AppointmentSymptoms;
     startsAt: Date;
     endsAt: Date;
     isPregnant?: boolean;
@@ -46,11 +47,11 @@ export class AppointmentEntity extends Entity {
         return this.props.isUnderMedicalTreatment;
     }
 
-    public set symptoms(symptoms: string) {
+    public set symptoms(symptoms: AppointmentSymptoms) {
         this.props.symptoms = symptoms;
     }
 
-    public get symptoms(): string {
+    public get symptoms(): AppointmentSymptoms {
         return this.props.symptoms;
     }
 

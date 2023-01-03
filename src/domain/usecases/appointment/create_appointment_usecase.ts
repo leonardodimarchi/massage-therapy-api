@@ -1,6 +1,7 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
 import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/appointment_complaint";
+import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/appointment_symptoms";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 
@@ -26,9 +27,6 @@ export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecas
     ) { }
 
     public async call(params: CreateAppointmentUsecaseInput): Promise<CreateAppointmentUsecaseOutput> {
-        if (!params.symptoms?.trim()?.length)
-            throw new ValidationException('É necessário enviar algum sintoma');
-
         if (params.startsAt?.getTime() < new Date().getTime())
             throw new ValidationException('A data de agendamento não pode ser antes da data de hoje');
 
@@ -69,7 +67,7 @@ export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecas
             userId,
             complaint: new AppointmentComplaint(complaint),
             isUnderMedicalTreatment,
-            symptoms,
+            symptoms: new AppointmentSymptoms(symptoms),
             startsAt,
             endsAt,
             isPregnant,

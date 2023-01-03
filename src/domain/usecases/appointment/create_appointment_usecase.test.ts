@@ -132,13 +132,4 @@ describe('CreateAppointmentUsecase', () => {
             await usecase.call(input)
         }).rejects.toThrowError(ValidationException);
     });
-
-    it('should check if there is a valid symptom', async () => {
-        expect(async () => {
-            await usecase.call({
-                ...input,
-                symptoms: '',
-            })
-        }).rejects.toThrowError(ValidationException);
-    });
 });
