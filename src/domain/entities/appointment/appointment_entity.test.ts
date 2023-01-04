@@ -1,6 +1,6 @@
 import { AppointmentEntity } from "./appointment_entity";
-import { AppointmentComplaint } from "./value-objects/appointment_complaint";
-import { AppointmentSymptoms } from "./value-objects/appointment_symptoms";
+import { AppointmentComplaint } from "./value-objects/complaint/appointment_complaint";
+import { AppointmentSymptoms } from "./value-objects/symptoms/appointment_symptoms";
 
 describe('AppointmentEntity', () => {
     it('should be able to instantiate the entity', () => {

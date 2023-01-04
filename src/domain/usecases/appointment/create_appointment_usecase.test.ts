@@ -107,24 +107,6 @@ describe('CreateAppointmentUsecase', () => {
         }).rejects.toThrowError(ValidationException);
     });
 
-    it('should not create if the start and end date don\'t have the same day', async () => {
-        const todayDate = new Date(2022, 10, 2);
-        const startsAt = new Date(2022, 10, 2);
-        const endsAt = new Date(2022, 11, 3);
-
-        jest.useFakeTimers().setSystemTime(todayDate);
-
-        const invalidPayload: CreateAppointmentUsecaseInput = {
-            ...input,
-            startsAt,
-            endsAt,
-        };
-
-        expect(async () => {
-            await usecase.call(invalidPayload)
-        }).rejects.toThrowError(ValidationException);
-    });
-
     it('should check if there is any conclicting appointments', async () => {
         await usecase.call(input);
 

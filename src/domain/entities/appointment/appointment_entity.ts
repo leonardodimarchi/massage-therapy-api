@@ -2,8 +2,8 @@ import { Replace } from "src/helpers/replace";
 import { AppointmentStatusEnum } from "../../models/enums/appointment_status.enum";
 import { EntityProps, Entity } from "../../shared/entity";
 import { UserEntity } from "../user_entity";
-import { AppointmentComplaint } from "./value-objects/appointment_complaint";
-import { AppointmentSymptoms } from "./value-objects/appointment_symptoms";
+import { AppointmentComplaint } from "./value-objects/complaint/appointment_complaint";
+import { AppointmentSymptoms } from "./value-objects/symptoms/appointment_symptoms";
 
 export interface AppointmentProps {
     complaint: AppointmentComplaint;

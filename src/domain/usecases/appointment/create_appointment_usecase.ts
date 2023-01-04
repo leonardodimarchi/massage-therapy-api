@@ -1,7 +1,7 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
-import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/appointment_complaint";
-import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/appointment_symptoms";
+import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/complaint/appointment_complaint";
+import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/symptoms/appointment_symptoms";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 
@@ -35,9 +35,6 @@ export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecas
 
         if (params.endsAt?.getTime() < params.startsAt?.getTime())
             throw new ValidationException('A data final do agendamento não pode ser antes da data inicial');
-
-        if (params.startsAt?.getDate() !== params.endsAt?.getDate())
-            throw new ValidationException('A data inicial e final do agendamento não podem ser em dias diferentes');
 
         const hasConflictingDates = await this.repository.hasConflictingDates(params.startsAt, params.endsAt);
 

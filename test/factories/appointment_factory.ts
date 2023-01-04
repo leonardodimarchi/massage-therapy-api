@@ -1,6 +1,6 @@
 import { AppointmentEntity, AppointmentProps } from "@/domain/entities/appointment/appointment_entity";
-import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/appointment_complaint";
-import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/appointment_symptoms";
+import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/complaint/appointment_complaint";
+import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/symptoms/appointment_symptoms";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { EntityProps } from "@/domain/shared/entity";
 
