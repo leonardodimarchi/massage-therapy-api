@@ -27,15 +27,6 @@ export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecas
     ) { }
 
     public async call(params: CreateAppointmentUsecaseInput): Promise<CreateAppointmentUsecaseOutput> {
-        if (params.startsAt?.getTime() < new Date().getTime())
-            throw new ValidationException('A data de agendamento não pode ser antes da data de hoje');
-
-        if (params.startsAt?.getTime() === params.endsAt?.getTime())
-            throw new ValidationException('A data inicial não deve ser igual a data final do agendamento');
-
-        if (params.endsAt?.getTime() < params.startsAt?.getTime())
-            throw new ValidationException('A data final do agendamento não pode ser antes da data inicial');
-
         const hasConflictingDates = await this.repository.hasConflictingDates(params.startsAt, params.endsAt);
 
         if (hasConflictingDates)
