@@ -1,6 +1,7 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
 import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/complaint/appointment_complaint";
+import { AppointmentDateRange } from "@/domain/entities/appointment/value-objects/date-range/appointment_date_range";
 import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/symptoms/appointment_symptoms";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
@@ -56,8 +57,7 @@ export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecas
             complaint: new AppointmentComplaint(complaint),
             isUnderMedicalTreatment,
             symptoms: new AppointmentSymptoms(symptoms),
-            startsAt,
-            endsAt,
+            dateRange: new AppointmentDateRange({ startsAt, endsAt }),
             isPregnant,
             pregnantWeeks,
             status: AppointmentStatusEnum.PENDING,

@@ -1,6 +1,7 @@
 import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
-import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/appointment_complaint";
-import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/appointment_symptoms";
+import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/complaint/appointment_complaint";
+import { AppointmentDateRange } from "@/domain/entities/appointment/value-objects/date-range/appointment_date_range";
+import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/symptoms/appointment_symptoms";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 
 interface TypeOrmRawAppointment {
@@ -20,15 +21,17 @@ interface TypeOrmRawAppointment {
 
 export class TypeOrmAppointmentMapper {
     static toSchema(appointment: AppointmentEntity): TypeOrmRawAppointment {
+        const { startsAt, endsAt } = appointment.dateRange.value;
+
         return {
             complaint: appointment.complaint.value,
             createdAt: appointment.createdAt,
-            endsAt: appointment.endsAt,
             id: appointment.id,
             isPregnant: appointment.isPregnant,
             isUnderMedicalTreatment: appointment.isUnderMedicalTreatment,
             pregnantWeeks: appointment.pregnantWeeks,
-            startsAt: appointment.startsAt,
+            startsAt,
+            endsAt,
             status: appointment.status,
             symptoms: appointment.symptoms.value,
             updatedAt: appointment.updatedAt,
@@ -37,11 +40,13 @@ export class TypeOrmAppointmentMapper {
     }
 
     static toDomain(raw: TypeOrmRawAppointment): AppointmentEntity {
+        const startsAt = raw.startsAt;
+        const endsAt = raw.endsAt;
+
         return new AppointmentEntity({
             complaint: new AppointmentComplaint(raw.complaint),
-            endsAt: raw.endsAt,
+            dateRange: new AppointmentDateRange({ startsAt, endsAt }),
             isUnderMedicalTreatment: raw.isUnderMedicalTreatment,
-            startsAt: raw.startsAt,
             status: raw.status,
             symptoms: new AppointmentSymptoms(raw.symptoms),
             userId: raw.userId,

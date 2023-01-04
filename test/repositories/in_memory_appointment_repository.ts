@@ -14,8 +14,10 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
 
     public async hasConflictingDates(startDate: Date, endDate: Date): Promise<boolean> {
         const conflictingAppointment = this.appointments.find(appointment => {
-            const startsAtMoreThanOrEqual = appointment.startsAt.getTime() >= startDate.getTime();
-            const endsAtLessThanOrEqual = appointment.endsAt.getTime() <= endDate.getTime();
+            const { startsAt, endsAt } = appointment.dateRange.value;
+
+            const startsAtMoreThanOrEqual = startsAt.getTime() >= startDate.getTime();
+            const endsAtLessThanOrEqual = endsAt.getTime() <= endDate.getTime();
 
             return startsAtMoreThanOrEqual && endsAtLessThanOrEqual;
         });

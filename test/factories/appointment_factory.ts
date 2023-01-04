@@ -1,8 +1,10 @@
 import { AppointmentEntity, AppointmentProps } from "@/domain/entities/appointment/appointment_entity";
 import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/complaint/appointment_complaint";
+import { AppointmentDateRange } from "@/domain/entities/appointment/value-objects/date-range/appointment_date_range";
 import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/symptoms/appointment_symptoms";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 import { EntityProps } from "@/domain/shared/entity";
+import { ONE_MILLISECOND } from "@/helpers/date_constants";
 
 interface MakeUserOverrideProps {
     override?: Omit<Partial<AppointmentProps>, keyof EntityProps>,
@@ -13,13 +15,15 @@ export function makeAppointment(overrideProps: MakeUserOverrideProps = {}): Appo
     const override = overrideProps.override ?? {};
     const entityPropsOverride = overrideProps.entityPropsOverride ?? {};
 
+    const startsAt = new Date(new Date().getTime() + ONE_MILLISECOND);
+    const endsAt = new Date(startsAt.getTime() + ONE_MILLISECOND);
+
     return new AppointmentEntity({
         userId: 1,
         complaint: new AppointmentComplaint('Those two last weeks i have been felling a strong headache'),
-        isUnderMedicalTreatment: false,
         symptoms: new AppointmentSymptoms('Headache, insomnia'),
-        startsAt: new Date(2023, 7, 20),
-        endsAt: new Date(2023, 8, 4),
+        dateRange: new AppointmentDateRange({ startsAt, endsAt }),
+        isUnderMedicalTreatment: false,
         status: AppointmentStatusEnum.PENDING,
         ...override,
     }, {

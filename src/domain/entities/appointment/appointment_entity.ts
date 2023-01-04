@@ -3,14 +3,14 @@ import { AppointmentStatusEnum } from "../../models/enums/appointment_status.enu
 import { EntityProps, Entity } from "../../shared/entity";
 import { UserEntity } from "../user_entity";
 import { AppointmentComplaint } from "./value-objects/complaint/appointment_complaint";
+import { AppointmentDateRange } from "./value-objects/date-range/appointment_date_range";
 import { AppointmentSymptoms } from "./value-objects/symptoms/appointment_symptoms";
 
 export interface AppointmentProps {
     complaint: AppointmentComplaint;
     isUnderMedicalTreatment: boolean;
     symptoms: AppointmentSymptoms;
-    startsAt: Date;
-    endsAt: Date;
+    dateRange: AppointmentDateRange;
     isPregnant?: boolean;
     pregnantWeeks?: number;
     status: AppointmentStatusEnum;
@@ -55,22 +55,14 @@ export class AppointmentEntity extends Entity {
         return this.props.symptoms;
     }
 
-    public set startsAt(startsAt: Date) {
-        this.props.startsAt = startsAt;
+    public set dateRange(dateRange: AppointmentDateRange) {
+      this.props.dateRange = dateRange;
     }
-
-    public get startsAt(): Date {
-        return this.props.startsAt;
+    
+    public get dateRange(): AppointmentDateRange {
+      return this.props.dateRange;
     }
-
-    public set endsAt(endsAt: Date) {
-        this.props.endsAt = endsAt;
-    }
-
-    public get endsAt(): Date {
-        return this.props.endsAt;
-    }
-
+    
     public set isPregnant(isPregnant: boolean) {
         this.props.isPregnant = isPregnant;
     }

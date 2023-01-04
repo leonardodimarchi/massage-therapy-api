@@ -1,17 +1,17 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { ONE_MILLISECOND } from "@/helpers/date_constants";
+import { TestDateUtils} from "test/utils/test_date_utils";
 import { AppointmentDateRange, AppointmentDateRangeProps } from "./appointment_date_range";
-import { set as setTestDate, reset as resetTestDate } from "mockdate";
 
 describe('ValueObjects - AppointmentDateRange', () => {
     beforeAll(() => {
-        setTestDate(new Date());
+        TestDateUtils.setTestDate(new Date());
     });
 
     afterAll(() => {
-        resetTestDate();
+        TestDateUtils.resetTestDate();
     });
 
-    const ONE_MILLISECOND = 1;
 
     const createValidDates = (): AppointmentDateRangeProps => {
         const startsAt = new Date(new Date().getTime() + ONE_MILLISECOND);

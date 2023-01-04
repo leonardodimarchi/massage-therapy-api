@@ -3,6 +3,8 @@ import { AppointmentViewModel } from "./appointment.view-model";
 
 export class AppointmentViewModelMapper {
     static toModel(entity: AppointmentEntity): AppointmentViewModel {
+        const { startsAt, endsAt } = entity.dateRange.value;
+
         return {
             id: entity.id,
             createdAt: entity.createdAt,
@@ -11,8 +13,8 @@ export class AppointmentViewModelMapper {
             complaint: entity.complaint.value,
             isUnderMedicalTreatment: entity.isUnderMedicalTreatment,
             symptoms: entity.symptoms.value,
-            startsAt: entity.startsAt,
-            endsAt: entity.endsAt,
+            startsAt,
+            endsAt,
             status: entity.status,
             isPregnant: entity.isPregnant,
             pregnantWeeks: entity.pregnantWeeks,
