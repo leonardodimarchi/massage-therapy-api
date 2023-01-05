@@ -2,25 +2,10 @@ import { AppointmentEntity } from "@/domain/entities/appointment/appointment_ent
 import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/complaint/appointment_complaint";
 import { AppointmentDateRange } from "@/domain/entities/appointment/value-objects/date-range/appointment_date_range";
 import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/symptoms/appointment_symptoms";
-import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
-
-interface TypeOrmRawAppointment {
-    id: number;
-    createdAt: Date;
-    updatedAt: Date;
-    complaint: string;
-    isUnderMedicalTreatment: boolean;
-    symptoms: string;
-    startsAt: Date;
-    endsAt: Date;
-    isPregnant?: boolean;
-    pregnantWeeks?: number;
-    status: AppointmentStatusEnum;
-    userId: number;
-}
+import { RawAppointmentEntity } from "../schema/appointment_schema";
 
 export class TypeOrmAppointmentMapper {
-    static toSchema(appointment: AppointmentEntity): TypeOrmRawAppointment {
+    static toSchema(appointment: AppointmentEntity): RawAppointmentEntity {
         const { startsAt, endsAt } = appointment.dateRange.value;
 
         return {
@@ -39,7 +24,7 @@ export class TypeOrmAppointmentMapper {
         };
     }
 
-    static toDomain(raw: TypeOrmRawAppointment): AppointmentEntity {
+    static toDomain(raw: RawAppointmentEntity): AppointmentEntity {
         const startsAt = raw.startsAt;
         const endsAt = raw.endsAt;
 

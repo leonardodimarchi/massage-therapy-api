@@ -1,9 +1,27 @@
 import { EntitySchema } from 'typeorm';
 import { BaseSchemaColumns } from './base_schema_columns';
-import { AppointmentEntity } from '@/domain/entities/appointment/appointment_entity';
+import { AppointmentProps } from '@/domain/entities/appointment/appointment_entity';
 import { AppointmentStatusEnum } from '@/domain/models/enums/appointment_status.enum';
+import { EntityProps } from '@/domain/shared/entity';
+import { Replace } from '@/helpers/replace';
 
-export const AppointmentSchema = new EntitySchema<AppointmentEntity>({
+type EntityFields = AppointmentProps & EntityProps;
+
+type EntityFieldsToRemove = 'dateRange';
+
+type EntityFieldsToAddOrReplace = {
+  complaint: string;
+  symptoms: string;
+  startsAt: Date;
+  endsAt: Date;
+};
+
+export type RawAppointmentEntity = Replace<Omit<
+  EntityFields,
+  EntityFieldsToRemove
+>, EntityFieldsToAddOrReplace>;
+
+export const AppointmentSchema = new EntitySchema<RawAppointmentEntity>({
   name: 'Appointments',
   tableName: 'appointments',
   columns: {
