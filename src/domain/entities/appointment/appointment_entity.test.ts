@@ -11,7 +11,7 @@ describe('AppointmentEntity', () => {
     });
 
     afterAll(() => {
-        TestDateUtils.resetTestDate()
+        TestDateUtils.resetTestDate();
     });
 
     it('should be able to instantiate the entity', () => {

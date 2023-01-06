@@ -1,6 +1,6 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
 import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 

@@ -1,5 +1,5 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
 
 export class InMemoryUserRepository implements UserRepository {
     

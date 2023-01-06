@@ -1,4 +1,4 @@
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
 
 interface TypeOrmRawUser {
     id: number;

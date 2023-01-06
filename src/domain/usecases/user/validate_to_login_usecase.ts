@@ -1,6 +1,6 @@
 import { PasswordEncryptionService } from "../../contracts/services/password_encryptation_service";
 import { UserRepository } from "../../../domain/contracts/repositories/user_repository";
-import { UserEntity } from "../../entities/user_entity";
+import { UserEntity } from "../../entities/user/user_entity";
 
 export interface ValidateToLoginUsecaseInput {
     email: string;

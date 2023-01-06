@@ -1,4 +1,4 @@
-import { UserEntity, UserProps } from "@/domain/entities/user_entity";
+import { UserEntity, UserProps } from "@/domain/entities/user/user_entity";
 import { EntityProps } from "@/domain/shared/entity";
 
 interface MakeUserOverrideProps {

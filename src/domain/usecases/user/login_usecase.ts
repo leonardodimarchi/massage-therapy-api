@@ -1,5 +1,5 @@
 import { JwtService } from "../../../domain/contracts/services/jwt_service";
-import { UserEntity } from "../../../domain/entities/user_entity";
+import { UserEntity } from "../../entities/user/user_entity";
 import { JwtInterface } from "@/domain/models/interfaces/jwt.interface";
 
 export interface LoginUseCaseInput {

@@ -1,6 +1,6 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { UserValidator } from "@/domain/validators/user_validator";
 
