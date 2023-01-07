@@ -1,8 +1,9 @@
 import { Entity, EntityProps } from "../../shared/entity";
 import { AppointmentEntity } from "../appointment/appointment_entity";
+import { UserEmail } from "./value-objects/user_email";
 
 export interface UserProps {
-    email: string;
+    email: UserEmail;
     name: string;
     phone: string;
     birthDate: Date;
@@ -20,11 +21,11 @@ export class UserEntity extends Entity {
         this.props = props;
     }
     
-    public set email(email: string) {
+    public set email(email: UserEmail) {
       this.props.email = email;
     }
     
-    public get email(): string {
+    public get email(): UserEmail {
       return this.props.email;
     }
     

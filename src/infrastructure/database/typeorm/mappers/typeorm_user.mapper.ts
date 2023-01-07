@@ -1,4 +1,5 @@
 import { UserEntity } from "@/domain/entities/user/user_entity";
+import { UserEmail } from "@/domain/entities/user/value-objects/user_email";
 
 interface TypeOrmRawUser {
     id: number;
@@ -16,7 +17,7 @@ export class TypeOrmUserMapper {
         return {
             id: user.id,
             birthDate: user.birthDate,
-            email: user.email,
+            email: user.email.value,
             name: user.name,
             password: user.password,
             phone: user.phone,
@@ -27,7 +28,7 @@ export class TypeOrmUserMapper {
 
     static toDomain(raw: TypeOrmRawUser): UserEntity {
         return new UserEntity({
-            email: raw.email,
+            email: new UserEmail(raw.email),
             birthDate: raw.birthDate,
             name: raw.name,
             password: raw.password,

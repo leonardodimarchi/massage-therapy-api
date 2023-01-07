@@ -20,7 +20,7 @@ export class LoginUsecase implements UseCase<LoginUseCaseInput, LoginUseCaseOutp
         return {
             jwt: {
                 access_token: this.jwtService.sign({
-                    email: user.email,
+                    email: user.email.value,
                     sub: user.id,
                 }),
             },

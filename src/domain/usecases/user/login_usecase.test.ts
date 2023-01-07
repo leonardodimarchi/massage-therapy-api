@@ -30,7 +30,7 @@ describe('LoginUsecase', () => {
         const result = usecase.call(input);
 
         expect(jwtService.sign).toHaveBeenNthCalledWith(1, { 
-            email: input.user.email,
+            email: input.user.email.value,
             sub: input.user.id,
         })
         expect(result).toEqual(expectedResult);
