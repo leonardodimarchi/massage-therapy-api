@@ -30,9 +30,6 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         birthDate,
         password,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
-        if (!UserValidator.isValidEmail(email))
-            throw new ValidationException('Email inválido');
-
         if (!UserValidator.isValidName(name))
             throw new ValidationException('Nome inválido');
 

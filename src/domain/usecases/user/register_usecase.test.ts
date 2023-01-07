@@ -62,17 +62,6 @@ describe('RegisterUsecase', () => {
         expect(encryptationService.hash).toHaveBeenNthCalledWith(1, input.password);
     });
 
-    it('should not register with invalid email', async () => {
-        const usecaseCall = async () => {
-            await usecase.call({
-                ...input,
-                email: 'invalid_email',
-            });
-        }
-
-        expect(usecaseCall()).rejects.toThrow(ValidationException);
-    });
-
     it('should not register with invalid name', async () => {
         const usecaseCall = async () => {
             await usecase.call({

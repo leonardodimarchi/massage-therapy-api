@@ -1,10 +1,4 @@
-import { Validators } from "../shared/validations/validators";
-
 export class UserValidator {
-    public static isValidEmail(email: string): boolean {
-        return Validators.isValidEmail(email);
-    }
-
     public static isValidName(name: string): boolean {
         return !!name.length;
     }
