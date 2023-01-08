@@ -1,5 +1,5 @@
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
-import { UserEmail } from "@/domain/entities/user/value-objects/user_email";
+import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
 import { ValidateToLoginUsecase } from "@/domain/usecases/user/validate_to_login_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
 import { makeUser } from "test/factories/user_factory";

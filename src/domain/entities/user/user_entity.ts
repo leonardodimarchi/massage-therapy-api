@@ -1,6 +1,6 @@
 import { Entity, EntityProps } from "../../shared/entity";
 import { AppointmentEntity } from "../appointment/appointment_entity";
-import { UserEmail } from "./value-objects/user_email";
+import { UserEmail } from "./value-objects/email/user_email";
 
 export interface UserProps {
     email: UserEmail;

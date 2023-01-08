@@ -1,5 +1,5 @@
 import { UserEntity } from "@/domain/entities/user/user_entity";
-import { UserEmail } from "@/domain/entities/user/value-objects/user_email";
+import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
 
 interface TypeOrmRawUser {
     id: number;

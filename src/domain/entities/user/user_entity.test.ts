@@ -1,6 +1,6 @@
 import { TestDateUtils } from 'test/utils/test_date_utils';
 import { UserEntity } from './user_entity';
-import { UserEmail } from './value-objects/user_email';
+import { UserEmail } from './value-objects/email/user_email';
 
 describe('UserEntity', () => {
     beforeAll(() => {
