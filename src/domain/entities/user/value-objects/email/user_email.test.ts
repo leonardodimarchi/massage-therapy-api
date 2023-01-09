@@ -14,7 +14,7 @@ describe('ValueObjects - UserEmail', () => {
         expect(valueObject).toBeDefined();
     });
 
-    it('should be able to create with an invalid email', () => {
+    it('should not be able to create with an invalid email', () => {
         const createValueObject = () => new UserEmail('testingemail.com');
 
         expect(createValueObject).toThrowError(ValidationException);

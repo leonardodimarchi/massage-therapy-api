@@ -5,7 +5,7 @@ export class UserEmail {
         const isValid = this.validate(email);
 
         if (!isValid)
-            throw new ValidationException('Email inválido');
+            throw new ValidationException('Email inválido.');
 
         this.email = email;
     }
