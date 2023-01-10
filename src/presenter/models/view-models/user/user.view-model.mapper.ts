@@ -8,7 +8,7 @@ export class UserViewModelMapper {
             createdAt: entity.createdAt,
             birthDate: entity.birthDate,
             email: entity.email.value,
-            name: entity.name,
+            name: entity.name.value,
             phone: entity.phone,
             updatedAt: entity.updatedAt
         }

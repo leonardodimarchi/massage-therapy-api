@@ -1,6 +1,7 @@
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
+import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { RegisterUsecase, RegisterUseCaseInput } from "@/domain/usecases/user/register_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
@@ -25,7 +26,7 @@ describe('RegisterUsecase', () => {
     const entity = makeUser({
         override: {
             email: new UserEmail('valid@email.com'),
-            name: 'Mocked name',
+            name: new UserName('Mocked name'),
             phone: '15992280628',
             birthDate: new Date(),
             password: hashPassword,
@@ -44,7 +45,7 @@ describe('RegisterUsecase', () => {
         const { createdUser } = await usecase.call(input);
 
         expect(repository.users[0].email.value).toEqual(input.email);
-        expect(repository.users[0].name).toEqual(input.name);
+        expect(repository.users[0].name.value).toEqual(input.name);
         expect(repository.users[0].phone).toEqual(input.phone);
         expect(repository.users[0].birthDate).toEqual(input.birthDate);
         expect(repository.users[0].password).toEqual(input.password);

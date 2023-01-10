@@ -8,6 +8,7 @@ type EntityFields = UserProps & EntityProps;
 
 type EntityFieldsToAddOrReplace = {
   email: string;
+  name: string;
 };
 
 export type RawUserEntity = Replace<EntityFields, EntityFieldsToAddOrReplace>;

@@ -1,24 +1,15 @@
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
-
-interface TypeOrmRawUser {
-    id: number;
-    createdAt: Date;
-    updatedAt: Date;
-    email: string;
-    name: string;
-    phone: string;
-    birthDate: Date;
-    password: string;
-}
+import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
+import { RawUserEntity } from "../schema/user_schema";
 
 export class TypeOrmUserMapper {
-    static toSchema(user: UserEntity): TypeOrmRawUser {
+    static toSchema(user: UserEntity): RawUserEntity {
         return {
             id: user.id,
             birthDate: user.birthDate,
             email: user.email.value,
-            name: user.name,
+            name: user.name.value,
             password: user.password,
             phone: user.phone,
             updatedAt: user.updatedAt,
@@ -26,11 +17,11 @@ export class TypeOrmUserMapper {
         };
     }
 
-    static toDomain(raw: TypeOrmRawUser): UserEntity {
+    static toDomain(raw: RawUserEntity): UserEntity {
         return new UserEntity({
             email: new UserEmail(raw.email),
             birthDate: raw.birthDate,
-            name: raw.name,
+            name: new UserName(raw.name),
             password: raw.password,
             phone: raw.phone,
         }, {

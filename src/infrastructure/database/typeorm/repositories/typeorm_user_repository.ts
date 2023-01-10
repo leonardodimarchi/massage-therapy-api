@@ -2,19 +2,21 @@ import { UserEntity } from "@/domain/entities/user/user_entity";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
-import { UserSchema } from "../schema/user_schema";
+import { RawUserEntity, UserSchema } from "../schema/user_schema";
 import { TypeOrmUserMapper } from "../mappers/typeorm_user.mapper";
 
 export class TypeOrmUserRepository implements UserRepository {
     constructor(
         @InjectRepository(UserSchema)
-        private typeOrmRepository: Repository<UserEntity>,
+        private typeOrmRepository: Repository<RawUserEntity>,
     ) { }
 
     public async register(user: UserEntity): Promise<UserEntity> {
-        const raw = TypeOrmUserMapper.toSchema(user);
+        const userToSave = TypeOrmUserMapper.toSchema(user);
+        
+        const raw = await this.typeOrmRepository.save(userToSave);
 
-        return await this.typeOrmRepository.save(raw);
+        return TypeOrmUserMapper.toDomain(raw);
     }
 
     public async getByEmail(email: string): Promise<UserEntity | null> {

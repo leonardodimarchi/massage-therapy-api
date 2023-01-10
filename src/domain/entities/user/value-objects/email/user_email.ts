@@ -1,4 +1,5 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { Validators } from "@/helpers/validations/email.validation";
 
 export class UserEmail {
     constructor(email: string) {
@@ -17,8 +18,6 @@ export class UserEmail {
     }
 
     private validate(email: string): boolean {
-        const emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/);
-
-        return emailRegex.test(email);
+        return Validators.isValidEmail(email);
     }
 }

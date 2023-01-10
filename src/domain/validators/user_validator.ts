@@ -1,8 +1,4 @@
 export class UserValidator {
-    public static isValidName(name: string): boolean {
-        return !!name.length;
-    }
-
     public static isValidPhone(phone: string): boolean {
         return !!phone.length;
     }

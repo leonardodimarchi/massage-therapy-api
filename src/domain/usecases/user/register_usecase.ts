@@ -2,6 +2,7 @@ import { UserRepository } from "@/domain/contracts/repositories/user_repository"
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
+import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { UserValidator } from "@/domain/validators/user_validator";
 
@@ -31,9 +32,6 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         birthDate,
         password,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
-        if (!UserValidator.isValidName(name))
-            throw new ValidationException('Nome inválido');
-
         if (!UserValidator.isValidPhone(phone))
             throw new ValidationException('Telefone inválido');
 
@@ -52,7 +50,7 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
 
         const userToCreate = new UserEntity({
             email: new UserEmail(email),
-            name,
+            name: new UserName(name),
             phone,
             birthDate,
             password,
