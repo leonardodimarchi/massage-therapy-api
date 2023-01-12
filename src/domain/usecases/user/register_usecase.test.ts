@@ -86,17 +86,6 @@ describe('RegisterUsecase', () => {
         expect(usecaseCall()).rejects.toThrow(ValidationException);
     });
 
-    it('should not register with invalid birthdate', async () => {
-        const usecaseCall = async () => {
-            await usecase.call({
-                ...input,
-                birthDate: null,
-            });
-        }
-
-        expect(usecaseCall()).rejects.toThrow(ValidationException);
-    });
-
     it('should not register with invalid password', async () => {
         const usecaseCall = async () => {
             await usecase.call({

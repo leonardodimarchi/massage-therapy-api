@@ -3,10 +3,6 @@ export class UserValidator {
         return !!phone.length;
     }
 
-    public static isValidBirthDate(birthDate: Date): boolean {
-        return !!birthDate;
-    }
-
     public static isValidPassword(password: string): boolean {
         return !!password?.length
     }
