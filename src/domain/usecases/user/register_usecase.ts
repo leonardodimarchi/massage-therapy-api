@@ -32,9 +32,6 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         birthDate,
         password,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
-        if (!UserValidator.isValidPhone(phone))
-            throw new ValidationException('Telefone inválido');
-
         if (!UserValidator.isValidPassword(password))
             throw new ValidationException('Senha inválida');
 

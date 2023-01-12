@@ -19,17 +19,17 @@ describe('ValueObjects - UserBirthdate', () => {
         expect(valueObject).toBeDefined();
     });
 
-    it('should not be able to create less than 10 years old birthdate', () => {
-        const age = 9;
-        const birthDate = new Date(new Date().getDate(), new Date().getMonth(), new Date().getFullYear() - age);
-
-        const createValueObject = () => new UserBirthdate(birthDate);
-
-        expect(createValueObject).toThrowError(ValidationException);
-    });
-
     it('should be able to create if has exactly 10 years old', () => {
         const age = 10;
+        const birthDate = new Date(new Date().getDate(), new Date().getMonth(), new Date().getFullYear() - age);
+
+        const valueObject = new UserBirthdate(birthDate);
+
+        expect(valueObject).toBeDefined();
+    });
+
+    it('should not be able to create less than 10 years old birthdate', () => {
+        const age = 9;
         const birthDate = new Date(new Date().getDate(), new Date().getMonth(), new Date().getFullYear() - age);
 
         const createValueObject = () => new UserBirthdate(birthDate);

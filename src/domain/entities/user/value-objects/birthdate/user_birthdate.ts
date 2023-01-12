@@ -21,6 +21,6 @@ export class UserBirthdate {
         const minimumAge = 10;
         const tenYearsBackDate = new Date(today.getDate(), today.getMonth(), today.getFullYear() - minimumAge);
 
-        return tenYearsBackDate.getTime() > value.getTime();
+        return tenYearsBackDate.getTime() >= value.getTime();
     }
 }

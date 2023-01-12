@@ -75,17 +75,6 @@ describe('RegisterUsecase', () => {
         expect(usecaseCall()).rejects.toThrow(ValidationException);
     });
 
-    it('should not register with invalid phone', async () => {
-        const usecaseCall = async () => {
-            await usecase.call({
-                ...input,
-                phone: '',
-            });
-        }
-
-        expect(usecaseCall()).rejects.toThrow(ValidationException);
-    });
-
     it('should not register with invalid password', async () => {
         const usecaseCall = async () => {
             await usecase.call({

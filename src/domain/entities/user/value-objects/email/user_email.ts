@@ -1,5 +1,5 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { Validators } from "@/helpers/validations/email.validation";
+import { Validators } from "@/helpers/validators";
 
 export class UserEmail {
     constructor(email: string) {
