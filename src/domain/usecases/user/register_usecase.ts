@@ -4,7 +4,6 @@ import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
 import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { UserValidator } from "@/domain/validators/user_validator";
 
 export interface RegisterUseCaseInput {
     email: string;
@@ -32,15 +31,10 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         birthDate,
         password,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
-        if (!UserValidator.isValidPassword(password))
-            throw new ValidationException('Senha inválida');
-
         const hasUserWithEmail = await this.repository.getByEmail(email);
 
         if (hasUserWithEmail) 
             throw new ValidationException('Email já cadastrado');
-
-        password = await this.bcryptService.hash(password);
 
         const userToCreate = new UserEntity({
             email: new UserEmail(email),
@@ -49,6 +43,9 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
             birthDate,
             password,
         });
+        
+        userToCreate.password = await this.bcryptService.hash(password);
+
         const createdUser = await this.repository.register(userToCreate);
 
         return {

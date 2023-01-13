@@ -64,28 +64,6 @@ describe('RegisterUsecase', () => {
         expect(encryptationService.hash).toHaveBeenNthCalledWith(1, input.password);
     });
 
-    it('should not register with invalid name', async () => {
-        const usecaseCall = async () => {
-            await usecase.call({
-                ...input,
-                name: '',
-            });
-        }
-
-        expect(usecaseCall()).rejects.toThrow(ValidationException);
-    });
-
-    it('should not register with invalid password', async () => {
-        const usecaseCall = async () => {
-            await usecase.call({
-                ...input,
-                password: '',
-            });
-        }
-
-        expect(usecaseCall()).rejects.toThrow(ValidationException);
-    });
-
     it('should not register if the email already exists', async () => {
         repository.register(entity);
 
