@@ -1,5 +1,5 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
 
 export class InMemoryUserRepository implements UserRepository {
     
@@ -12,7 +12,7 @@ export class InMemoryUserRepository implements UserRepository {
     }
 
     public async getByEmail(email: string): Promise<UserEntity | null> {
-        const user = this.users.find(u => u.email === email);
+        const user = this.users.find(u => u.email.value === email);
 
         if (!user)
             return null;

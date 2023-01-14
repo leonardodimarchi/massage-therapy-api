@@ -1,4 +1,4 @@
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { GetUserAppointmentsUsecase } from "@/domain/usecases/appointment/get_user_appointments_usecase";

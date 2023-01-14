@@ -1,6 +1,6 @@
 import { PasswordEncryptionService } from "../../contracts/services/password_encryptation_service";
 import { UserRepository } from "../../../domain/contracts/repositories/user_repository";
-import { UserEntity } from "../../entities/user_entity";
+import { UserEntity } from "../../entities/user/user_entity";
 
 export interface ValidateToLoginUsecaseInput {
     email: string;
@@ -30,7 +30,7 @@ export class ValidateToLoginUsecase implements UseCase<ValidateToLoginUsecaseInp
             };
         }
 
-        const isCorrectPassword = await this.bcryptService.compare(password, user.password);
+        const isCorrectPassword = await this.bcryptService.compare(password, user.password.value);
 
         if (!isCorrectPassword) {
             return {

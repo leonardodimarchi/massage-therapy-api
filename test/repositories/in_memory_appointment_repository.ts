@@ -1,5 +1,5 @@
 import { AppointmentRepository, GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 
 export class InMemoryAppointmentRepository implements AppointmentRepository {
@@ -14,8 +14,10 @@ export class InMemoryAppointmentRepository implements AppointmentRepository {
 
     public async hasConflictingDates(startDate: Date, endDate: Date): Promise<boolean> {
         const conflictingAppointment = this.appointments.find(appointment => {
-            const startsAtMoreThanOrEqual = appointment.startsAt.getTime() >= startDate.getTime();
-            const endsAtLessThanOrEqual = appointment.endsAt.getTime() <= endDate.getTime();
+            const { startsAt, endsAt } = appointment.dateRange.value;
+
+            const startsAtMoreThanOrEqual = startsAt.getTime() >= startDate.getTime();
+            const endsAtLessThanOrEqual = endsAt.getTime() <= endDate.getTime();
 
             return startsAtMoreThanOrEqual && endsAtLessThanOrEqual;
         });

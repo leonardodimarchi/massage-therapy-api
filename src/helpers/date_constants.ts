@@ -1,0 +1,1 @@
+export const ONE_MILLISECOND = 1;

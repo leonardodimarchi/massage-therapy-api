@@ -1,4 +1,4 @@
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserViewModel } from "./user.view-model";
 
 export class UserViewModelMapper {
@@ -6,10 +6,10 @@ export class UserViewModelMapper {
         return {
             id: entity.id,
             createdAt: entity.createdAt,
-            birthDate: entity.birthDate,
-            email: entity.email,
-            name: entity.name,
-            phone: entity.phone,
+            birthDate: entity.birthDate.value,
+            email: entity.email.value,
+            name: entity.name.value,
+            phone: entity.phone.value,
             updatedAt: entity.updatedAt
         }
     }

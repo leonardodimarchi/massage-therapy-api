@@ -20,7 +20,8 @@
     "paths": {
       "@/presenter/*": ["./src/presenter/*"],
       "@/infra/*": ["./src/infrastructure/*"],
-      "@/domain/*": ["./src/domain/*"]
+      "@/domain/*": ["./src/domain/*"],
+      "@/helpers/*": ["./src/helpers/*"]
     },
   }
 }

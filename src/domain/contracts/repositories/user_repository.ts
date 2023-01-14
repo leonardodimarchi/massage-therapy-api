@@ -1,4 +1,4 @@
-import { UserEntity } from "../../entities/user_entity";
+import { UserEntity } from "../../entities/user/user_entity";
 
 export abstract class UserRepository {
     abstract register(user: UserEntity): Promise<UserEntity>;

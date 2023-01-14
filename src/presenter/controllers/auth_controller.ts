@@ -1,4 +1,4 @@
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
 import { LoginUsecase } from "@/domain/usecases/user/login_usecase";
 import { LocalAuthGuard } from "@/infra/guards/authentication/local_auth_guard";
 import { Controller, UseGuards, Post, Request } from "@nestjs/common";

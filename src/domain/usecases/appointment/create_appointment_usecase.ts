@@ -1,5 +1,8 @@
 import { AppointmentRepository } from "@/domain/contracts/repositories/appointment_repository";
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
+import { AppointmentComplaint } from "@/domain/entities/appointment/value-objects/complaint/appointment_complaint";
+import { AppointmentDateRange } from "@/domain/entities/appointment/value-objects/date-range/appointment_date_range";
+import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/symptoms/appointment_symptoms";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
 
@@ -25,38 +28,39 @@ export class CreateAppointmentUsecase implements UseCase<CreateAppointmentUsecas
     ) { }
 
     public async call(params: CreateAppointmentUsecaseInput): Promise<CreateAppointmentUsecaseOutput> {
-        if (!params.complaint?.trim()?.length)
-            throw new ValidationException('É necessário enviar uma descrição');
-
-        if (!params.symptoms?.trim()?.length)
-            throw new ValidationException('É necessário enviar algum sintoma');
-
-        if (params.startsAt?.getTime() < new Date().getTime())
-            throw new ValidationException('A data de agendamento não pode ser antes da data de hoje');
-
-        if (params.startsAt?.getTime() === params.endsAt?.getTime())
-            throw new ValidationException('A data inicial não deve ser igual a data final do agendamento');
-
-        if (params.endsAt?.getTime() < params.startsAt?.getTime())
-            throw new ValidationException('A data final do agendamento não pode ser antes da data inicial');
-
-        if (params.startsAt?.getDate() !== params.endsAt?.getDate())
-            throw new ValidationException('A data inicial e final do agendamento não podem ser em dias diferentes');
-
         const hasConflictingDates = await this.repository.hasConflictingDates(params.startsAt, params.endsAt);
 
         if (hasConflictingDates)
             throw new ValidationException('A data de agendamento está indisponível');
 
-        const entity = new AppointmentEntity({
-            ...params,
-            status: AppointmentStatusEnum.PENDING,
-        })
+        const entity = this.getEntity(params);
 
         const createdAppointment = await this.repository.create(entity);
 
-        return { 
+        return {
             createdAppointment,
-         };
+        };
+    }
+
+    private getEntity({
+        userId,
+        complaint,
+        isUnderMedicalTreatment,
+        symptoms,
+        startsAt,
+        endsAt,
+        isPregnant,
+        pregnantWeeks,
+    }: CreateAppointmentUsecaseInput): AppointmentEntity {
+        return new AppointmentEntity({
+            userId,
+            complaint: new AppointmentComplaint(complaint),
+            isUnderMedicalTreatment,
+            symptoms: new AppointmentSymptoms(symptoms),
+            dateRange: new AppointmentDateRange({ startsAt, endsAt }),
+            isPregnant,
+            pregnantWeeks,
+            status: AppointmentStatusEnum.PENDING,
+        })
     }
 }

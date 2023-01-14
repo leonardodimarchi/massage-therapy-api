@@ -1,4 +1,4 @@
-import { AppointmentEntity } from "@/domain/entities/appointment_entity";
+import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm";
 import { AppointmentRepository, GetUserAppointmentsParams } from "@/domain/contracts/repositories/appointment_repository";
@@ -6,19 +6,21 @@ import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.inter
 import { PaginationOptions } from "@/domain/models/interfaces/pagination_options.interface";
 import { Injectable } from "@nestjs/common";
 import { TypeOrmAppointmentMapper } from "../mappers/typeorm_appointment.mapper";
-import { AppointmentSchema } from "../schema/appointment_schema";
+import { AppointmentSchema, RawAppointmentEntity } from "../schema/appointment_schema";
 
 @Injectable()
 export class TypeOrmAppointmentRepository implements AppointmentRepository {
     constructor(
         @InjectRepository(AppointmentSchema)
-        private typeOrmRepository: Repository<AppointmentEntity>,
+        private typeOrmRepository: Repository<RawAppointmentEntity>,
     ) { }
 
     public async create(appointment: AppointmentEntity): Promise<AppointmentEntity> {
         const raw = TypeOrmAppointmentMapper.toSchema(appointment);
 
-        return await this.typeOrmRepository.save(raw);
+        const savedEntity = await this.typeOrmRepository.save(raw);
+
+        return TypeOrmAppointmentMapper.toDomain(savedEntity);
     }
 
     public async hasConflictingDates(startDate: Date, endDate: Date): Promise<boolean> {
