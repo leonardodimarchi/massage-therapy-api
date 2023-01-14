@@ -1,4 +1,5 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { Validators } from "@/helpers/validators";
 
 export class UserPassword {
     constructor(value: string) {
@@ -17,6 +18,6 @@ export class UserPassword {
     }
 
     private validate(value: string): boolean {
-        return value.trim().length >= 6 && value.trim().length <= 512;
+        return Validators.isValidPassword(value);
     }
 }

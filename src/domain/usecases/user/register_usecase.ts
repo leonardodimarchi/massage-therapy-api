@@ -1,8 +1,11 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { UserEntity } from "@/domain/entities/user/user_entity";
+import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
 import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
+import { UserPassword } from "@/domain/entities/user/value-objects/password/user_password";
+import { UserPhone } from "@/domain/entities/user/value-objects/phone/user_phone";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 
 export interface RegisterUseCaseInput {
@@ -39,12 +42,12 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         const userToCreate = new UserEntity({
             email: new UserEmail(email),
             name: new UserName(name),
-            phone,
-            birthDate,
-            password,
+            phone: new UserPhone(phone),
+            birthDate: new UserBirthdate(birthDate),
+            password: new UserPassword(password),
         });
         
-        userToCreate.password = await this.bcryptService.hash(password);
+        userToCreate.password = new UserPassword(await this.bcryptService.hash(password));
 
         const createdUser = await this.repository.register(userToCreate);
 

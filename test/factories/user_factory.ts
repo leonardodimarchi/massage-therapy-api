@@ -1,6 +1,9 @@
 import { UserEntity, UserProps } from "@/domain/entities/user/user_entity";
+import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
 import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
+import { UserPassword } from "@/domain/entities/user/value-objects/password/user_password";
+import { UserPhone } from "@/domain/entities/user/value-objects/phone/user_phone";
 import { EntityProps } from "@/domain/shared/entity";
 
 interface MakeUserOverrideProps {
@@ -15,9 +18,9 @@ export function makeUser(overrideProps: MakeUserOverrideProps = {}): UserEntity 
     return new UserEntity({
         email: new UserEmail('valid@email.com'),
         name: new UserName('Mocked Name'),
-        birthDate: new Date(11, 10, 2000),
-        phone: 'Mocked phone',
-        password: '123456',
+        birthDate: new UserBirthdate(new Date(11, 10, 2000)),
+        phone: new UserPhone('15998489760'),
+        password: new UserPassword('123456'),
         ...override,
     }, {
         id: 1,

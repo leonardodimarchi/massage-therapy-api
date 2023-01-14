@@ -30,7 +30,7 @@ export class ValidateToLoginUsecase implements UseCase<ValidateToLoginUsecaseInp
             };
         }
 
-        const isCorrectPassword = await this.bcryptService.compare(password, user.password);
+        const isCorrectPassword = await this.bcryptService.compare(password, user.password.value);
 
         if (!isCorrectPassword) {
             return {

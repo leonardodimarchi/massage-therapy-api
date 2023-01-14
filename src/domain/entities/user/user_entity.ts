@@ -1,14 +1,17 @@
 import { Entity, EntityProps } from "../../shared/entity";
 import { AppointmentEntity } from "../appointment/appointment_entity";
+import { UserBirthdate } from "./value-objects/birthdate/user_birthdate";
 import { UserEmail } from "./value-objects/email/user_email";
 import { UserName } from "./value-objects/name/user_name";
+import { UserPassword } from "./value-objects/password/user_password";
+import { UserPhone } from "./value-objects/phone/user_phone";
 
 export interface UserProps {
     email: UserEmail;
     name: UserName;
-    phone: string;
-    birthDate: Date;
-    password: string;
+    phone: UserPhone;
+    birthDate: UserBirthdate;
+    password: UserPassword;
 
     appointments?: AppointmentEntity[];
 }
@@ -38,27 +41,27 @@ export class UserEntity extends Entity {
       return this.props.name;
     }
 
-    public set phone(phone: string) {
+    public set phone(phone: UserPhone) {
       this.props.phone = phone;
     }
     
-    public get phone(): string {
+    public get phone(): UserPhone {
       return this.props.phone;
     }
     
-    public set birthDate(birthDate: Date) {
+    public set birthDate(birthDate: UserBirthdate) {
       this.props.birthDate = birthDate;
     }
     
-    public get birthDate(): Date {
+    public get birthDate(): UserBirthdate {
       return this.props.birthDate;
     }
     
-    public set password(password: string) {
+    public set password(password: UserPassword) {
       this.props.password = password;
     }
     
-    public get password(): string {
+    public get password(): UserPassword {
       return this.props.password;
     }
     

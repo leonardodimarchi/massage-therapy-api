@@ -4,4 +4,8 @@ export namespace Validators {
 
         return emailRegex.test(email);
     }
+
+    export function isValidPassword(value: string): boolean {
+        return value.trim().length >= 6 && value.trim().length <= 512;
+    }
 }

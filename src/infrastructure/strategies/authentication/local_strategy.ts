@@ -2,8 +2,7 @@ import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/
 import { Strategy } from "passport-local";
 import { PassportStrategy } from "@nestjs/passport";
 import { ValidateToLoginUsecase } from "../../../domain/usecases/user/validate_to_login_usecase";
-import { UserValidator } from "@/domain/validators/user_validator";
-import { Validators } from "@/helpers/validations/email.validation";
+import { Validators } from "@/helpers/validators";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -15,7 +14,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(email: string, password: string): Promise<any> {
     const isValidEmail = Validators.isValidEmail(email);
-    const isValidPassword = UserValidator.isValidPassword(password);
+    const isValidPassword = Validators.isValidPassword(password);
 
     if (!isValidEmail)
       throw new BadRequestException('Email inválido.');
