@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsString } from "class-validator";
+import { Transform } from "class-transformer";
+import { IsDate, IsDateString, IsString } from "class-validator";
 
 export class CreateUserPayload {
     @ApiProperty({
@@ -24,7 +25,7 @@ export class CreateUserPayload {
         required: true,
     })
     @IsDateString({}, { message: 'É necessário enviar uma data de nascimento válida' })
-    birthDate: Date;
+    birthDate: string;
 
     @ApiProperty({
         required: true,

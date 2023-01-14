@@ -13,7 +13,7 @@ describe('ValueObjects - UserBirthdate', () => {
 
     it('should be able to create with a valid birthdate', () => {
         const age = 18;
-        const birthDate = new Date(new Date().getDate(), new Date().getMonth(), new Date().getFullYear() - age);
+        const birthDate = new Date(new Date().getFullYear() - age, new Date().getMonth(), new Date().getDate());
         const valueObject = new UserBirthdate(birthDate);
 
         expect(valueObject).toBeDefined();
@@ -21,7 +21,7 @@ describe('ValueObjects - UserBirthdate', () => {
 
     it('should be able to create if has exactly 10 years old', () => {
         const age = 10;
-        const birthDate = new Date(new Date().getDate(), new Date().getMonth(), new Date().getFullYear() - age);
+        const birthDate = new Date(new Date().getFullYear() - age, new Date().getMonth(), new Date().getDate());
 
         const valueObject = new UserBirthdate(birthDate);
 
@@ -30,7 +30,7 @@ describe('ValueObjects - UserBirthdate', () => {
 
     it('should not be able to create less than 10 years old birthdate', () => {
         const age = 9;
-        const birthDate = new Date(new Date().getDate(), new Date().getMonth(), new Date().getFullYear() - age);
+        const birthDate = new Date(new Date().getFullYear() - age, new Date().getMonth(), new Date().getDate());
 
         const createValueObject = () => new UserBirthdate(birthDate);
 

@@ -4,6 +4,7 @@ import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email
 import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
 import { UserPassword } from "@/domain/entities/user/value-objects/password/user_password";
 import { UserPhone } from "@/domain/entities/user/value-objects/phone/user_phone";
+import { ValueObjectOptions } from "@/domain/models/interfaces/value-object-options.interface";
 import { RawUserEntity } from "../schema/user_schema";
 
 export class TypeOrmUserMapper {
@@ -22,11 +23,11 @@ export class TypeOrmUserMapper {
 
     static toDomain(raw: RawUserEntity): UserEntity {
         return new UserEntity({
-            email: new UserEmail(raw.email),
-            birthDate: new UserBirthdate(raw.birthDate),
-            name: new UserName(raw.name),
-            password: new UserPassword(raw.password),
-            phone: new UserPhone(raw.phone),
+            email: new UserEmail(raw.email, { validate: false }),
+            birthDate: new UserBirthdate(raw.birthDate, { validate: false }),
+            name: new UserName(raw.name, { validate: false }),
+            password: new UserPassword(raw.password, { validate: false }),
+            phone: new UserPhone(raw.phone, { validate: false }),
         }, {
             id: raw.id,
             createdAt: raw.createdAt,

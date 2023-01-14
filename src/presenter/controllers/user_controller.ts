@@ -30,7 +30,7 @@ export class UserController {
                 email,
                 name,
                 phone,
-                birthDate,
+                birthDate: new Date(birthDate),
                 password,
             });
 

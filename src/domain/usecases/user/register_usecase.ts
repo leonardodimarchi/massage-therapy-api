@@ -34,11 +34,6 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         birthDate,
         password,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
-        const hasUserWithEmail = await this.repository.getByEmail(email);
-
-        if (hasUserWithEmail) 
-            throw new ValidationException('Email já cadastrado');
-
         const userToCreate = new UserEntity({
             email: new UserEmail(email),
             name: new UserName(name),
@@ -46,6 +41,11 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
             birthDate: new UserBirthdate(birthDate),
             password: new UserPassword(password),
         });
+
+        const hasUserWithEmail = await this.repository.getByEmail(email);
+
+        if (hasUserWithEmail) 
+            throw new ValidationException('Email já cadastrado');
         
         userToCreate.password = new UserPassword(await this.bcryptService.hash(password));
 

@@ -1,11 +1,22 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { ValueObjectOptions } from "@/domain/models/interfaces/value-object-options.interface";
 
 export class UserPhone {
-    constructor(value: string) {
-        const isValid = this.validate(value);
+    constructor(value: string, options?: ValueObjectOptions) {
+        const defaultOptions: ValueObjectOptions = {
+            validate: true,
+        }
 
-        if (!isValid)
-            throw new ValidationException('Telefone inválido.');
+        const {
+            validate
+        } = Object.assign(defaultOptions, options);
+
+        if (validate) {
+            const isValid = this.validate(value);
+
+            if (!isValid)
+                throw new ValidationException('Telefone inválido.');
+        }
 
         this.phone = value;
     }
