@@ -1,5 +1,5 @@
 import { JwtService } from "../../../domain/contracts/services/jwt_service";
-import { UserEntity } from "../../../domain/entities/user_entity";
+import { UserEntity } from "../../entities/user/user_entity";
 import { JwtInterface } from "@/domain/models/interfaces/jwt.interface";
 
 export interface LoginUseCaseInput {
@@ -20,7 +20,7 @@ export class LoginUsecase implements UseCase<LoginUseCaseInput, LoginUseCaseOutp
         return {
             jwt: {
                 access_token: this.jwtService.sign({
-                    email: user.email,
+                    email: user.email.value,
                     sub: user.id,
                 }),
             },

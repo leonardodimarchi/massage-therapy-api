@@ -1,8 +1,22 @@
-import { UserEntity } from '@/domain/entities/user_entity';
+import { UserProps } from '@/domain/entities/user/user_entity';
+import { EntityProps } from '@/domain/shared/entity';
+import { Replace } from '@/helpers/replace';
 import { EntitySchema } from 'typeorm';
 import { BaseSchemaColumns } from './base_schema_columns';
 
-export const UserSchema = new EntitySchema<UserEntity>({
+type EntityFields = UserProps & EntityProps;
+
+type EntityFieldsToAddOrReplace = {
+  email: string;
+  name: string;
+  password: string;
+  birthDate: Date;
+  phone: string;
+};
+
+export type RawUserEntity = Replace<EntityFields, EntityFieldsToAddOrReplace>;
+
+export const UserSchema = new EntitySchema<RawUserEntity>({
   name: 'Users',
   tableName: 'users',
   columns: {

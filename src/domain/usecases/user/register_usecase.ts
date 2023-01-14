@@ -1,8 +1,12 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
+import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
+import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
+import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
+import { UserPassword } from "@/domain/entities/user/value-objects/password/user_password";
+import { UserPhone } from "@/domain/entities/user/value-objects/phone/user_phone";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { UserValidator } from "@/domain/validators/user_validator";
 
 export interface RegisterUseCaseInput {
     email: string;
@@ -30,35 +34,21 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         birthDate,
         password,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
-        if (!UserValidator.isValidEmail(email))
-            throw new ValidationException('Email inválido');
-
-        if (!UserValidator.isValidName(name))
-            throw new ValidationException('Nome inválido');
-
-        if (!UserValidator.isValidPhone(phone))
-            throw new ValidationException('Telefone inválido');
-
-        if (!UserValidator.isValidBirthDate(birthDate))
-            throw new ValidationException('Data de nascimento inválida');
-
-        if (!UserValidator.isValidPassword(password))
-            throw new ValidationException('Senha inválida');
+        const userToCreate = new UserEntity({
+            email: new UserEmail(email),
+            name: new UserName(name),
+            phone: new UserPhone(phone),
+            birthDate: new UserBirthdate(birthDate),
+            password: new UserPassword(password),
+        });
 
         const hasUserWithEmail = await this.repository.getByEmail(email);
 
         if (hasUserWithEmail) 
             throw new ValidationException('Email já cadastrado');
+        
+        userToCreate.password = new UserPassword(await this.bcryptService.hash(password));
 
-        password = await this.bcryptService.hash(password);
-
-        const userToCreate = new UserEntity({
-            email,
-            name,
-            phone,
-            birthDate,
-            password,
-        });
         const createdUser = await this.repository.register(userToCreate);
 
         return {

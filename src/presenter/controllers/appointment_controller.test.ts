@@ -1,4 +1,4 @@
-import { UserEntity } from "@/domain/entities/user_entity";
+import { UserEntity } from "@/domain/entities/user/user_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { PaginatedItems } from "@/domain/models/interfaces/paginated_items.interface";
 import { CreateAppointmentUsecase } from "@/domain/usecases/appointment/create_appointment_usecase";

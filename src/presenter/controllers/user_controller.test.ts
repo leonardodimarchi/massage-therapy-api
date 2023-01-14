@@ -19,7 +19,7 @@ describe('UserController', () => {
         const params: CreateUserPayload = {
             email: 'Mocked email',
             name: 'Mocked Name',
-            birthDate: new Date(11, 10, 2000),
+            birthDate: new Date(11, 10, 2000).toISOString(),
             phone: 'Mocked phone',
             password: '123456'
         };
