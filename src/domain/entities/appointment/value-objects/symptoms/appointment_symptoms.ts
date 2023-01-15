@@ -1,11 +1,22 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { ValueObjectOptions } from "@/domain/models/interfaces/value-object-options.interface";
 
 export class AppointmentSymptoms {
-    constructor(symptoms: string) {
-        const hasValidLength = this.validateLength(symptoms);
+    constructor(symptoms: string, options?: ValueObjectOptions) {
+        const defaultOptions: ValueObjectOptions = {
+            validate: true,
+        }
 
-        if (!hasValidLength)
-            throw new ValidationException('Os sintomas devem ser descritos em ao menos 3 caracteres e no máximo 1024 caracteres.');
+        const {
+            validate
+        } = Object.assign(defaultOptions, options);
+
+        if (validate) {
+            const hasValidLength = this.validateLength(symptoms);
+
+            if (!hasValidLength)
+                throw new ValidationException('Os sintomas devem ser descritos em ao menos 3 caracteres e no máximo 1024 caracteres.');
+        }
 
         this.symptoms = symptoms;
     }

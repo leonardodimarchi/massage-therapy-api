@@ -1,11 +1,22 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { ValueObjectOptions } from "@/domain/models/interfaces/value-object-options.interface";
 
 export class AppointmentComplaint {
-    constructor(complaint: string) {
-        const hasValidLength = this.validateComplaintLength(complaint);
+    constructor(complaint: string, options?: ValueObjectOptions) {
+        const defaultOptions: ValueObjectOptions = {
+            validate: true,
+        }
 
-        if (!hasValidLength)
-            throw new ValidationException('A descrição deve possuir entre 5 e 1024 caracteres.');
+        const {
+            validate
+        } = Object.assign(defaultOptions, options);
+
+        if (validate) {
+            const hasValidLength = this.validateComplaintLength(complaint);
+
+            if (!hasValidLength)
+                throw new ValidationException('A descrição deve possuir entre 5 e 1024 caracteres.');
+        }
 
         this.complaint = complaint;
     }

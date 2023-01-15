@@ -1,4 +1,5 @@
 import { ValidationException } from "@/domain/exceptions/validation_exception";
+import { ValueObjectOptions } from "@/domain/models/interfaces/value-object-options.interface";
 
 export interface AppointmentDateRangeProps {
     startsAt: Date;
@@ -6,20 +7,30 @@ export interface AppointmentDateRangeProps {
 }
 
 export class AppointmentDateRange {
-    constructor(range: AppointmentDateRangeProps) {
-        const haveSameDay = this.haveSameDay(range);
-        const endIsAfterStart = this.endIsAfterStart(range);
-        const startsAfterNow = this.startsAfterNow(range);
+    constructor(range: AppointmentDateRangeProps, options?: ValueObjectOptions) {
+        const defaultOptions: ValueObjectOptions = {
+            validate: true,
+        }
 
-        if (!haveSameDay)
-            throw new ValidationException('A data inicial e final do agendamento não podem ser em dias diferentes');
+        const {
+            validate
+        } = Object.assign(defaultOptions, options);
 
-        if (!endIsAfterStart)
-            throw new ValidationException('A data/horário final do agendamento não pode ser antes da data/horário inicial');
+        if (validate) {
+            const haveSameDay = this.haveSameDay(range);
+            const endIsAfterStart = this.endIsAfterStart(range);
+            const startsAfterNow = this.startsAfterNow(range);
 
-        if (!startsAfterNow)
-            throw new ValidationException('A data/horário de agendamento não pode ser antes da data/horário atual');
-            
+            if (!haveSameDay)
+                throw new ValidationException('A data inicial e final do agendamento não podem ser em dias diferentes');
+
+            if (!endIsAfterStart)
+                throw new ValidationException('A data/horário final do agendamento não pode ser antes da data/horário inicial');
+
+            if (!startsAfterNow)
+                throw new ValidationException('A data/horário de agendamento não pode ser antes da data/horário atual');
+        }
+
         this.range = range;
     }
 

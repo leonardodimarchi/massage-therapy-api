@@ -29,11 +29,11 @@ export class TypeOrmAppointmentMapper {
         const endsAt = raw.endsAt;
 
         return new AppointmentEntity({
-            complaint: new AppointmentComplaint(raw.complaint),
-            dateRange: new AppointmentDateRange({ startsAt, endsAt }),
+            complaint: new AppointmentComplaint(raw.complaint, { validate: false }),
+            dateRange: new AppointmentDateRange({ startsAt, endsAt }, { validate: false }),
             isUnderMedicalTreatment: raw.isUnderMedicalTreatment,
             status: raw.status,
-            symptoms: new AppointmentSymptoms(raw.symptoms),
+            symptoms: new AppointmentSymptoms(raw.symptoms, { validate: false }),
             userId: raw.userId,
             isPregnant: raw.isPregnant,
             pregnantWeeks: raw.pregnantWeeks,
