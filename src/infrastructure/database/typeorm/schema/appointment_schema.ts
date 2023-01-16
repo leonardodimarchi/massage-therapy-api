@@ -1,7 +1,7 @@
 import { EntitySchema } from 'typeorm';
 import { BaseSchemaColumns } from './base_schema_columns';
 import { AppointmentProps } from '@/domain/entities/appointment/appointment_entity';
-import { AppointmentStatusEnum } from '@/domain/models/enums/appointment_status.enum';
+import { AppointmentStatusEnum } from '@/domain/entities/appointment/enum/appointment_status.enum';
 import { EntityProps } from '@/domain/shared/entity';
 import { Replace } from '@/helpers/replace';
 

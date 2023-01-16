@@ -4,7 +4,7 @@ import { AppointmentComplaint } from "@/domain/entities/appointment/value-object
 import { AppointmentDateRange } from "@/domain/entities/appointment/value-objects/date-range/appointment_date_range";
 import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/symptoms/appointment_symptoms";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
+import { AppointmentStatusEnum } from "@/domain/entities/appointment/enum/appointment_status.enum";
 
 export interface CreateAppointmentUsecaseInput {
     userId: number;

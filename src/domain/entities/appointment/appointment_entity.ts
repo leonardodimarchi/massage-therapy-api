@@ -1,5 +1,5 @@
 import { Replace } from "src/helpers/replace";
-import { AppointmentStatusEnum } from "../../models/enums/appointment_status.enum";
+import { AppointmentStatusEnum } from "./enum/appointment_status.enum";
 import { EntityProps, Entity } from "../../shared/entity";
 import { UserEntity } from "../user/user_entity";
 import { AppointmentComplaint } from "./value-objects/complaint/appointment_complaint";
