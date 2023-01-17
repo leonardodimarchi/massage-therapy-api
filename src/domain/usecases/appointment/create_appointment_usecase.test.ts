@@ -1,6 +1,6 @@
 import { AppointmentEntity } from "@/domain/entities/appointment/appointment_entity";
 import { ValidationException } from "@/domain/exceptions/validation_exception";
-import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
+import { AppointmentStatusEnum } from "@/domain/entities/appointment/enum/appointment_status.enum";
 import { CreateAppointmentUsecase, CreateAppointmentUsecaseInput } from "@/domain/usecases/appointment/create_appointment_usecase";
 import { ONE_MILLISECOND } from "@/helpers/date_constants";
 import { InMemoryAppointmentRepository } from "test/repositories/in_memory_appointment_repository";

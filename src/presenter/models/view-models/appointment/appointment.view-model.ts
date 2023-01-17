@@ -1,4 +1,4 @@
-import { AppointmentStatusEnum } from "@/domain/models/enums/appointment_status.enum";
+import { AppointmentStatusEnum } from "@/domain/entities/appointment/enum/appointment_status.enum";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { BaseEntityViewModel } from "../shared/base-entity.view-model";
 
