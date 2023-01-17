@@ -1,29 +1,19 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsString } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { BaseEntityViewModel } from "../shared/base-entity.view-model";
 
 export class UserViewModel extends BaseEntityViewModel {
-    @ApiProperty({
-        required: true,
-    })
-    @IsString({ message: 'É necessário enviar um e-mail válido' })
+    @ApiProperty()
     email: string;
 
-    @ApiProperty({
-        required: true,
-    })
-    @IsString({ message: 'É necessário enviar um nome válido' })
+    @ApiProperty()
     name: string;
 
-    @ApiProperty({
-        required: true,
-    })
-    @IsString({ message: 'É necessário enviar um telefone válido' })
+    @ApiProperty()
     phone: string;
 
-    @ApiProperty({
-        required: true,
-    })
-    @IsDateString({}, { message: 'É necessário enviar uma data de nascimento válida' })
+    @ApiProperty()
     birthDate: Date;
+
+    @ApiPropertyOptional()
+    diseaseHistory?: string;
 }
