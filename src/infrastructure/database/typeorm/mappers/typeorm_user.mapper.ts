@@ -1,10 +1,10 @@
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
+import { UserDiseaseHistory } from "@/domain/entities/user/value-objects/disease-history/disease_history";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
 import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
 import { UserPassword } from "@/domain/entities/user/value-objects/password/user_password";
 import { UserPhone } from "@/domain/entities/user/value-objects/phone/user_phone";
-import { ValueObjectOptions } from "@/domain/models/interfaces/value-object-options.interface";
 import { RawUserEntity } from "../schema/user_schema";
 
 export class TypeOrmUserMapper {
@@ -18,6 +18,7 @@ export class TypeOrmUserMapper {
             phone: user.phone.value,
             updatedAt: user.updatedAt,
             createdAt: user.createdAt,
+            ...user.diseaseHistory && { diseaseHistory: user.diseaseHistory.value },
         };
     }
 
@@ -28,6 +29,7 @@ export class TypeOrmUserMapper {
             name: new UserName(raw.name, { validate: false }),
             password: new UserPassword(raw.password, { validate: false }),
             phone: new UserPhone(raw.phone, { validate: false }),
+            ...raw.diseaseHistory && { diseaseHistory: new UserDiseaseHistory(raw.diseaseHistory, { validate: false }) },
         }, {
             id: raw.id,
             createdAt: raw.createdAt,

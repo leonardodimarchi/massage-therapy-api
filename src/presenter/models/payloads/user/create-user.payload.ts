@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { IsDate, IsDateString, IsString } from "class-validator";
+import { IsDate, IsDateString, IsOptional, IsString } from "class-validator";
 
 export class CreateUserPayload {
     @ApiProperty({
@@ -32,4 +32,9 @@ export class CreateUserPayload {
     })
     @IsString({ message: 'É necessário enviar uma senha válida' })
     password: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsString({ message: 'É necessário enviar um histórico válido de doenças, lesões e cirurgias' })
+    diseaseHistory?: string;
 }

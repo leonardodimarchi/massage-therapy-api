@@ -10,7 +10,8 @@ export class UserViewModelMapper {
             email: entity.email.value,
             name: entity.name.value,
             phone: entity.phone.value,
-            updatedAt: entity.updatedAt
+            updatedAt: entity.updatedAt,
+            ...entity.diseaseHistory && { diseaseHistory: entity.diseaseHistory.value },
         }
     }
 }
