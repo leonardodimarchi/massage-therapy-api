@@ -2,6 +2,7 @@ import { UserRepository } from "@/domain/contracts/repositories/user_repository"
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
+import { UserDiseaseHistory } from "@/domain/entities/user/value-objects/disease-history/disease_history";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
 import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
 import { UserPassword } from "@/domain/entities/user/value-objects/password/user_password";
@@ -14,6 +15,7 @@ export interface RegisterUseCaseInput {
     phone: string;
     birthDate: Date;
     password: string;
+    diseaseHistory?: string;
 }
 
 export interface RegisterUseCaseOutput {
@@ -33,6 +35,7 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         phone,
         birthDate,
         password,
+        diseaseHistory,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
         const userToCreate = new UserEntity({
             email: new UserEmail(email),
@@ -40,6 +43,7 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
             phone: new UserPhone(phone),
             birthDate: new UserBirthdate(birthDate),
             password: new UserPassword(password),
+            ...diseaseHistory && { diseaseHistory: new UserDiseaseHistory(diseaseHistory) },
         });
 
         const hasUserWithEmail = await this.repository.getByEmail(email);

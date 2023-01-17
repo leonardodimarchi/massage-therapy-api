@@ -12,6 +12,7 @@ type EntityFieldsToAddOrReplace = {
   password: string;
   birthDate: Date;
   phone: string;
+  diseaseHistory?: string;
 };
 
 export type RawUserEntity = Replace<EntityFields, EntityFieldsToAddOrReplace>;
@@ -23,16 +24,16 @@ export const UserSchema = new EntitySchema<RawUserEntity>({
     ...BaseSchemaColumns,
     email: {
       type: String,
-      length: 50,
+      length: 512,
       unique: true,
     },
     name: {
       type: String,
-      length: 50,
+      length: 1024,
     },
     password: {
       type: String,
-      length: 50,
+      length: 512,
     },
     birthDate: {
       type: Date,
@@ -40,6 +41,11 @@ export const UserSchema = new EntitySchema<RawUserEntity>({
     phone: {
       type: String,
       length: 50,
+    },
+    diseaseHistory: {
+      type: String,
+      length: 1024,
+      nullable: true,
     }
   },
   orderBy: {

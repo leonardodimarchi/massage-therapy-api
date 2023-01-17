@@ -23,6 +23,7 @@ export class UserController {
             phone,
             birthDate,
             password,
+            diseaseHistory,
         }: CreateUserPayload
     ): Promise<UserViewModel> {
         try {
@@ -32,6 +33,7 @@ export class UserController {
                 phone,
                 birthDate: new Date(birthDate),
                 password,
+                diseaseHistory,
             });
 
             return UserViewModelMapper.toModel(createdUser);
