@@ -1,6 +1,7 @@
+import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
-import { IsDate, IsDateString, IsOptional, IsString } from "class-validator";
+import { IsDate, IsDateString, IsEnum, IsOptional, IsString } from "class-validator";
 
 export class CreateUserPayload {
     @ApiProperty({
@@ -32,6 +33,12 @@ export class CreateUserPayload {
     })
     @IsString({ message: 'É necessário enviar uma senha válida' })
     password: string;
+
+    @ApiProperty({
+        required: true,
+    })
+    @IsEnum(UserGenderEnum, { message: 'É necessário enviar um gênero valido' })
+    gender: UserGenderEnum;
 
     @ApiPropertyOptional()
     @IsOptional()

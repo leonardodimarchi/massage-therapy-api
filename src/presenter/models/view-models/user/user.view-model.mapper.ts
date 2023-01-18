@@ -11,6 +11,7 @@ export class UserViewModelMapper {
             name: entity.name.value,
             phone: entity.phone.value,
             updatedAt: entity.updatedAt,
+            gender: entity.gender,
             ...entity.diseaseHistory && { diseaseHistory: entity.diseaseHistory.value },
         }
     }

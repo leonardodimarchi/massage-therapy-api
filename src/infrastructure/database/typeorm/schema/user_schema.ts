@@ -1,3 +1,4 @@
+import { UserGenderEnum } from '@/domain/entities/user/enum/user_gender.enum';
 import { UserProps } from '@/domain/entities/user/user_entity';
 import { EntityProps } from '@/domain/shared/entity';
 import { Replace } from '@/helpers/replace';
@@ -41,6 +42,10 @@ export const UserSchema = new EntitySchema<RawUserEntity>({
     phone: {
       type: String,
       length: 50,
+    },
+    gender: {
+      type: String,
+      enum: UserGenderEnum,
     },
     diseaseHistory: {
       type: String,

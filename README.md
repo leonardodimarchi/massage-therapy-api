@@ -15,6 +15,8 @@ erDiagram
         string name
         string phone
         string password
+        string diseaseHistory
+        UserGenderEnum gender
         Date birthDate
     }
 
@@ -30,7 +32,7 @@ erDiagram
         Date endsAt
         boolean isPregnant
         number pregnantWeeks
-        AppointmentStatus status
+        AppointmentStatusEnum status
 
         number userId FK
     }
@@ -38,11 +40,17 @@ erDiagram
 
 ```mermaid
 classDiagram
-class AppointmentStatus {
-    <<enumeration>>
-    PENDING
-    SCHEDULED
-    COMPLETED
-    REPROVED
-}
+    class UserGenderEnum {
+        <<enumeration>>
+        MALE
+        FEMALE
+    }
+
+    class AppointmentStatusEnum {
+        <<enumeration>>
+        PENDING
+        SCHEDULED
+        COMPLETED
+        REPROVED
+    }
 ```
