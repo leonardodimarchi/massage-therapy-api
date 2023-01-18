@@ -1,5 +1,6 @@
 import { Entity, EntityProps } from "../../shared/entity";
 import { AppointmentEntity } from "../appointment/appointment_entity";
+import { UserGenderEnum } from "./enum/user_gender.enum";
 import { UserBirthdate } from "./value-objects/birthdate/user_birthdate";
 import { UserDiseaseHistory } from "./value-objects/disease-history/disease_history";
 import { UserEmail } from "./value-objects/email/user_email";
@@ -13,6 +14,7 @@ export interface UserProps {
   phone: UserPhone;
   birthDate: UserBirthdate;
   password: UserPassword;
+  gender: UserGenderEnum;
   diseaseHistory?: UserDiseaseHistory;
 
   appointments?: AppointmentEntity[];
@@ -65,6 +67,14 @@ export class UserEntity extends Entity {
 
   public get password(): UserPassword {
     return this.props.password;
+  }
+
+  public set gender(gender: UserGenderEnum) {
+    this.props.gender = gender;
+  }
+  
+  public get gender(): UserGenderEnum {
+    return this.props.gender;
   }
 
   public set diseaseHistory(diseaseHistory: UserDiseaseHistory) {

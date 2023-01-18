@@ -18,6 +18,7 @@ export class TypeOrmUserMapper {
             phone: user.phone.value,
             updatedAt: user.updatedAt,
             createdAt: user.createdAt,
+            gender: user.gender,
             ...user.diseaseHistory && { diseaseHistory: user.diseaseHistory.value },
         };
     }
@@ -29,6 +30,7 @@ export class TypeOrmUserMapper {
             name: new UserName(raw.name, { validate: false }),
             password: new UserPassword(raw.password, { validate: false }),
             phone: new UserPhone(raw.phone, { validate: false }),
+            gender: raw.gender,
             ...raw.diseaseHistory && { diseaseHistory: new UserDiseaseHistory(raw.diseaseHistory, { validate: false }) },
         }, {
             id: raw.id,

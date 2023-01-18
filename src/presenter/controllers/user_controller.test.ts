@@ -5,6 +5,7 @@ import { UserController } from "@/presenter/controllers/user_controller";
 import { CreateUserPayload } from "@/presenter/models/payloads/user/create-user.payload";
 import { UserViewModelMapper } from "../models/view-models/user/user.view-model.mapper";
 import { makeUser } from "test/factories/user_factory";
+import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 
 describe('UserController', () => {
     let controller: UserController;
@@ -21,7 +22,8 @@ describe('UserController', () => {
             name: 'Mocked Name',
             birthDate: new Date(11, 10, 2000).toISOString(),
             phone: 'Mocked phone',
-            password: '123456'
+            password: '123456',
+            gender: UserGenderEnum.MALE,
         };
 
         const usecaseOutput = makeUser();

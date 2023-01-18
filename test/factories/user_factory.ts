@@ -1,3 +1,4 @@
+import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { UserEntity, UserProps } from "@/domain/entities/user/user_entity";
 import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
@@ -21,6 +22,7 @@ export function makeUser(overrideProps: MakeUserOverrideProps = {}): UserEntity 
         birthDate: new UserBirthdate(new Date(11, 10, 2000)),
         phone: new UserPhone('15998489760'),
         password: new UserPassword('123456'),
+        gender: UserGenderEnum.MALE,
         ...override,
     }, {
         id: 1,
