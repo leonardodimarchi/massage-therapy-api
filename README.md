@@ -19,20 +19,6 @@ erDiagram
         UserGenderEnum gender
         Date birthDate
     }
-```
-
-```mermaid
-classDiagram
-class UserGenderEnum {
-    <<enumeration>>
-    MALE
-    FEMALE
-}
-```
-
-```mermaid
-%%{init: {'theme':'base'}}%%
-erDiagram
 
     APPOINTMENT {
         number id PK
@@ -54,11 +40,17 @@ erDiagram
 
 ```mermaid
 classDiagram
-class AppointmentStatusEnum {
-    <<enumeration>>
-    PENDING
-    SCHEDULED
-    COMPLETED
-    REPROVED
-}
+    class UserGenderEnum {
+        <<enumeration>>
+        MALE
+        FEMALE
+    }
+
+    class AppointmentStatusEnum {
+        <<enumeration>>
+        PENDING
+        SCHEDULED
+        COMPLETED
+        REPROVED
+    }
 ```
