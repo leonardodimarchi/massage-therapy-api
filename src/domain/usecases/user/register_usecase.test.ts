@@ -1,4 +1,5 @@
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
+import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
 import { UserEmail } from "@/domain/entities/user/value-objects/email/user_email";
@@ -42,6 +43,7 @@ describe('RegisterUsecase', () => {
         phone: '15992280628',
         birthDate: new Date(11, 10, 2000),
         password: '123456',
+        gender: UserGenderEnum.MALE,
     };
 
     it('should register the new user', async () => {

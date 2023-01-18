@@ -1,3 +1,4 @@
+import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { BaseEntityViewModel } from "../shared/base-entity.view-model";
 
@@ -13,6 +14,9 @@ export class UserViewModel extends BaseEntityViewModel {
 
     @ApiProperty()
     birthDate: Date;
+
+    @ApiProperty()
+    gender: UserGenderEnum;
 
     @ApiPropertyOptional()
     diseaseHistory?: string;

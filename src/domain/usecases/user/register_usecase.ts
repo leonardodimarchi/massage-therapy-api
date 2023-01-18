@@ -1,5 +1,6 @@
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
+import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
 import { UserDiseaseHistory } from "@/domain/entities/user/value-objects/disease-history/disease_history";
@@ -15,6 +16,7 @@ export interface RegisterUseCaseInput {
     phone: string;
     birthDate: Date;
     password: string;
+    gender: UserGenderEnum;
     diseaseHistory?: string;
 }
 
@@ -35,6 +37,7 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         phone,
         birthDate,
         password,
+        gender,
         diseaseHistory,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
         const userToCreate = new UserEntity({
@@ -43,6 +46,7 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
             phone: new UserPhone(phone),
             birthDate: new UserBirthdate(birthDate),
             password: new UserPassword(password),
+            gender,
             ...diseaseHistory && { diseaseHistory: new UserDiseaseHistory(diseaseHistory) },
         });
 

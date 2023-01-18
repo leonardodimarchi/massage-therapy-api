@@ -1,4 +1,5 @@
 import { TestDateUtils } from 'test/utils/test_date_utils';
+import { UserGenderEnum } from './enum/user_gender.enum';
 import { UserEntity } from './user_entity';
 import { UserBirthdate } from './value-objects/birthdate/user_birthdate';
 import { UserEmail } from './value-objects/email/user_email';
@@ -22,6 +23,7 @@ describe('UserEntity', () => {
             birthDate: new UserBirthdate(new Date(11, 10, 2000)),
             phone: new UserPhone('15998489760'),
             password: new UserPassword('123456'),
+            gender: UserGenderEnum.MALE,
         })
 
         expect(entity).toBeDefined();
