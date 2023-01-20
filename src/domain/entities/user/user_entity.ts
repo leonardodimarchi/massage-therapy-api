@@ -21,13 +21,13 @@ export interface UserProps {
 }
 
 export class UserEntity extends Entity {
-  private props: UserProps;
-
   constructor(props: UserProps, entityProps?: EntityProps) {
     super(entityProps);
 
     this.props = props;
   }
+
+  private props: UserProps;
 
   public set email(email: UserEmail) {
     this.props.email = email;
