@@ -1,7 +1,6 @@
 import { Replace } from "src/helpers/replace";
 import { AppointmentStatusEnum } from "./enum/appointment_status.enum";
 import { EntityProps, Entity } from "../../shared/entity";
-import { UserEntity } from "../user/user_entity";
 import { AppointmentComplaint } from "./value-objects/complaint/appointment_complaint";
 import { AppointmentDateRange } from "./value-objects/date-range/appointment_date_range";
 import { AppointmentSymptoms } from "./value-objects/symptoms/appointment_symptoms";
@@ -16,7 +15,6 @@ export interface AppointmentProps {
     status: AppointmentStatusEnum;
 
     userId: number;
-    user?: UserEntity;
 }
 
 export class AppointmentEntity extends Entity {
@@ -89,9 +87,5 @@ export class AppointmentEntity extends Entity {
 
     public get userId(): number {
         return this.props.userId;
-    }
-
-    public get user(): UserEntity {
-        return this.props.user;
     }
 }

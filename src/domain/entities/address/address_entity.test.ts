@@ -12,6 +12,7 @@ describe('AddressEntity', () => {
             city: new City('Tatui'),
             neighborhood: new Neighborhood('Valid neighborhood'),
             houseNumber: 1,
+            userId: 1,
         });
 
         expect(entity).toBeDefined();

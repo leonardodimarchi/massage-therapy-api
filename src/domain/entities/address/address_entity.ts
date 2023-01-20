@@ -10,6 +10,7 @@ export interface AddressProps {
   city: City;
   neighborhood: Neighborhood;
   houseNumber: number;
+  userId: number;
 }
 
 export class AddressEntity extends Entity {
@@ -59,5 +60,9 @@ export class AddressEntity extends Entity {
   
   public get houseNumber(): number {
     return this.props.houseNumber;
+  }
+  
+  public get userId(): number {
+    return this.props.userId;
   }
 }
