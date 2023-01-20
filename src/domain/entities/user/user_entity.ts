@@ -85,7 +85,6 @@ export class UserEntity extends Entity {
     return this.props.diseaseHistory;
   }
   
-
   public get appointments(): AppointmentEntity[] {
     return this.props.appointments;
   }
