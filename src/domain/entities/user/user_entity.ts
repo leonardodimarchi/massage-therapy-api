@@ -1,4 +1,5 @@
 import { Entity, EntityProps } from "../../shared/entity";
+import { AddressEntity } from "../address/address_entity";
 import { AppointmentEntity } from "../appointment/appointment_entity";
 import { UserGenderEnum } from "./enum/user_gender.enum";
 import { UserBirthdate } from "./value-objects/birthdate/user_birthdate";
@@ -17,6 +18,7 @@ export interface UserProps {
   gender: UserGenderEnum;
   diseaseHistory?: UserDiseaseHistory;
 
+  address?: AddressEntity;
   appointments?: AppointmentEntity[];
 }
 

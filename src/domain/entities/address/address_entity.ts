@@ -1,4 +1,5 @@
 import { Entity, EntityProps } from "../../shared/entity";
+import { UserEntity } from "../user/user_entity";
 import { City } from "./value-objects/city/city";
 import { Neighborhood } from "./value-objects/neighborhood/neighborhood";
 import { PostalCode } from "./value-objects/postal-code/postal_code";
@@ -11,6 +12,8 @@ export interface AddressProps {
   neighborhood: Neighborhood;
   houseNumber: number;
   userId: number;
+
+  user?: UserEntity;
 }
 
 export class AddressEntity extends Entity {
@@ -64,5 +67,9 @@ export class AddressEntity extends Entity {
   
   public get userId(): number {
     return this.props.userId;
+  }
+
+  public get user(): UserEntity {
+    return this.props.user;
   }
 }

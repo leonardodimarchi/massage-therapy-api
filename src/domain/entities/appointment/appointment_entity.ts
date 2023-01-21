@@ -4,6 +4,7 @@ import { EntityProps, Entity } from "../../shared/entity";
 import { AppointmentComplaint } from "./value-objects/complaint/appointment_complaint";
 import { AppointmentDateRange } from "./value-objects/date-range/appointment_date_range";
 import { AppointmentSymptoms } from "./value-objects/symptoms/appointment_symptoms";
+import { UserEntity } from "../user/user_entity";
 
 export interface AppointmentProps {
     complaint: AppointmentComplaint;
@@ -15,6 +16,8 @@ export interface AppointmentProps {
     status: AppointmentStatusEnum;
 
     userId: number;
+
+    user?: UserEntity;
 }
 
 export class AppointmentEntity extends Entity {
@@ -88,4 +91,8 @@ export class AppointmentEntity extends Entity {
     public get userId(): number {
         return this.props.userId;
     }
+
+    public get user(): UserEntity {
+      return this.props.user;
+    }    
 }
