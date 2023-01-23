@@ -1,7 +1,8 @@
 import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { Transform } from "class-transformer";
-import { IsDate, IsDateString, IsEnum, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDateString, IsDefined, IsEnum, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+import { CreateAddressPayload } from "../address/create_address.payload";
 
 export class CreateUserPayload {
     @ApiProperty({
@@ -44,4 +45,11 @@ export class CreateUserPayload {
     @IsOptional()
     @IsString({ message: 'É necessário enviar um histórico válido de doenças, lesões e cirurgias' })
     diseaseHistory?: string;
+
+    @ApiProperty()
+    @IsDefined({ message: 'É necessário enviar um endereço' })
+    @IsObject()
+    @ValidateNested()
+    @Type(() => CreateAddressPayload)
+    address: CreateAddressPayload;
 }

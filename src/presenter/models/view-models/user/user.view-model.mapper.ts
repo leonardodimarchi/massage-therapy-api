@@ -1,4 +1,5 @@
 import { UserEntity } from "@/domain/entities/user/user_entity";
+import { AddressViewModelMapper } from "../address/address.view-model.mapper";
 import { UserViewModel } from "./user.view-model";
 
 export class UserViewModelMapper {
@@ -13,6 +14,7 @@ export class UserViewModelMapper {
             updatedAt: entity.updatedAt,
             gender: entity.gender,
             ...entity.diseaseHistory && { diseaseHistory: entity.diseaseHistory.value },
+            ...entity.address && { address: AddressViewModelMapper.toModel(entity.address) },
         }
     }
 }

@@ -74,7 +74,7 @@ export class UserEntity extends Entity {
   public set gender(gender: UserGenderEnum) {
     this.props.gender = gender;
   }
-  
+
   public get gender(): UserGenderEnum {
     return this.props.gender;
   }
@@ -82,11 +82,23 @@ export class UserEntity extends Entity {
   public set diseaseHistory(diseaseHistory: UserDiseaseHistory) {
     this.props.diseaseHistory = diseaseHistory;
   }
-  
+
   public get diseaseHistory(): UserDiseaseHistory {
     return this.props.diseaseHistory;
   }
-  
+
+  public set address(address: AddressEntity) {
+    this.props.address = address;
+  }
+
+  public get address(): AddressEntity {
+    return this.props.address;
+  }
+
+  public set appointments(appointments: AppointmentEntity[]) {
+    this.props.appointments = appointments;
+  }
+
   public get appointments(): AppointmentEntity[] {
     return this.props.appointments;
   }

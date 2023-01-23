@@ -28,15 +28,15 @@ export class AddressEntity extends Entity {
   public set postalCode(postalCode: PostalCode) {
     this.props.postalCode = postalCode;
   }
-  
+
   public get postalCode(): PostalCode {
     return this.props.postalCode;
   }
-  
+
   public set state(state: State) {
     this.props.state = state;
   }
-  
+
   public get state(): State {
     return this.props.state;
   }
@@ -44,27 +44,31 @@ export class AddressEntity extends Entity {
   public set city(city: City) {
     this.props.city = city;
   }
-  
+
   public get city(): City {
     return this.props.city;
   }
-  
+
   public set neighborhood(neighborhood: Neighborhood) {
     this.props.neighborhood = neighborhood;
   }
-  
+
   public get neighborhood(): Neighborhood {
     return this.props.neighborhood;
   }
-  
+
   public set houseNumber(houseNumber: number) {
     this.props.houseNumber = houseNumber;
   }
-  
+
   public get houseNumber(): number {
     return this.props.houseNumber;
   }
-  
+
+  public set userId(id: number) {
+    this.userId = id;
+  }
+
   public get userId(): number {
     return this.props.userId;
   }
