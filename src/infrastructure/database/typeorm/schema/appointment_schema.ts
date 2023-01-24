@@ -4,6 +4,7 @@ import { AppointmentProps } from '@/domain/entities/appointment/appointment_enti
 import { AppointmentStatusEnum } from '@/domain/entities/appointment/enum/appointment_status.enum';
 import { EntityProps } from '@/domain/shared/entity';
 import { Replace } from '@/helpers/replace';
+import { RawUserEntity } from './user_schema';
 
 type EntityFields = AppointmentProps & EntityProps;
 
@@ -14,6 +15,7 @@ type EntityFieldsToAddOrReplace = {
   symptoms: string;
   startsAt: Date;
   endsAt: Date;
+  user?: RawUserEntity,
 };
 
 export type RawAppointmentEntity = Replace<Omit<
@@ -68,8 +70,7 @@ export const AppointmentSchema = new EntitySchema<RawAppointmentEntity>({
     user: {
       type: 'many-to-one',
       target: 'users',
-      joinColumn: true,
-      inverseSide: 'Users'
+      inverseSide: 'appointments',
     }
   },
 });

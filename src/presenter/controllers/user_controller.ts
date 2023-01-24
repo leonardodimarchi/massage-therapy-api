@@ -2,7 +2,7 @@ import { Body, Controller, HttpException, HttpStatus, Post } from "@nestjs/commo
 import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { RegisterUsecase } from "@/domain/usecases/user/register_usecase";
 import { ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { CreateUserPayload } from "@/presenter/models/payloads/user/create-user.payload";
+import { CreateUserPayload } from "@/presenter/models/payloads/user/create_user.payload";
 import { UserViewModel } from "../models/view-models/user/user.view-model";
 import { UserViewModelMapper } from "../models/view-models/user/user.view-model.mapper";
 
@@ -25,6 +25,7 @@ export class UserController {
             password,
             gender,
             diseaseHistory,
+            address,
         }: CreateUserPayload
     ): Promise<UserViewModel> {
         try {
@@ -36,6 +37,11 @@ export class UserController {
                 password,
                 gender,
                 diseaseHistory,
+                city: address.city,
+                state: address.state,
+                neighborhood: address.neighborhood,
+                postalCode: address.postalCode,
+                houseNumber: address.houseNumber,
             });
 
             return UserViewModelMapper.toModel(createdUser);

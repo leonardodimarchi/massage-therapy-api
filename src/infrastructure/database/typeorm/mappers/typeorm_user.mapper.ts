@@ -6,6 +6,8 @@ import { UserName } from "@/domain/entities/user/value-objects/name/user_name";
 import { UserPassword } from "@/domain/entities/user/value-objects/password/user_password";
 import { UserPhone } from "@/domain/entities/user/value-objects/phone/user_phone";
 import { RawUserEntity } from "../schema/user_schema";
+import { TypeOrmAddressMapper } from "./typeorm_address.mapper";
+import { TypeOrmAppointmentMapper } from "./typeorm_appointment.mapper";
 
 export class TypeOrmUserMapper {
     static toSchema(user: UserEntity): RawUserEntity {
@@ -32,6 +34,8 @@ export class TypeOrmUserMapper {
             phone: new UserPhone(raw.phone, { validate: false }),
             gender: raw.gender,
             ...raw.diseaseHistory && { diseaseHistory: new UserDiseaseHistory(raw.diseaseHistory, { validate: false }) },
+            ...raw.appointments && { appointments: raw.appointments.map(TypeOrmAppointmentMapper.toDomain) },
+            ...raw.address && { address: TypeOrmAddressMapper.toDomain(raw.address) },
         }, {
             id: raw.id,
             createdAt: raw.createdAt,

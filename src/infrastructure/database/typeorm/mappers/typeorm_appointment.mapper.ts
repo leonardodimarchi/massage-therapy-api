@@ -3,6 +3,7 @@ import { AppointmentComplaint } from "@/domain/entities/appointment/value-object
 import { AppointmentDateRange } from "@/domain/entities/appointment/value-objects/date-range/appointment_date_range";
 import { AppointmentSymptoms } from "@/domain/entities/appointment/value-objects/symptoms/appointment_symptoms";
 import { RawAppointmentEntity } from "../schema/appointment_schema";
+import { TypeOrmUserMapper } from "./typeorm_user.mapper";
 
 export class TypeOrmAppointmentMapper {
     static toSchema(appointment: AppointmentEntity): RawAppointmentEntity {
@@ -37,6 +38,7 @@ export class TypeOrmAppointmentMapper {
             userId: raw.userId,
             isPregnant: raw.isPregnant,
             pregnantWeeks: raw.pregnantWeeks,
+            ...raw.user && { user: TypeOrmUserMapper.toDomain(raw.user)  },
         }, {
             id: raw.id,
             createdAt: raw.createdAt,

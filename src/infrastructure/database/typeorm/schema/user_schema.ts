@@ -3,6 +3,8 @@ import { UserProps } from '@/domain/entities/user/user_entity';
 import { EntityProps } from '@/domain/shared/entity';
 import { Replace } from '@/helpers/replace';
 import { EntitySchema } from 'typeorm';
+import { RawAddressEntity } from './address_schema';
+import { RawAppointmentEntity } from './appointment_schema';
 import { BaseSchemaColumns } from './base_schema_columns';
 
 type EntityFields = UserProps & EntityProps;
@@ -14,6 +16,9 @@ type EntityFieldsToAddOrReplace = {
   birthDate: Date;
   phone: string;
   diseaseHistory?: string;
+  
+  appointments?: RawAppointmentEntity[];
+  address?: RawAddressEntity;
 };
 
 export type RawUserEntity = Replace<EntityFields, EntityFieldsToAddOrReplace>;
@@ -60,7 +65,7 @@ export const UserSchema = new EntitySchema<RawUserEntity>({
     appointments: {
       type: 'one-to-many',
       target: 'appointments',
-      inverseSide: 'Appointments'
+      inverseSide: 'user'
     }
   }
 });
