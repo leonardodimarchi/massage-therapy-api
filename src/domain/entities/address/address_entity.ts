@@ -66,7 +66,7 @@ export class AddressEntity extends Entity {
   }
 
   public set userId(id: number) {
-    this.userId = id;
+    this.props.userId = id;
   }
 
   public get userId(): number {

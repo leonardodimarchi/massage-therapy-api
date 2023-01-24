@@ -12,6 +12,7 @@ export class AddressViewModelMapper {
             neighborhood: entity.neighborhood.value,
             postalCode: entity.postalCode.value,
             houseNumber: entity.houseNumber,
+            userId: entity.userId,
         }
     }
 }

@@ -16,4 +16,7 @@ export class AddressViewModel extends BaseEntityViewModel {
 
     @ApiProperty()
     houseNumber: number;
+
+    @ApiProperty()
+    userId: number;
 }

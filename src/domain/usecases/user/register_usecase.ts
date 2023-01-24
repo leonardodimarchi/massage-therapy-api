@@ -68,6 +68,15 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
             ...diseaseHistory && { diseaseHistory: new UserDiseaseHistory(diseaseHistory) },
         });
 
+        const address = new AddressEntity({
+            postalCode: new PostalCode(postalCode),
+            state: new State(state),
+            city: new City(city),
+            neighborhood: new Neighborhood(neighborhood),
+            houseNumber,
+            userId: 0,
+        });
+
         const hasUserWithEmail = await this.repository.getByEmail(email);
 
         if (hasUserWithEmail)
@@ -77,16 +86,11 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
 
         const createdUser = await this.repository.register(userToCreate);
 
-        const address = new AddressEntity({
-            postalCode: new PostalCode(postalCode),
-            state: new State(state),
-            city: new City(city),
-            neighborhood: new Neighborhood(neighborhood),
-            userId: createdUser.id,
-            houseNumber,
-        });
+        address.userId = createdUser.id;
 
-        await this.addressRepository.create(address);
+        const createdAddress = await this.addressRepository.create(address);
+
+        createdUser.address = createdAddress;
 
         return {
             createdUser,
