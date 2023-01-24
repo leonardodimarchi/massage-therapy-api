@@ -8,24 +8,42 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserController } from "@/presenter/controllers/user_controller";
 import { AuthModule } from "@/presenter/modules/auth_module";
 import { TypeOrmUserRepository } from "@/infra/database/typeorm/repositories/typeorm_user_repository";
+import { AddressRepository } from "@/domain/contracts/repositories/address_repository";
+import { TypeOrmAddressRepository } from "@/infra/database/typeorm/repositories/typeorm_address_repository";
+import { AddressSchema } from "@/infra/database/typeorm/schema/address_schema";
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([UserSchema]),
+        TypeOrmModule.forFeature([
+            UserSchema,
+            AddressSchema,
+        ]),
         AuthModule,
     ],
     controllers: [UserController],
     providers: [
         {
             provide: RegisterUsecase,
-            useFactory: (repository: UserRepository, bcryptService: PasswordEncryptionService) => {
-                return new RegisterUsecase(repository, bcryptService);
+            useFactory: (
+                repository: UserRepository,
+                addressRepository: AddressRepository,
+                bcryptService: PasswordEncryptionService
+            ) => {
+                return new RegisterUsecase(
+                    repository,
+                    addressRepository,
+                    bcryptService,
+                );
             },
-            inject: [UserRepository, PasswordEncryptionService]
+            inject: [UserRepository, AddressRepository, PasswordEncryptionService]
         },
         {
             provide: UserRepository,
             useClass: TypeOrmUserRepository,
+        },
+        {
+            provide: AddressRepository,
+            useClass: TypeOrmAddressRepository,
         },
         {
             provide: PasswordEncryptionService,

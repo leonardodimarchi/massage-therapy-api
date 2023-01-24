@@ -26,10 +26,10 @@ export abstract class Entity {
     }
 
     public set updatedAt(updatedAt: Date) {
-      this._updatedAt = updatedAt;
+        this._updatedAt = updatedAt;
     }
-    
+
     public get updatedAt(): Date {
-      return this._updatedAt;
+        return this._updatedAt;
     }
 }

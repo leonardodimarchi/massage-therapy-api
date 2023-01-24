@@ -1,5 +1,11 @@
+import { AddressRepository } from "@/domain/contracts/repositories/address_repository";
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
+import { AddressEntity } from "@/domain/entities/address/address_entity";
+import { City } from "@/domain/entities/address/value-objects/city/city";
+import { Neighborhood } from "@/domain/entities/address/value-objects/neighborhood/neighborhood";
+import { PostalCode } from "@/domain/entities/address/value-objects/postal-code/postal_code";
+import { State } from "@/domain/entities/address/value-objects/state/state";
 import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
@@ -18,6 +24,12 @@ export interface RegisterUseCaseInput {
     password: string;
     gender: UserGenderEnum;
     diseaseHistory?: string;
+
+    state: string;
+    city: string;
+    postalCode: string;
+    neighborhood: string;
+    houseNumber: number;
 }
 
 export interface RegisterUseCaseOutput {
@@ -28,8 +40,9 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
 
     constructor(
         private readonly repository: UserRepository,
+        private readonly addressRepository: AddressRepository,
         private readonly bcryptService: PasswordEncryptionService,
-    ) {}
+    ) { }
 
     public async call({
         email,
@@ -39,6 +52,11 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         password,
         gender,
         diseaseHistory,
+        state,
+        city,
+        postalCode,
+        neighborhood,
+        houseNumber,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
         const userToCreate = new UserEntity({
             email: new UserEmail(email),
@@ -50,14 +68,29 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
             ...diseaseHistory && { diseaseHistory: new UserDiseaseHistory(diseaseHistory) },
         });
 
+        const address = new AddressEntity({
+            postalCode: new PostalCode(postalCode),
+            state: new State(state),
+            city: new City(city),
+            neighborhood: new Neighborhood(neighborhood),
+            houseNumber,
+            userId: 0,
+        });
+
         const hasUserWithEmail = await this.repository.getByEmail(email);
 
-        if (hasUserWithEmail) 
+        if (hasUserWithEmail)
             throw new ValidationException('Email já cadastrado');
-        
+
         userToCreate.password = new UserPassword(await this.bcryptService.hash(password));
 
         const createdUser = await this.repository.register(userToCreate);
+
+        address.userId = createdUser.id;
+
+        const createdAddress = await this.addressRepository.create(address);
+
+        createdUser.address = createdAddress;
 
         return {
             createdUser,

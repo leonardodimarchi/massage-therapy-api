@@ -1,4 +1,5 @@
 import { Entity, EntityProps } from "../../shared/entity";
+import { AddressEntity } from "../address/address_entity";
 import { AppointmentEntity } from "../appointment/appointment_entity";
 import { UserGenderEnum } from "./enum/user_gender.enum";
 import { UserBirthdate } from "./value-objects/birthdate/user_birthdate";
@@ -17,17 +18,18 @@ export interface UserProps {
   gender: UserGenderEnum;
   diseaseHistory?: UserDiseaseHistory;
 
+  address?: AddressEntity;
   appointments?: AppointmentEntity[];
 }
 
 export class UserEntity extends Entity {
-  private props: UserProps;
-
   constructor(props: UserProps, entityProps?: EntityProps) {
     super(entityProps);
 
     this.props = props;
   }
+
+  private props: UserProps;
 
   public set email(email: UserEmail) {
     this.props.email = email;
@@ -72,7 +74,7 @@ export class UserEntity extends Entity {
   public set gender(gender: UserGenderEnum) {
     this.props.gender = gender;
   }
-  
+
   public get gender(): UserGenderEnum {
     return this.props.gender;
   }
@@ -80,11 +82,22 @@ export class UserEntity extends Entity {
   public set diseaseHistory(diseaseHistory: UserDiseaseHistory) {
     this.props.diseaseHistory = diseaseHistory;
   }
-  
+
   public get diseaseHistory(): UserDiseaseHistory {
     return this.props.diseaseHistory;
   }
-  
+
+  public set address(address: AddressEntity) {
+    this.props.address = address;
+  }
+
+  public get address(): AddressEntity {
+    return this.props.address;
+  }
+
+  public set appointments(appointments: AppointmentEntity[]) {
+    this.props.appointments = appointments;
+  }
 
   public get appointments(): AppointmentEntity[] {
     return this.props.appointments;

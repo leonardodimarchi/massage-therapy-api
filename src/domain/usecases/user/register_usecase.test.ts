@@ -10,19 +10,24 @@ import { ValidationException } from "@/domain/exceptions/validation_exception";
 import { RegisterUsecase, RegisterUseCaseInput } from "@/domain/usecases/user/register_usecase";
 import { MockProxy, mock } from "jest-mock-extended";
 import { makeUser } from "test/factories/user_factory";
+import { InMemoryAddressRepository } from "test/repositories/in_memory_address_repository";
 import { InMemoryUserRepository } from "test/repositories/in_memory_user_repository";
 
 describe('RegisterUsecase', () => {
-    let repository: InMemoryUserRepository;
-    let encryptationService: MockProxy<PasswordEncryptionService>;
     let usecase: RegisterUsecase;
+
+    let repository: InMemoryUserRepository;
+    let addressRepository: InMemoryAddressRepository;
+    let encryptationService: MockProxy<PasswordEncryptionService>;
 
     const encryptedPassword = 'hashpassword';
 
     beforeEach(() => {
         repository = new InMemoryUserRepository();
+        addressRepository = new InMemoryAddressRepository();
         encryptationService = mock<PasswordEncryptionService>();
-        usecase = new RegisterUsecase(repository, encryptationService);
+
+        usecase = new RegisterUsecase(repository, addressRepository, encryptationService);
 
         encryptationService.hash.mockResolvedValueOnce(encryptedPassword);
     });
@@ -44,11 +49,14 @@ describe('RegisterUsecase', () => {
         birthDate: new Date(11, 10, 2000),
         password: '123456',
         gender: UserGenderEnum.MALE,
+        state: 'state',
+        city: 'city',
+        neighborhood: 'neighborhood',
+        postalCode: '29485726',
+        houseNumber: 1,
     };
 
     it('should register the new user', async () => {
-        
-
         const { createdUser } = await usecase.call(input);
 
         expect(repository.users[0].email.value).toEqual(input.email);
@@ -57,7 +65,13 @@ describe('RegisterUsecase', () => {
         expect(repository.users[0].birthDate.value).toEqual(input.birthDate);
         expect(repository.users[0].password.value).toEqual(encryptedPassword);
         expect(repository.users[0]).toEqual(createdUser);
-    })
+    });
+
+    it('should register a new address', async () => {
+       await usecase.call(input);
+
+        expect(addressRepository.addresses).toHaveLength(1);
+    });
 
     it('should get an user when calling the repository successfully', async () => {
         const { createdUser } = await usecase.call(input);
