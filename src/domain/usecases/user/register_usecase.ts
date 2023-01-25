@@ -1,6 +1,7 @@
 import { AddressRepository } from "@/domain/contracts/repositories/address_repository";
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
+import { Transactional } from "@/domain/decorators/transactional/transactional.decorator";
 import { AddressEntity } from "@/domain/entities/address/address_entity";
 import { City } from "@/domain/entities/address/value-objects/city/city";
 import { Neighborhood } from "@/domain/entities/address/value-objects/neighborhood/neighborhood";
@@ -44,6 +45,7 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         private readonly bcryptService: PasswordEncryptionService,
     ) { }
 
+    @Transactional()
     public async call({
         email,
         name,

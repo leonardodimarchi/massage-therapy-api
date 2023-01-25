@@ -1,4 +1,4 @@
-import {registerAs} from "@nestjs/config";
+import { registerAs } from "@nestjs/config";
 import { join } from "path";
 import { DataSourceOptions, LoggerOptions } from "typeorm";
 import * as dotenv from 'dotenv';
