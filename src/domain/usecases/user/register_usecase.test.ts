@@ -31,8 +31,6 @@ describe('RegisterUsecase', () => {
         encryptationService = mock<PasswordEncryptionService>();
         transactionService = mock<TransactionService>();
 
-        repository.shouldThrowErrorAt = 'none';
-
         usecase = new RegisterUsecase(repository, addressRepository, encryptationService, transactionService);
 
         encryptationService.hash.mockResolvedValueOnce(encryptedPassword);
