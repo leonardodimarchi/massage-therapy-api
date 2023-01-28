@@ -11,6 +11,7 @@ import { TypeOrmUserRepository } from "@/infra/database/typeorm/repositories/typ
 import { AddressRepository } from "@/domain/contracts/repositories/address_repository";
 import { TypeOrmAddressRepository } from "@/infra/database/typeorm/repositories/typeorm_address_repository";
 import { AddressSchema } from "@/infra/database/typeorm/schema/address_schema";
+import { TransactionService } from "@/domain/contracts/services/transaction_service";
 
 @Module({
     imports: [
@@ -27,15 +28,22 @@ import { AddressSchema } from "@/infra/database/typeorm/schema/address_schema";
             useFactory: (
                 repository: UserRepository,
                 addressRepository: AddressRepository,
-                bcryptService: PasswordEncryptionService
+                bcryptService: PasswordEncryptionService,
+                transactionService: TransactionService,
             ) => {
                 return new RegisterUsecase(
                     repository,
                     addressRepository,
                     bcryptService,
+                    transactionService,
                 );
             },
-            inject: [UserRepository, AddressRepository, PasswordEncryptionService]
+            inject: [
+                UserRepository, 
+                AddressRepository, 
+                PasswordEncryptionService,
+                TransactionService,
+            ]
         },
         {
             provide: UserRepository,
