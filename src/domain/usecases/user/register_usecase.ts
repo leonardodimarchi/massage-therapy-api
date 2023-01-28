@@ -1,6 +1,7 @@
 import { AddressRepository } from "@/domain/contracts/repositories/address_repository";
 import { UserRepository } from "@/domain/contracts/repositories/user_repository";
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
+import { TransactionService } from "@/domain/contracts/services/transaction_service";
 import { AddressEntity } from "@/domain/entities/address/address_entity";
 import { City } from "@/domain/entities/address/value-objects/city/city";
 import { Neighborhood } from "@/domain/entities/address/value-objects/neighborhood/neighborhood";
@@ -42,6 +43,7 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         private readonly repository: UserRepository,
         private readonly addressRepository: AddressRepository,
         private readonly bcryptService: PasswordEncryptionService,
+        private readonly transactionService: TransactionService,
     ) { }
 
     public async call({
@@ -84,16 +86,26 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
 
         userToCreate.password = new UserPassword(await this.bcryptService.hash(password));
 
-        const createdUser = await this.repository.register(userToCreate);
+        await this.transactionService.startTransaction();
 
-        address.userId = createdUser.id;
+        try {
+            const createdUser = await this.repository.register(userToCreate);
 
-        const createdAddress = await this.addressRepository.create(address);
+            address.userId = createdUser.id;
 
-        createdUser.address = createdAddress;
+            const createdAddress = await this.addressRepository.create(address);
 
-        return {
-            createdUser,
-        };
+            createdUser.address = createdAddress;
+
+            await this.transactionService.commitTransaction();
+
+            return {
+                createdUser,
+            };
+        } catch (error) {
+            await this.transactionService.rollbackTransaction();
+
+            throw error;
+        }
     }
 }

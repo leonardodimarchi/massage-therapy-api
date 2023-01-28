@@ -1,4 +1,5 @@
 import { PasswordEncryptionService } from "@/domain/contracts/services/password_encryptation_service";
+import { TransactionService } from "@/domain/contracts/services/transaction_service";
 import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
@@ -18,7 +19,9 @@ describe('RegisterUsecase', () => {
 
     let repository: InMemoryUserRepository;
     let addressRepository: InMemoryAddressRepository;
+
     let encryptationService: MockProxy<PasswordEncryptionService>;
+    let transactionService: MockProxy<TransactionService>;
 
     const encryptedPassword = 'hashpassword';
 
@@ -26,8 +29,9 @@ describe('RegisterUsecase', () => {
         repository = new InMemoryUserRepository();
         addressRepository = new InMemoryAddressRepository();
         encryptationService = mock<PasswordEncryptionService>();
+        transactionService = mock<TransactionService>();
 
-        usecase = new RegisterUsecase(repository, addressRepository, encryptationService);
+        usecase = new RegisterUsecase(repository, addressRepository, encryptationService, transactionService);
 
         encryptationService.hash.mockResolvedValueOnce(encryptedPassword);
     });
@@ -91,5 +95,25 @@ describe('RegisterUsecase', () => {
         const usecaseCall = async () => await usecase.call(input);
 
         expect(usecaseCall()).rejects.toThrow(ValidationException);
+    });
+
+    it('should start a transaction', async () => {
+        await usecase.call(input);
+
+        expect(transactionService.startTransaction).toHaveBeenCalledTimes(1);
+    });
+
+    it('should commit the transaction', async () => {
+        await usecase.call(input);
+
+        expect(transactionService.commitTransaction).toHaveBeenCalledTimes(1);
+    });
+
+    it('should rollback the transaction if user register fails', async () => {
+        repository.shouldThrowErrorAt = 'register';
+
+        await usecase.call(input).catch(() => null);
+
+        expect(transactionService.rollbackTransaction).toHaveBeenCalledTimes(1);
     });
 });
