@@ -62,6 +62,11 @@ export const UserSchema = new EntitySchema<RawUserEntity>({
     createdAt: 'ASC',
   },
   relations: {
+    address: {
+      type: 'one-to-one',
+      target: 'addresses',
+      inverseSide: 'user',
+    },
     appointments: {
       type: 'one-to-many',
       target: 'appointments',
