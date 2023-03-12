@@ -39,6 +39,7 @@ export class UserController {
                 diseaseHistory,
                 city: address.city,
                 state: address.state,
+                street: address.street,
                 neighborhood: address.neighborhood,
                 postalCode: address.postalCode,
                 houseNumber: address.houseNumber,

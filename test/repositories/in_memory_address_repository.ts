@@ -12,6 +12,7 @@ export class InMemoryAddressRepository implements AddressRepository {
             neighborhood: address.neighborhood,
             postalCode: address.postalCode,
             userId: address.userId,
+            street: address.street,
             houseNumber: address.houseNumber,
         }, {
             id: this.getNextId(),

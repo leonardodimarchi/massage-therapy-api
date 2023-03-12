@@ -4,11 +4,13 @@ import { City } from "./value-objects/city/city";
 import { Neighborhood } from "./value-objects/neighborhood/neighborhood";
 import { PostalCode } from "./value-objects/postal-code/postal_code";
 import { State } from "./value-objects/state/state";
+import { Street } from "./value-objects/street/street";
 
 export interface AddressProps {
   postalCode: PostalCode;
   state: State;
   city: City;
+  street: Street;
   neighborhood: Neighborhood;
   houseNumber: number;
   userId: number;
@@ -47,6 +49,14 @@ export class AddressEntity extends Entity {
 
   public get city(): City {
     return this.props.city;
+  }
+
+  public set street(street: Street) {
+    this.props.street = street;
+  }
+
+  public get street(): Street {
+    return this.props.street;
   }
 
   public set neighborhood(neighborhood: Neighborhood) {

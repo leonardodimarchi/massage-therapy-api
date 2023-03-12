@@ -27,6 +27,7 @@ describe('UserController', () => {
             address: {
                 city: 'city',
                 state: 'state',
+                street: 'Rua Sandra Tereza',
                 postalCode: '23857394',
                 houseNumber: 1,
                 neighborhood: 'neighborhood',

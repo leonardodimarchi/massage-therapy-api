@@ -11,6 +11,7 @@ type EntityFields = AddressProps & EntityProps;
 type EntityFieldsToAddOrReplace = {
   postalCode: string;
   state: string;
+  street: string;
   city: string;
   neighborhood: string;
 
@@ -35,6 +36,10 @@ export const AddressSchema = new EntitySchema<RawAddressEntity>({
     city: {
       type: String,
       length: 512,
+    },
+    street: {
+      type: String,
+      length: 1024,
     },
     neighborhood: {
       type: String,

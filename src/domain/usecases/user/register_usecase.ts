@@ -7,6 +7,7 @@ import { City } from "@/domain/entities/address/value-objects/city/city";
 import { Neighborhood } from "@/domain/entities/address/value-objects/neighborhood/neighborhood";
 import { PostalCode } from "@/domain/entities/address/value-objects/postal-code/postal_code";
 import { State } from "@/domain/entities/address/value-objects/state/state";
+import { Street } from "@/domain/entities/address/value-objects/street/street";
 import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { UserEntity } from "@/domain/entities/user/user_entity";
 import { UserBirthdate } from "@/domain/entities/user/value-objects/birthdate/user_birthdate";
@@ -28,8 +29,9 @@ export interface RegisterUseCaseInput {
 
     state: string;
     city: string;
-    postalCode: string;
+    street: string;
     neighborhood: string;
+    postalCode: string;
     houseNumber: number;
 }
 
@@ -56,8 +58,9 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
         diseaseHistory,
         state,
         city,
-        postalCode,
+        street,
         neighborhood,
+        postalCode,
         houseNumber,
     }: RegisterUseCaseInput): Promise<RegisterUseCaseOutput> {
         const userToCreate = new UserEntity({
@@ -74,6 +77,7 @@ export class RegisterUsecase implements UseCase<RegisterUseCaseInput, RegisterUs
             postalCode: new PostalCode(postalCode),
             state: new State(state),
             city: new City(city),
+            street: new Street(street),
             neighborhood: new Neighborhood(neighborhood),
             houseNumber,
             userId: 0,

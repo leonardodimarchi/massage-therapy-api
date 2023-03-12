@@ -1,7 +1,7 @@
 import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsDateString, IsDefined, IsEnum, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsDateString, IsDefined, IsEnum, IsNotEmptyObject, IsOptional, IsString, ValidateNested } from "class-validator";
 import { CreateAddressPayload } from "../address/create_address.payload";
 
 export class CreateUserPayload {
@@ -48,7 +48,7 @@ export class CreateUserPayload {
 
     @ApiProperty()
     @IsDefined({ message: 'É necessário enviar um endereço' })
-    @IsObject()
+    @IsNotEmptyObject({}, { message: 'O endereço está em um formato inválido.' })
     @ValidateNested()
     @Type(() => CreateAddressPayload)
     address: CreateAddressPayload;

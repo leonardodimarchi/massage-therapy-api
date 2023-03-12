@@ -1,6 +1,5 @@
-import { UserGenderEnum } from "@/domain/entities/user/enum/user_gender.enum";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString,  } from "class-validator";
 
 export class CreateAddressPayload {
     @ApiProperty()
@@ -8,8 +7,12 @@ export class CreateAddressPayload {
     state: string;
 
     @ApiProperty()
-    @IsString({ message: 'É necessário enviar uma cidate válida' })
+    @IsString({ message: 'É necessário enviar uma cidade válida' })
     city: string;
+
+    @ApiProperty()
+    @IsString({ message: 'É necessário enviar uma rua válida' })
+    street: string;
 
     @ApiProperty()
     @IsString({ message: 'É necessário enviar um bairro válido' })
