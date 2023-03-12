@@ -9,6 +9,7 @@ export class AddressViewModelMapper {
             updatedAt: entity.updatedAt,
             state: entity.state.value,
             city: entity.city.value,
+            street: entity.street.value,
             neighborhood: entity.neighborhood.value,
             postalCode: entity.postalCode.value,
             houseNumber: entity.houseNumber,

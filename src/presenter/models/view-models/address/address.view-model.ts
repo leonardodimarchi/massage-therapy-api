@@ -9,6 +9,9 @@ export class AddressViewModel extends BaseEntityViewModel {
     city: string;
 
     @ApiProperty()
+    street: string;
+
+    @ApiProperty()
     postalCode: string;
 
     @ApiProperty()

@@ -55,6 +55,7 @@ describe('RegisterUsecase', () => {
         gender: UserGenderEnum.MALE,
         state: 'state',
         city: 'city',
+        street: 'Rua Sandra Tereza',
         neighborhood: 'neighborhood',
         postalCode: '29485726',
         houseNumber: 1,
