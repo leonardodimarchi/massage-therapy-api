@@ -3,6 +3,7 @@ import { City } from "@/domain/entities/address/value-objects/city/city";
 import { Neighborhood } from "@/domain/entities/address/value-objects/neighborhood/neighborhood";
 import { PostalCode } from "@/domain/entities/address/value-objects/postal-code/postal_code";
 import { State } from "@/domain/entities/address/value-objects/state/state";
+import { Street } from "@/domain/entities/address/value-objects/street/street";
 import { RawAddressEntity } from "../schema/address_schema";
 import { TypeOrmUserMapper } from "./typeorm_user.mapper";
 
@@ -14,6 +15,7 @@ export class TypeOrmAddressMapper {
             updatedAt: address.updatedAt,
             postalCode: address.postalCode.value,
             state: address.state.value,
+            street: address.street.value,
             city: address.city.value,
             neighborhood: address.neighborhood.value,
             houseNumber: address.houseNumber,
@@ -26,6 +28,7 @@ export class TypeOrmAddressMapper {
             postalCode: new PostalCode(raw.postalCode, { validate: false, }),
             state: new State(raw.state, { validate: false }),
             city: new City(raw.city, { validate: false }),
+            street: new Street(raw.street, { validate: false }),
             neighborhood: new Neighborhood(raw.neighborhood, { validate: false }),
             houseNumber: raw.houseNumber,
             userId: raw.userId,

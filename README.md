@@ -6,35 +6,49 @@
 %%{init: {'theme':'base'}}%%
 erDiagram
     USER ||--o{ APPOINTMENT : creates
+    USER ||--|| ADDRESS : has
     USER {
-        number id PK
+        Number id PK
         Date createdAt
         Date updatedAt
 
-        string email
-        string name
-        string phone
-        string password
-        string diseaseHistory
+        String email
+        String name
+        String phone
+        String password
+        String diseaseHistory
         UserGenderEnum gender
         Date birthDate
     }
 
-    APPOINTMENT {
-        number id PK
+    ADDRESS {
+        Number id PK
         Date createdAt
         Date updatedAt
 
-        string complaint
-        boolean isUnderMedicalTreatment
-        string symptoms
+        String postalCode
+        String state
+        String city
+        String neighborhood
+        Number houseNumber
+        Number userId FK
+    }
+
+    APPOINTMENT {
+        Number id PK
+        Date createdAt
+        Date updatedAt
+
+        String complaint
+        Boolean isUnderMedicalTreatment
+        String symptoms
         Date startsAt
         Date endsAt
-        boolean isPregnant
-        number pregnantWeeks
+        Boolean isPregnant
+        Number pregnantWeeks
         AppointmentStatusEnum status
 
-        number userId FK
+        Number userId FK
     }
 ```
 
