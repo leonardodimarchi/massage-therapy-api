@@ -18,7 +18,10 @@ export const dataSourceOptions: DataSourceOptions = {
     },
     ...process.env.DB_TYPE === 'postgres' && {
         url: process.env.DB_URL,
-        ssl: true,
+        ssl: {
+            rejectUnauthorized: false,
+        },
+
     },
     entities: [join(__dirname, 'schema', '**', '*_schema{.ts,.js}')],
     migrations: [join(__dirname, 'migrations', '*.ts')],
