@@ -28,6 +28,6 @@ export class UserName {
     }
 
     private validate(value: string): boolean {
-        return value.trim().length > 3 && value.trim().length < 1024;
+        return value.trim().length >= 3 && value.trim().length < 1024;
     }
 }

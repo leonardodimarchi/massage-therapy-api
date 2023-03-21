@@ -3,7 +3,7 @@ import { UserName } from "./user_name";
 
 describe('ValueObjects - UserName', () => {
     it('should be able to create with a valid name', () => {
-        const valueObject = new UserName('My valid name');
+        const valueObject = new UserName('Nam');
 
         expect(valueObject).toBeDefined();
     });
