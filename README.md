@@ -76,4 +76,4 @@ For the pipeline, i'm using a Github [Action](./.github/workflows/pipeline.yml) 
 
 ## Database
 
-Currently using the free PostgreSQL instance at [Render](https://render.com/)
+Currently using the free PostgreSQL instance at [Render](https://render.com/).
