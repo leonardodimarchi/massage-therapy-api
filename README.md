@@ -29,6 +29,7 @@ erDiagram
         String postalCode
         String state
         String city
+        String street
         String neighborhood
         Number houseNumber
         Number userId FK
@@ -68,3 +69,11 @@ classDiagram
         REPROVED
     }
 ```
+
+## Pipeline
+
+For the pipeline, i'm using a Github [Action](./.github/workflows/pipeline.yml) to test and build, along with [Render's](https://render.com/) integration to deploy the API.
+
+## Database
+
+Currently using the free PostgreSQL instance at [Render](https://render.com/)
