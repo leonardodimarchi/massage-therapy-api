@@ -1,5 +1,7 @@
 # Massage-therapy-api
 
+![Build and Tests](https://github.com/leonardodimarchi/massage-therapy-api/actions/workflows/pipeline.yml/badge.svg)
+
 ## Entities
 
 ```mermaid
