@@ -18,14 +18,10 @@ export interface AddressProps {
   user?: UserEntity;
 }
 
-export class AddressEntity extends Entity {
+export class AddressEntity extends Entity<AddressProps> {
   constructor(props: AddressProps, entityProps?: EntityProps) {
-    super(entityProps);
-
-    this.props = props;
+    super(props, entityProps);
   }
-
-  private props: AddressProps;
 
   public set postalCode(postalCode: PostalCode) {
     this.props.postalCode = postalCode;

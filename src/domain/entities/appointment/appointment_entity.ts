@@ -20,17 +20,13 @@ export interface AppointmentProps {
     user?: UserEntity;
 }
 
-export class AppointmentEntity extends Entity {
+export class AppointmentEntity extends Entity<AppointmentProps> {
     constructor(props: Replace<AppointmentProps, { status?: AppointmentStatusEnum }>, entityProps?: EntityProps) {
-        super(entityProps);
-
-        this.props = {
+        super({
             ...props,
             status: props.status ?? AppointmentStatusEnum.PENDING,
-        };
+        }, entityProps);
     }
-
-    private props: AppointmentProps;
 
     public set complaint(complaint: AppointmentComplaint) {
         this.props.complaint = complaint;
