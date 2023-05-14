@@ -11,7 +11,7 @@ Features:
 
 # Architecture
 
-I'm using clean architecture to build this API, just to practice.
+I'm using clean architecture to build this API.
 
 ## Domain
 
