@@ -4,17 +4,21 @@ export interface EntityProps {
     updatedAt?: Date;
 }
 
-export abstract class Entity {
-    private _id: number;
-    private _createdAt: Date;
-    private _updatedAt: Date;
+export abstract class Entity<TProps> {
+    protected _id: number;
+    protected _createdAt: Date;
+    protected _updatedAt: Date;
 
-    constructor(props: EntityProps = {}) {
-        if (props.id)
-            this._id = props.id;
+    protected props: TProps;
 
-        this._createdAt = props.createdAt ?? new Date();
-        this._updatedAt = props.updatedAt ?? new Date();
+    constructor(props: TProps, baseEntityProps: EntityProps = {}) {
+        if (baseEntityProps.id)
+            this._id = baseEntityProps.id;
+
+        this._createdAt = baseEntityProps.createdAt ?? new Date();
+        this._updatedAt = baseEntityProps.updatedAt ?? new Date();
+
+        this.props = props;
     }
 
     public get id(): number {

@@ -22,14 +22,10 @@ export interface UserProps {
   appointments?: AppointmentEntity[];
 }
 
-export class UserEntity extends Entity {
+export class UserEntity extends Entity<UserProps> {
   constructor(props: UserProps, entityProps?: EntityProps) {
-    super(entityProps);
-
-    this.props = props;
+    super(props, entityProps);
   }
-
-  private props: UserProps;
 
   public set email(email: UserEmail) {
     this.props.email = email;
